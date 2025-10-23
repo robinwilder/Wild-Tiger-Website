@@ -40,27 +40,43 @@ Wild Tiger Design is a full-service digital agency offering comprehensive web an
 - **Formspree**: Contact form backend integration
 - **GitHub Pages**: Static site hosting
 
+## Portfolio Projects
+
+Our portfolio showcases real-world projects we've built for clients:
+
+- **Intersky Aerospace**: Professional aerospace services website with calibration solutions, certifications, and rotable inventory management
+- **DrParkRx**: Modern online pharmacy platform with prescription services, transfers, and patient portal integration
+- **Central Delivery**: Comprehensive food delivery platform with restaurant management dashboard and mobile app
+
 ## File Structure
 
 ```
 wild-tiger-design/
-├── index.html              # Homepage with hero and services overview
-├── web-design.html         # Web design services landing page
-├── portfolio.html          # Portfolio showcase page
-├── prices.html             # Web design pricing page
-├── web-hosting.html        # Web hosting services page
-├── it-services.html        # IT management services page
-├── styles.css              # Main stylesheet
-├── favicon.png             # Site favicon
-├── tigerupclose.jpg        # Hero section background image
-└── README.md               # This file
+├── index.html                      # Homepage with hero and services overview
+├── web-design.html                 # Web design services landing page
+├── portfolio.html                  # Portfolio showcase page with project links
+├── portfolio-intersky.html         # Intersky Aerospace portfolio page
+├── portfolio-drparkrx.html         # DrParkRx portfolio page
+├── portfolio-centraldelivery.html  # Central Delivery portfolio page
+├── prices.html                     # Web design pricing page
+├── web-hosting.html                # Web hosting services page
+├── it-services.html                # IT management services page
+├── styles.css                      # Main stylesheet
+├── favicon.png                     # Site favicon (tiger logo)
+├── tigerupclose.jpg                # Hero section background image
+├── images/
+│   └── portfolio/                  # Portfolio project screenshots
+│       ├── interskyaero.com_*.png
+│       ├── drsparkrx.com_*.png
+│       └── centraldelivery.com_*.png
+└── README.md                       # This file
 ```
 
 ## Local Development
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/[username]/wild-tiger-design.git
+   git clone https://github.com/robinwilder/wild-tiger-design.git
    ```
 
 2. Navigate to the project directory:
@@ -77,7 +93,7 @@ wild-tiger-design/
 
 This site is deployed on GitHub Pages and is accessible at:
 ```
-https://[username].github.io/wild-tiger-design/
+https://robinwilder.github.io/wild-tiger-design/
 ```
 
 ### Setting up GitHub Pages
@@ -113,7 +129,7 @@ The contact form uses Formspree for email delivery. To configure:
 
 ## Future Enhancements
 
-- [ ] Add project screenshots to portfolio page
+- [x] Add project screenshots to portfolio page
 - [ ] Implement blog section for industry insights
 - [ ] Add client testimonials
 - [ ] Create case studies for featured projects
@@ -128,7 +144,7 @@ Copyright © 2025 Wild Tiger Design. All rights reserved.
 
 For inquiries about our services:
 - Email: wildtigerdesign@gmail.com
-- Website: [Your GitHub Pages URL]
+- Website: https://robinwilder.github.io/wild-tiger-design/
 
 ---
 
