@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DrParkRx - Portfolio - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .portfolio-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .portfolio-gallery img {
+            width: 100%;
+            border: 2px solid #ff8c00;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.2);
+            transition: all 0.3s;
+        }
+        .portfolio-gallery img:hover {
+            box-shadow: 0 0 25px rgba(255, 140, 0, 0.5);
+            transform: scale(1.02);
+        }
+        .project-info {
+            background: #0f0f0f;
+            border: 2px solid #ff8c00;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+        .project-info h3 {
+            color: #ff8c00;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1 class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">Wild Tiger Design</a></h1>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="portfolio.html">Portfolio</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>DrParkRx</h2>
+            <p>Online pharmacy and prescription services website</p>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="container">
+            <div class="project-info">
+                <h3>Project Overview</h3>
+                <p>A modern pharmacy website for DrParkRx, featuring online prescription services, prescription transfers, blog content, and comprehensive contact information. The site provides an easy-to-use interface for patients to manage their healthcare needs.</p>
+            </div>
+
+            <h2 class="section-title">Website Screenshots</h2>
+            <div class="portfolio-gallery">
+                <img src="images/portfolio/drsparkrx.com_.png" alt="DrParkRx Homepage">
+                <img src="images/portfolio/drsparkrx.com_about-us_.png" alt="DrParkRx About Us">
+                <img src="images/portfolio/drsparkrx.com_transfer_prescription_.png" alt="DrParkRx Transfer Prescription">
+                <img src="images/portfolio/drsparkrx.com_blog_.png" alt="DrParkRx Blog">
+                <img src="images/portfolio/drsparkrx.com_contact_.png" alt="DrParkRx Contact">
+                <img src="images/portfolio/3706251.winrxrefill.com_.png" alt="DrParkRx Rx Refill Portal">
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="portfolio.html" class="cta-button">Back to Portfolio</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
