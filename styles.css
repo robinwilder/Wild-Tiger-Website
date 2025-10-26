@@ -71,7 +71,7 @@ nav .container {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(rgba(26, 58, 82, 0.85), rgba(26, 58, 82, 0.85)), url('tigerupclose.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('tigerupclose.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
