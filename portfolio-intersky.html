@@ -51,6 +51,11 @@
         <nav>
             <div class="container">
                 <h1 class="logo"><a href="index.html" style="color: inherit; text-decoration: none;"><img src="tigerlogoforweb.png" alt="Wild Tiger Design Logo" class="logo-icon">Wild Tiger Design</a></h1>
+                <button class="hamburger" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="portfolio.html">Portfolio</a></li>
@@ -99,5 +104,21 @@
             <p>&copy; 2025 Wild Tiger Design. All rights reserved.</p>
         </div>
     </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>
