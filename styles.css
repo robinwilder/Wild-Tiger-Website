@@ -316,6 +316,9 @@ footer p {
 
     .hero {
         padding: 5rem 0;
+        background-attachment: scroll;
+        background-position: center 30%;
+        background-size: cover;
     }
 
     .hero h2 {
@@ -351,6 +354,9 @@ footer p {
 
     .hero {
         padding: 4rem 0;
+        background-attachment: scroll;
+        background-position: center 25%;
+        background-size: cover;
     }
 
     .hero h2 {
