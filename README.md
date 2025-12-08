@@ -68,6 +68,7 @@ wildtigerdesign.com/
 ├── ai-consulting.html              # AI consulting services page with carousel
 ├── privacy-policy.html             # Privacy policy page
 ├── terms-of-service.html           # Terms of service page
+├── 404.html                        # Custom 404 error page
 ├── favicon-32x32.png               # Favicon (32x32)
 ├── favicon-16x16.png               # Favicon (16x16)
 ├── apple-touch-icon.png            # Apple touch icon (180x180)
