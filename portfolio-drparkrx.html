@@ -8,114 +8,194 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
     <style>
-        .portfolio-gallery {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
-        .portfolio-gallery img {
-            width: 100%;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s;
-        }
-        .portfolio-gallery img:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-            transform: scale(1.02);
-            border-color: #ff8c00;
-        }
-        .project-info {
-            background: #ffffff;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-        .project-info h3 {
-            color: #1a3a52;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-        .project-info p {
-            color: #555555;
-            font-size: 1.05rem;
-            line-height: 1.8;
+
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-<body>
-    <header>
-        <nav>
-            <div class="container">
-                <h1 class="logo"><a href="index.html" style="color: inherit; text-decoration: none;"><img src="tigerlogoforweb.png" alt="Wild Tiger Design Logo" class="logo-icon">Wild Tiger Design</a></h1>
-                <button class="hamburger" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
                 </button>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="portfolio.html">Portfolio</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
-                    <li><a href="https://github.com/robinwilder/wild-tiger-design" target="_blank">GitHub</a></li>
-                </ul>
             </div>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <div class="container">
-            <h2>DrParkRx</h2>
-            <p>Online pharmacy and prescription services website</p>
         </div>
-    </section>
 
-    <section class="services">
-        <div class="container">
-            <div class="project-info">
-                <h3>Project Overview</h3>
-                <p>A modern pharmacy website for DrParkRx, featuring online prescription services, prescription transfers, blog content, and comprehensive contact information. The site provides an easy-to-use interface for patients to manage their healthcare needs.</p>
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="index.html" class="block text-gray-300 hover:text-white transition-colors">Home</a>
+                <a href="portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="index.html#contact" class="block px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-medium text-center">
+                    Contact
+                </a>
             </div>
+        </div>
+    </nav>
 
-            <h2 class="section-title">Website Screenshots</h2>
-            <div class="portfolio-gallery">
-                <img src="images/portfolio/drsparkrx.com_.png" alt="DrParkRx Homepage">
-                <img src="images/portfolio/drsparkrx.com_about-us_.png" alt="DrParkRx About Us">
-                <img src="images/portfolio/drsparkrx.com_transfer_prescription_.png" alt="DrParkRx Transfer Prescription">
-                <img src="images/portfolio/drsparkrx.com_blog_.png" alt="DrParkRx Blog">
-                <img src="images/portfolio/drsparkrx.com_contact_.png" alt="DrParkRx Contact">
-                <img src="images/portfolio/3706251.winrxrefill.com_.png" alt="DrParkRx Rx Refill Portal">
-            </div>
-
-            <div style="text-align: center; margin-top: 3rem;">
-                <a href="portfolio.html" class="cta-button">Back to Portfolio</a>
+    <!-- Hero Section -->
+    <section class="relative min-h-[40vh] flex items-center pt-32">
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12 py-20 w-full">
+            <div class="max-w-3xl">
+                <a href="portfolio.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Portfolio
+                </a>
+                <h1 class="text-4xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    DrParkRx
+                </h1>
+                <p class="text-xl text-gray-400 leading-relaxed">
+                    Online pharmacy and prescription services website
+                </p>
             </div>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+    <!-- Project Info -->
+    <section class="relative py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="p-8 bg-dark-lighter rounded-2xl border border-gray-800 mb-12">
+                <h3 class="text-2xl font-bold mb-4">Project Overview</h3>
+                <p class="text-gray-400 text-lg leading-relaxed">
+                    A modern pharmacy website for DrParkRx, featuring online prescription services, prescription transfers, blog content, and comprehensive contact information. The site provides an easy-to-use interface for patients to manage their healthcare needs.
+                </p>
+            </div>
+
+            <h2 class="text-3xl lg:text-4xl font-bold mb-8">Website Screenshot</h2>
+            <div class="grid gap-8">
+                <img src="images/portfolio/drparkrx.png" alt="DrParkRx Website" class="w-full rounded-2xl border border-gray-800 hover:border-primary/50 transition-all">
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="portfolio.html" class="inline-flex items-center px-8 py-4 bg-white text-primary rounded-lg font-semibold hover:bg-white/90 transition-all text-lg">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Portfolio
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12 mt-20">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
         </div>
     </footer>
-    <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
+    <script>
+        // Navigation scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-dark/95', 'backdrop-blur-lg', 'shadow-lg');
+            } else {
+                navbar.classList.remove('bg-dark/95', 'backdrop-blur-lg', 'shadow-lg');
+            }
         });
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
             link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
+                mobileMenu.classList.add('hidden');
             });
         });
     </script>

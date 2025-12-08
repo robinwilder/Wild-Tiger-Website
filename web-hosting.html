@@ -8,124 +8,240 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
     <style>
-        .pricing-box {
-            background: #ffffff;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 2.5rem;
-            margin: 3rem auto;
-            max-width: 600px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
-        .pricing-box h3 {
-            color: #1a3a52;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            font-weight: 700;
-        }
-        .pricing-box .price-item {
-            color: #555555;
-            font-size: 1.25rem;
-            margin: 1.5rem 0;
-            padding: 1rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .pricing-box .price-item:last-child {
-            border-bottom: none;
-        }
-        .pricing-box .price-amount {
-            color: #ff8c00;
-            font-size: 1.75rem;
-            font-weight: 700;
-            display: block;
-            margin-top: 0.5rem;
+
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-<body>
-    <header>
-        <nav>
-            <div class="container">
-                <h1 class="logo"><a href="index.html" style="color: inherit; text-decoration: none;"><img src="tigerlogoforweb.png" alt="Wild Tiger Design Logo" class="logo-icon">Wild Tiger Design</a></h1>
-                <button class="hamburger" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
                 </button>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html#services">Services</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
-                    <li><a href="https://github.com/robinwilder/wild-tiger-design" target="_blank">GitHub</a></li>
-                </ul>
             </div>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <div class="container">
-            <h2>Web Hosting Management</h2>
-            <p>Professional hosting setup and management services</p>
         </div>
-    </section>
 
-    <section class="services">
-        <div class="container">
-            <h2 class="section-title">What We Offer</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">&lt;</div>
-                    <h3>Hosting Setup</h3>
-                    <p>We'll set up your hosting account with your preferred provider. From domain configuration to server setup, we handle all the technical details to get your site online quickly and securely.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">&lt;</div>
-                    <h3>Account Management</h3>
-                    <p>Ongoing management of your hosting account including updates, security monitoring, performance optimization, and technical support. Focus on your business while we handle the infrastructure.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">&lt;</div>
-                    <h3>Site Migration</h3>
-                    <p>Moving to a new hosting provider? We'll migrate your site from your current host to your new one with zero downtime. All files, databases, and configurations transferred safely.</p>
-                </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="index.html" class="block text-gray-300 hover:text-white transition-colors">Home</a>
+                <a href="portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="index.html#contact" class="block px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-medium text-center">
+                    Contact
+                </a>
             </div>
+        </div>
+    </nav>
 
-            <div class="pricing-box">
-                <h3>Hosting Management Pricing</h3>
-                <div class="price-item">
-                    One-Time Setup Fee
-                    <span class="price-amount">$150</span>
-                </div>
-                <div class="price-item">
-                    Monthly Management
-                    <span class="price-amount">$25/month</span>
-                </div>
-                <a href="index.html#contact" class="cta-button" style="display: inline-block; margin-top: 2rem;">Get Started Today</a>
+    <!-- Hero Section -->
+    <section class="relative min-h-[60vh] flex items-center pt-32 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="junglehut.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12 py-20 w-full">
+            <div class="max-w-3xl">
+                <h1 class="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-8">
+                    Web Hosting<br>
+                    <span class="text-primary">Management</span>
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Professional hosting setup and management services for your website
+                </p>
             </div>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+    <!-- Services Section -->
+    <section class="relative py-32">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-6">What We Offer</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Complete hosting solutions from setup to ongoing management
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-20">
+                <!-- Hosting Setup -->
+                <div class="group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Hosting Setup</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        We'll set up your hosting account with your preferred provider. From domain configuration to server setup, we handle all the technical details.
+                    </p>
+                </div>
+
+                <!-- Account Management -->
+                <div class="group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Account Management</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Ongoing management including updates, security monitoring, performance optimization, and technical support. Focus on your business while we handle the infrastructure.
+                    </p>
+                </div>
+
+                <!-- Site Migration -->
+                <div class="group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Site Migration</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Moving to a new hosting provider? We'll migrate your site with zero downtime. All files, databases, and configurations transferred safely.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pricing Box -->
+            <div class="max-w-2xl mx-auto">
+                <div class="p-12 bg-dark-lighter rounded-2xl border border-gray-800 text-center">
+                    <h3 class="text-3xl font-bold mb-8">Hosting Management Pricing</h3>
+                    <div class="space-y-6 mb-10">
+                        <div class="pb-6 border-b border-gray-800">
+                            <p class="text-gray-400 mb-2">One-Time Setup Fee</p>
+                            <p class="text-4xl font-bold text-primary">$150</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 mb-2">Monthly Management</p>
+                            <p class="text-4xl font-bold text-primary">$25<span class="text-2xl text-gray-400">/month</span></p>
+                        </div>
+                    </div>
+                    <a href="index.html#contact" class="inline-flex items-center px-8 py-4 bg-white text-primary rounded-lg font-semibold hover:bg-white/90 transition-all text-lg">
+                        Get Started Today
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
         </div>
     </footer>
-    <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
+    <script>
+        // Navigation scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-dark/95', 'backdrop-blur-lg', 'shadow-lg');
+            } else {
+                navbar.classList.remove('bg-dark/95', 'backdrop-blur-lg', 'shadow-lg');
+            }
         });
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
             link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
+                mobileMenu.classList.add('hidden');
             });
         });
     </script>

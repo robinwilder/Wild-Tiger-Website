@@ -8,260 +8,644 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
     <style>
-        .pricing-box {
-            background: #ffffff;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 2.5rem;
-            margin: 3rem 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
-        .pricing-box h3 {
-            color: #1a3a52;
-            font-size: 2rem;
-            margin-bottom: 1rem;
+        html {
+            scroll-behavior: smooth;
         }
 
-        .price {
-            font-size: 2.5rem;
-            color: #ff8c00;
-            font-weight: 700;
-            margin-bottom: 1rem;
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+            perspective: 2000px;
         }
 
-        .price-note {
-            color: #555555;
-            font-size: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .features-list {
-            list-style: none;
-            margin: 2rem 0;
-        }
-
-        .features-list li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e0e0e0;
-            color: #333333;
-            font-size: 1.05rem;
-        }
-
-        .features-list li:before {
-            content: "✓ ";
-            color: #ff8c00;
-            font-weight: 700;
-            margin-right: 0.5rem;
-        }
-
-        .features-list li:last-child {
-            border-bottom: none;
-        }
-
-        .service-description {
-            background: #f9f9f9;
-            padding: 2.5rem;
-            border-radius: 12px;
-            margin: 2rem 0;
-        }
-
-        .service-description h3 {
-            color: #1a3a52;
-            margin-bottom: 1rem;
-        }
-
-        .service-description p {
-            color: #555555;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
             gap: 2rem;
-            margin: 3rem 0;
+            padding: 0 2rem;
+            transform-style: preserve-3d;
         }
 
-        .benefit-card {
-            background: #ffffff;
-            padding: 2rem;
-            border-radius: 12px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s;
+        .carousel-card {
+            min-width: 320px;
+            max-width: 320px;
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+            filter: blur(4px);
+            opacity: 0.2;
+            transform: scale(0.85) translateZ(-150px);
         }
 
-        .benefit-card:hover {
-            border-color: #ff8c00;
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        .carousel-card.active {
+            filter: blur(0);
+            opacity: 1;
+            transform: scale(1) translateZ(0);
         }
 
-        .benefit-card h4 {
-            color: #1a3a52;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
+        .carousel-card.side-1 {
+            filter: blur(1px);
+            opacity: 0.8;
+            transform: scale(0.97) translateZ(-30px);
         }
 
-        .benefit-card p {
-            color: #555555;
-            line-height: 1.7;
+        .carousel-card.side-2 {
+            filter: blur(2px);
+            opacity: 0.5;
+            transform: scale(0.92) translateZ(-80px);
         }
 
-        .benefit-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .carousel-card.side-3 {
+            filter: blur(3px);
+            opacity: 0.3;
+            transform: scale(0.88) translateZ(-120px);
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(20, 103, 101, 0.8);
+            border: none;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(20, 103, 101, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev {
+            left: 1rem;
+        }
+
+        .carousel-nav.next {
+            right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-card {
+                min-width: 280px;
+                max-width: 280px;
+            }
         }
     </style>
 </head>
-<body>
-    <header>
-        <nav>
-            <div class="container">
-                <h1 class="logo"><a href="index.html" style="color: inherit; text-decoration: none;"><img src="tigerlogoforweb.png" alt="Wild Tiger Design Logo" class="logo-icon">Wild Tiger Design</a></h1>
-                <button class="hamburger" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
                 </button>
-                <ul class="nav-links">
-                    <li><a href="index.html#home">Home</a></li>
-                    <li><a href="index.html#services">Services</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
-                    <li><a href="https://github.com/robinwilder" target="_blank">GitHub</a></li>
-                </ul>
             </div>
-        </nav>
-    </header>
-
-    <section class="hero" style="padding: 5rem 0; background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 100%);">
-        <div class="container">
-            <h2 style="color: #ffffff;">AI Consulting Services</h2>
-            <p style="color: #f0f0f0;">Stay Competitive with AI-Powered Business Solutions</p>
         </div>
-    </section>
 
-    <section class="services" style="padding: 4rem 0;">
-        <div class="container">
-            <div class="service-description">
-                <h3>Transform Your Business with AI</h3>
-                <p>In today's rapidly evolving business landscape, artificial intelligence is no longer optional—it's essential for staying competitive. Our AI consulting services help you harness the power of AI to streamline workflows, increase productivity, and gain a competitive edge.</p>
-                <p>We work with businesses of all sizes to implement practical AI solutions that deliver real results. From workflow automation to team training, we provide the expertise you need to confidently navigate the AI revolution.</p>
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="index.html" class="block text-gray-300 hover:text-white transition-colors">Home</a>
+                <a href="portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="index.html#contact" class="block px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-medium text-center">
+                    Contact
+                </a>
             </div>
+        </div>
+    </nav>
 
-            <h2 class="section-title">What We Offer</h2>
+    <!-- Hero Section -->
+    <section class="relative min-h-[60vh] flex items-center pt-32 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="robotinjungle.png" alt="" class="w-full h-full object-cover opacity-20" style="object-position: center 20%;">
+        </div>
 
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">📊</div>
-                    <h4>AI Strategy & Assessment</h4>
-                    <p>Comprehensive analysis of your business processes to identify high-impact AI opportunities. We create a customized roadmap for AI implementation aligned with your business goals.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">⚙️</div>
-                    <h4>Workflow Automation</h4>
-                    <p>Automate repetitive tasks and optimize processes using AI tools like ChatGPT, Claude, and custom automation solutions. Save time and reduce human error.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">👥</div>
-                    <h4>Team Training & Workshops</h4>
-                    <p>Hands-on training sessions to get your team up to speed with AI tools. We teach best practices for prompt engineering, workflow integration, and responsible AI use.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">🔧</div>
-                    <h4>AI Tools Integration</h4>
-                    <p>Seamlessly integrate powerful AI tools into your existing workflows. We work with ChatGPT, Claude, Midjourney, Stable Diffusion, and other cutting-edge platforms.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎯</div>
-                    <h4>Custom AI Solutions</h4>
-                    <p>Develop tailored AI solutions for your specific business needs. From chatbots to document processing, we build what works for you.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">📈</div>
-                    <h4>Competitive Analysis</h4>
-                    <p>Understand how your competitors are using AI and develop strategies to stay ahead. We help you identify gaps and opportunities in your market.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">🔄</div>
-                    <h4>Process Optimization</h4>
-                    <p>Analyze and improve existing workflows using AI. Identify bottlenecks, reduce costs, and increase efficiency across your organization.</p>
-                </div>
-
-                <div class="benefit-card">
-                    <div class="benefit-icon">💡</div>
-                    <h4>Ongoing Support</h4>
-                    <p>Continuous guidance as AI technology evolves. Stay current with the latest tools and best practices through regular check-ins and updates.</p>
-                </div>
-            </div>
-
-            <div class="pricing-box">
-                <h3>Flexible Hourly Consulting</h3>
-                <div class="price">$50<span style="font-size: 1.5rem; color: #555;">/hour</span></div>
-                <p class="price-note">Pay only for the time you need. No long-term contracts required.</p>
-
-                <ul class="features-list">
-                    <li>One-on-one consultation sessions</li>
-                    <li>Customized AI implementation plans</li>
-                    <li>Team training and workshops</li>
-                    <li>Workflow automation setup</li>
-                    <li>AI tools integration assistance</li>
-                    <li>Best practices documentation</li>
-                    <li>Email support between sessions</li>
-                    <li>Strategy recommendations</li>
-                </ul>
-
-                <a href="index.html#contact" class="cta-button" style="display: inline-block; margin-top: 2rem;">Schedule Consultation</a>
-            </div>
-
-            <div class="service-description">
-                <h3>Why Choose Wild Tiger Design for AI Consulting?</h3>
-                <p><strong>Practical, Results-Focused Approach:</strong> We focus on implementing AI solutions that deliver measurable business value, not just theoretical possibilities.</p>
-                <p><strong>Stay Ahead of Competitors:</strong> Many businesses are already leveraging AI to gain competitive advantages. Don't get left behind—we'll help you catch up and surpass your competition.</p>
-                <p><strong>Technology-Agnostic:</strong> We recommend the best tools for your specific needs, whether that's ChatGPT, Claude, custom solutions, or a combination of platforms.</p>
-                <p><strong>Clear Communication:</strong> No jargon or technical overwhelm. We explain AI concepts in plain language and ensure your team understands how to use new tools effectively.</p>
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12 py-20 w-full">
+            <div class="max-w-3xl">
+                <h1 class="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-8">
+                    AI Consulting<br>
+                    <span class="text-primary">Services</span>
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Stay Competitive with AI-Powered Business Solutions
+                </p>
             </div>
         </div>
     </section>
 
-    <section class="contact" style="padding: 4rem 0;">
-        <div class="container">
-            <h2 class="section-title">Ready to Get Started?</h2>
-            <p class="contact-intro">Schedule your first AI consultation today and discover how AI can transform your business.</p>
-            <a href="index.html#contact" class="cta-button" style="display: inline-block; margin-top: 2rem;">Contact Us</a>
+    <!-- Description Section -->
+    <section class="relative py-20">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-4xl mx-auto">
+                <div class="p-10 bg-dark-lighter rounded-2xl border border-gray-800">
+                    <h3 class="text-3xl font-bold mb-6">Transform Your Business with AI</h3>
+                    <p class="text-gray-400 text-lg leading-relaxed mb-4">
+                        In today's rapidly evolving business landscape, artificial intelligence is no longer optional—it's essential for staying competitive. Our AI consulting services help you harness the power of AI to streamline workflows, increase productivity, and gain a competitive edge.
+                    </p>
+                    <p class="text-gray-400 text-lg leading-relaxed">
+                        We work with businesses of all sizes to implement practical AI solutions that deliver real results. From workflow automation to team training, we provide the expertise you need to confidently navigate the AI revolution.
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+    <!-- Services Section -->
+    <section class="relative py-32">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-6">What We Offer</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Comprehensive AI solutions tailored to your business needs
+                </p>
+            </div>
+
+            <!-- Carousel Container -->
+            <div class="carousel-container">
+                <!-- Navigation Buttons -->
+                <button class="carousel-nav prev" onclick="moveCarousel(-1)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button class="carousel-nav next" onclick="moveCarousel(1)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- AI Strategy -->
+                    <div class="carousel-card group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">AI Strategy & Assessment</h4>
+                    <p class="text-gray-400 leading-relaxed">
+                        Comprehensive analysis of your business processes to identify high-impact AI opportunities.
+                    </p>
+                </div>
+
+                <!-- Workflow Automation -->
+                <div class="carousel-card group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">Workflow Automation</h4>
+                    <p class="text-gray-400 leading-relaxed">
+                        Automate repetitive tasks using AI tools like ChatGPT, Claude, and custom automation solutions.
+                    </p>
+                </div>
+
+                <!-- Team Training -->
+                <div class="carousel-card group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">Team Training & Workshops</h4>
+                    <p class="text-gray-400 leading-relaxed">
+                        Hands-on training sessions to get your team up to speed with AI tools and best practices.
+                    </p>
+                </div>
+
+                <!-- AI Tools Integration -->
+                <div class="carousel-card group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">AI Tools Integration</h4>
+                    <p class="text-gray-400 leading-relaxed">
+                        Seamlessly integrate powerful AI tools into your existing workflows and systems.
+                    </p>
+                </div>
+
+                <!-- Custom AI Solutions -->
+                <div class="carousel-card group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">Custom AI Solutions</h4>
+                    <p class="text-gray-400 leading-relaxed">
+                        Develop tailored AI solutions for your specific business needs, from chatbots to document processing.
+                    </p>
+                </div>
+
+                <!-- Competitive Analysis -->
+                <div class="carousel-card group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">Competitive Analysis</h4>
+                    <p class="text-gray-400 leading-relaxed">
+                        Understand how your competitors are using AI and develop strategies to stay ahead.
+                    </p>
+                </div>
+
+                <!-- Process Optimization -->
+                <div class="carousel-card group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">Process Optimization</h4>
+                    <p class="text-gray-400 leading-relaxed">
+                        Analyze and improve existing workflows using AI to reduce costs and increase efficiency.
+                    </p>
+                </div>
+
+                <!-- Ongoing Support -->
+                <div class="carousel-card group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <h4 class="text-xl font-bold mb-4">Ongoing Support</h4>
+                    <p class="text-gray-400 leading-relaxed">
+                        Continuous guidance as AI technology evolves to keep you current with latest tools.
+                    </p>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="relative py-32 bg-dark-lighter/50">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-2xl mx-auto">
+                <div class="p-12 bg-dark rounded-2xl border border-gray-800 text-center">
+                    <h3 class="text-3xl font-bold mb-4">Flexible Hourly Consulting</h3>
+                    <div class="mb-8">
+                        <span class="text-6xl font-bold text-primary">$50</span>
+                        <span class="text-2xl text-gray-400">/hour</span>
+                    </div>
+                    <p class="text-gray-400 text-lg mb-10">
+                        Pay only for the time you need. No long-term contracts required.
+                    </p>
+
+                    <div class="text-left mb-10">
+                        <ul class="space-y-4">
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-6 h-6 text-primary mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>One-on-one consultation sessions</span>
+                            </li>
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-6 h-6 text-primary mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Customized AI implementation plans</span>
+                            </li>
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-6 h-6 text-primary mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Team training and workshops</span>
+                            </li>
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-6 h-6 text-primary mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Workflow automation setup</span>
+                            </li>
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-6 h-6 text-primary mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>AI tools integration assistance</span>
+                            </li>
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-6 h-6 text-primary mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Best practices documentation</span>
+                            </li>
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-6 h-6 text-primary mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Email support between sessions</span>
+                            </li>
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-6 h-6 text-primary mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Strategy recommendations</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a href="index.html#contact" class="inline-flex items-center px-8 py-4 bg-white text-primary rounded-lg font-semibold hover:bg-white/90 transition-all text-lg">
+                        Schedule Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="relative py-32">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-4xl mx-auto">
+                <div class="p-10 bg-dark-lighter rounded-2xl border border-gray-800">
+                    <h3 class="text-3xl font-bold mb-8 text-center">Why Choose Wild Tiger Design for AI Consulting?</h3>
+
+                    <div class="space-y-6 text-gray-400 leading-relaxed">
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Practical, Results-Focused Approach</h4>
+                            <p>We focus on implementing AI solutions that deliver measurable business value, not just theoretical possibilities.</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Stay Ahead of Competitors</h4>
+                            <p>Many businesses are already leveraging AI to gain competitive advantages. Don't get left behind—we'll help you catch up and surpass your competition.</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Technology-Agnostic</h4>
+                            <p>We recommend the best tools for your specific needs, whether that's ChatGPT, Claude, custom solutions, or a combination of platforms.</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xl font-bold text-white mb-2">Clear Communication</h4>
+                            <p>No jargon or technical overwhelm. We explain AI concepts in plain language and ensure your team understands how to use new tools effectively.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="relative py-32">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-8">Ready to Get Started?</h2>
+                <p class="text-xl text-gray-400 mb-12">
+                    Schedule your first AI consultation today and discover how AI can transform your business.
+                </p>
+                <a href="index.html#contact" class="inline-flex items-center px-8 py-4 bg-white text-primary rounded-lg font-semibold hover:bg-white/90 transition-all text-lg">
+                    Contact Us
+                    <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
+        // Navigation scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-dark/95', 'backdrop-blur-lg', 'shadow-lg');
+            } else {
+                navbar.classList.remove('bg-dark/95', 'backdrop-blur-lg', 'shadow-lg');
+            }
         });
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
             link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
+                mobileMenu.classList.add('hidden');
             });
         });
+
+        // Carousel functionality
+        const cards = document.querySelectorAll('.carousel-card');
+        const track = document.getElementById('carouselTrack');
+        const totalCards = cards.length;
+        let currentIndex = Math.floor(totalCards / 2); // Start in the middle
+
+        // Clone cards for infinite loop effect
+        const firstClones = [];
+        const lastClones = [];
+
+        // Clone first 3 cards and append to end
+        for (let i = 0; i < 3; i++) {
+            const clone = cards[i].cloneNode(true);
+            clone.classList.add('clone');
+            track.appendChild(clone);
+            firstClones.push(clone);
+        }
+
+        // Clone last 3 cards and prepend to start
+        for (let i = totalCards - 1; i >= totalCards - 3; i--) {
+            const clone = cards[i].cloneNode(true);
+            clone.classList.add('clone');
+            track.insertBefore(clone, track.firstChild);
+            lastClones.unshift(clone);
+        }
+
+        // Update current index to account for prepended clones
+        currentIndex = currentIndex + 3;
+
+        function updateCarousel(skipTransition = false) {
+            // Calculate the offset to center the current card
+            const allCards = document.querySelectorAll('.carousel-card');
+            const cardWidth = allCards[0].offsetWidth;
+            const gap = 32; // 2rem gap
+            const containerWidth = track.parentElement.offsetWidth;
+            const centerOffset = (containerWidth - cardWidth) / 2;
+            const offset = -currentIndex * (cardWidth + gap) + centerOffset;
+
+            if (skipTransition) {
+                track.style.transition = 'none';
+            } else {
+                track.style.transition = 'transform 0.5s ease-in-out';
+            }
+
+            track.style.transform = `translateX(${offset}px)`;
+
+            // Update active state for all cards including clones
+            allCards.forEach((card, index) => {
+                const distance = Math.abs(index - currentIndex);
+
+                card.classList.remove('active', 'side-1', 'side-2', 'side-3');
+
+                if (index === currentIndex) {
+                    card.classList.add('active');
+                } else if (distance === 1) {
+                    card.classList.add('side-1');
+                } else if (distance === 2) {
+                    card.classList.add('side-2');
+                } else if (distance === 3) {
+                    card.classList.add('side-3');
+                }
+                // Cards further than distance 3 keep default styles (most faded)
+            });
+
+            // Force reflow if transition was disabled
+            if (skipTransition) {
+                track.offsetHeight;
+            }
+        }
+
+        function moveCarousel(direction) {
+            currentIndex += direction;
+            updateCarousel();
+
+            // Check if we need to loop
+            const allCards = document.querySelectorAll('.carousel-card');
+
+            setTimeout(() => {
+                // If we're past the last real card, jump to the first real card
+                if (currentIndex >= totalCards + 3) {
+                    currentIndex = 3;
+                    updateCarousel(true);
+                }
+                // If we're before the first real card, jump to the last real card
+                else if (currentIndex < 3) {
+                    currentIndex = totalCards + 2;
+                    updateCarousel(true);
+                }
+            }, 500);
+        }
+
+        // Initialize carousel on load
+        window.addEventListener('load', () => {
+            updateCarousel();
+        });
+
+        // Update on window resize
+        window.addEventListener('resize', () => {
+            updateCarousel();
+        });
+
+        // Auto-advance every 5 seconds
+        setInterval(() => {
+            moveCarousel(1);
+        }, 5000);
     </script>
 </body>
 </html>

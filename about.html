@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+            perspective: 2000px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            gap: 2rem;
+            padding: 0 2rem;
+            transform-style: preserve-3d;
+        }
+
+        .carousel-card {
+            min-width: 320px;
+            max-width: 320px;
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+            filter: blur(4px);
+            opacity: 0.2;
+            transform: scale(0.85) translateZ(-150px);
+        }
+
+        .carousel-card.active {
+            filter: blur(0);
+            opacity: 1;
+            transform: scale(1) translateZ(0);
+        }
+
+        .carousel-card.side-1 {
+            filter: blur(1px);
+            opacity: 0.8;
+            transform: scale(0.97) translateZ(-30px);
+        }
+
+        .carousel-card.side-2 {
+            filter: blur(2px);
+            opacity: 0.5;
+            transform: scale(0.92) translateZ(-80px);
+        }
+
+        .carousel-card.side-3 {
+            filter: blur(3px);
+            opacity: 0.3;
+            transform: scale(0.88) translateZ(-120px);
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(20, 103, 101, 0.8);
+            border: none;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(20, 103, 101, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev {
+            left: 1rem;
+        }
+
+        .carousel-nav.next {
+            right: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .carousel-card {
+                min-width: 280px;
+                max-width: 280px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="about.html" class="text-white transition-colors">About</a>
+                    <a href="index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="index.html" class="block text-gray-300 hover:text-white transition-colors">Home</a>
+                <a href="portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="about.html" class="block text-white transition-colors">About</a>
+                <a href="index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[60vh] flex items-center pt-32 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="jungleimage3.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-20 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12 py-20 w-full">
+            <div class="max-w-3xl">
+                <h1 class="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight mb-8">
+                    About<br>
+                    <span class="text-primary">Wild Tiger Design</span>
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Empowering businesses with cutting-edge digital solutions that drive real results.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="relative py-32">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-16">
+                    <h2 class="text-4xl lg:text-5xl font-bold mb-6">Our Story</h2>
+                    <div class="space-y-6 text-lg text-gray-400 leading-relaxed">
+                        <p>
+                            Wild Tiger Design was founded with a simple mission: to help businesses thrive in the digital age. We believe that every company, regardless of size, deserves access to professional, high-quality web solutions that drive real results.
+                        </p>
+                        <p>
+                            What started as a passion for creating beautiful, functional websites has evolved into a full-service digital agency. Today, we offer comprehensive solutions spanning web design, hosting management, IT services, and AI consulting.
+                        </p>
+                        <p>
+                            Our approach is different. We don't just build websites—we build partnerships. Every project is an opportunity to understand your unique challenges, goals, and vision, then craft solutions that exceed expectations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section class="relative py-32 bg-dark-lighter/50">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                <!-- Mission -->
+                <div class="p-10 bg-dark rounded-2xl border border-gray-800">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4">Our Mission</h3>
+                    <p class="text-gray-400 text-lg leading-relaxed">
+                        To empower businesses with innovative digital solutions that combine cutting-edge technology with exceptional design. We're committed to delivering measurable results while maintaining the highest standards of quality and service.
+                    </p>
+                </div>
+
+                <!-- Vision -->
+                <div class="p-10 bg-dark rounded-2xl border border-gray-800">
+                    <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4">Our Vision</h3>
+                    <p class="text-gray-400 text-lg leading-relaxed">
+                        To be the trusted digital partner for businesses looking to thrive in an increasingly connected world. We envision a future where technology empowers every business to reach its full potential.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="relative py-32">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-primary mb-2">100%</div>
+                    <div class="text-gray-400">Client Satisfaction</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-primary mb-2">24/7</div>
+                    <div class="text-gray-400">Support Available</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-primary mb-2">50+</div>
+                    <div class="text-gray-400">Projects Delivered</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-5xl font-bold text-primary mb-2">15+</div>
+                    <div class="text-gray-400">Years Experience</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values Section -->
+    <section class="relative py-32 bg-dark-lighter/50">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-6">Our Values</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    The principles that guide everything we do
+                </p>
+            </div>
+
+            <!-- Carousel Container -->
+            <div class="carousel-container">
+                <!-- Navigation Buttons -->
+                <button class="carousel-nav prev" onclick="moveValuesCarousel(-1)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button class="carousel-nav next" onclick="moveValuesCarousel(1)">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <div class="carousel-track" id="valuesCarouselTrack">
+                    <!-- Value 1 -->
+                    <div class="carousel-card group p-8 bg-dark rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                        <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                            <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Quality First</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            We never compromise on quality. Every line of code, every design element, and every strategy is crafted with excellence in mind.
+                        </p>
+                    </div>
+
+                    <!-- Value 2 -->
+                    <div class="carousel-card group p-8 bg-dark rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                        <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                            <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Client-Focused</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Your success is our success. We listen, understand, and deliver solutions that align perfectly with your business objectives.
+                        </p>
+                    </div>
+
+                    <!-- Value 3 -->
+                    <div class="carousel-card group p-8 bg-dark rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                        <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                            <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Innovation</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Technology evolves rapidly, and so do we. We stay ahead of trends to bring you cutting-edge solutions.
+                        </p>
+                    </div>
+
+                    <!-- Value 4 -->
+                    <div class="carousel-card group p-8 bg-dark rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                        <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                            <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Transparency</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Clear communication, honest pricing, and no hidden surprises. We believe in building trust through transparency.
+                        </p>
+                    </div>
+
+                    <!-- Value 5 -->
+                    <div class="carousel-card group p-8 bg-dark rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                        <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                            <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Reliability</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            When you work with us, you can count on timely delivery, ongoing support, and solutions that work flawlessly.
+                        </p>
+                    </div>
+
+                    <!-- Value 6 -->
+                    <div class="carousel-card group p-8 bg-dark rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                        <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                            <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Continuous Learning</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            We're always learning, growing, and improving our craft to deliver better solutions for our clients.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Do Section -->
+    <section class="relative py-32">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-12 text-center">What We Do</h2>
+
+                <div class="space-y-8">
+                    <!-- Service 1 -->
+                    <div class="p-8 bg-dark-lighter rounded-2xl border border-gray-800">
+                        <h3 class="text-2xl font-bold mb-4 text-primary">Web Design & Development</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            From stunning landing pages to complex web applications, we create responsive, fast, and beautiful websites that convert visitors into customers. Every site is custom-built with your brand and goals in mind.
+                        </p>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="p-8 bg-dark-lighter rounded-2xl border border-gray-800">
+                        <h3 class="text-2xl font-bold mb-4 text-primary">Web Hosting & Management</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Leave the technical details to us. We handle hosting setup, ongoing maintenance, security monitoring, and performance optimization so you can focus on running your business.
+                        </p>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="p-8 bg-dark-lighter rounded-2xl border border-gray-800">
+                        <h3 class="text-2xl font-bold mb-4 text-primary">IT Management Services</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Comprehensive IT solutions including infrastructure management, technical support, system monitoring, and strategic consulting to keep your technology running smoothly.
+                        </p>
+                    </div>
+
+                    <!-- Service 4 -->
+                    <div class="p-8 bg-dark-lighter rounded-2xl border border-gray-800">
+                        <h3 class="text-2xl font-bold mb-4 text-primary">AI Consulting</h3>
+                        <p class="text-gray-400 leading-relaxed">
+                            Stay competitive with AI. We help businesses identify opportunities, implement automation, and leverage AI tools to increase efficiency and drive growth.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="relative py-32 bg-dark-lighter/50">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-12 text-center">Why Choose Wild Tiger Design?</h2>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Differentiator 1 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Custom Solutions, Not Templates</h3>
+                            <p class="text-gray-400">Every project is built from scratch to match your unique needs and brand identity.</p>
+                        </div>
+                    </div>
+
+                    <!-- Differentiator 2 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Full-Service Partner</h3>
+                            <p class="text-gray-400">From design to hosting to ongoing support, we handle everything so you don't have to juggle multiple vendors.</p>
+                        </div>
+                    </div>
+
+                    <!-- Differentiator 3 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Results-Driven Approach</h3>
+                            <p class="text-gray-400">We focus on metrics that matter—conversions, engagement, and ROI, not just pretty designs.</p>
+                        </div>
+                    </div>
+
+                    <!-- Differentiator 4 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Future-Proof Technology</h3>
+                            <p class="text-gray-400">We build with scalability in mind, using modern frameworks and best practices that stand the test of time.</p>
+                        </div>
+                    </div>
+
+                    <!-- Differentiator 5 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Transparent Communication</h3>
+                            <p class="text-gray-400">You'll always know what we're working on, why we're doing it, and what to expect next.</p>
+                        </div>
+                    </div>
+
+                    <!-- Differentiator 6 -->
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Ongoing Support & Growth</h3>
+                            <p class="text-gray-400">Our relationship doesn't end at launch. We're here for maintenance, updates, and helping you grow.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="relative py-32">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-8">Ready to Work Together?</h2>
+                <p class="text-xl text-gray-400 mb-12">
+                    Let's discuss how we can help take your business to the next level.
+                </p>
+                <a href="index.html#contact" class="inline-flex items-center px-8 py-4 bg-white text-primary rounded-lg font-semibold hover:bg-white/90 transition-all text-lg">
+                    Get In Touch
+                    <svg class="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-dark/95', 'backdrop-blur-lg', 'shadow-lg');
+            } else {
+                navbar.classList.remove('bg-dark/95', 'backdrop-blur-lg', 'shadow-lg');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Values Carousel functionality
+        const valuesCards = document.querySelectorAll('#valuesCarouselTrack .carousel-card');
+        const valuesTrack = document.getElementById('valuesCarouselTrack');
+        const totalValuesCards = valuesCards.length;
+        let currentValuesIndex = Math.floor(totalValuesCards / 2); // Start in the middle
+
+        // Clone cards for infinite loop effect
+        const firstValuesClones = [];
+        const lastValuesClones = [];
+
+        // Clone first 3 cards and append to end
+        for (let i = 0; i < 3; i++) {
+            const clone = valuesCards[i].cloneNode(true);
+            clone.classList.add('clone');
+            valuesTrack.appendChild(clone);
+            firstValuesClones.push(clone);
+        }
+
+        // Clone last 3 cards and prepend to start
+        for (let i = totalValuesCards - 1; i >= totalValuesCards - 3; i--) {
+            const clone = valuesCards[i].cloneNode(true);
+            clone.classList.add('clone');
+            valuesTrack.insertBefore(clone, valuesTrack.firstChild);
+            lastValuesClones.unshift(clone);
+        }
+
+        // Update current index to account for prepended clones
+        currentValuesIndex = currentValuesIndex + 3;
+
+        function updateValuesCarousel(skipTransition = false) {
+            // Calculate the offset to center the current card
+            const allValuesCards = document.querySelectorAll('#valuesCarouselTrack .carousel-card');
+            const cardWidth = allValuesCards[0].offsetWidth;
+            const gap = 32; // 2rem gap
+            const containerWidth = valuesTrack.parentElement.offsetWidth;
+            const centerOffset = (containerWidth - cardWidth) / 2;
+            const offset = -currentValuesIndex * (cardWidth + gap) + centerOffset;
+
+            if (skipTransition) {
+                valuesTrack.style.transition = 'none';
+            } else {
+                valuesTrack.style.transition = 'transform 0.5s ease-in-out';
+            }
+
+            valuesTrack.style.transform = `translateX(${offset}px)`;
+
+            // Update active state for all cards including clones
+            allValuesCards.forEach((card, index) => {
+                const distance = Math.abs(index - currentValuesIndex);
+
+                card.classList.remove('active', 'side-1', 'side-2', 'side-3');
+
+                if (index === currentValuesIndex) {
+                    card.classList.add('active');
+                } else if (distance === 1) {
+                    card.classList.add('side-1');
+                } else if (distance === 2) {
+                    card.classList.add('side-2');
+                } else if (distance === 3) {
+                    card.classList.add('side-3');
+                }
+                // Cards further than distance 3 keep default styles (most faded)
+            });
+
+            // Force reflow if transition was disabled
+            if (skipTransition) {
+                valuesTrack.offsetHeight;
+            }
+        }
+
+        function moveValuesCarousel(direction) {
+            currentValuesIndex += direction;
+            updateValuesCarousel();
+
+            // Check if we need to loop
+            const allValuesCards = document.querySelectorAll('#valuesCarouselTrack .carousel-card');
+
+            setTimeout(() => {
+                // If we're past the last real card, jump to the first real card
+                if (currentValuesIndex >= totalValuesCards + 3) {
+                    currentValuesIndex = 3;
+                    updateValuesCarousel(true);
+                }
+                // If we're before the first real card, jump to the last real card
+                else if (currentValuesIndex < 3) {
+                    currentValuesIndex = totalValuesCards + 2;
+                    updateValuesCarousel(true);
+                }
+            }, 500);
+        }
+
+        // Initialize carousel on load
+        window.addEventListener('load', () => {
+            updateValuesCarousel();
+        });
+
+        // Update on window resize
+        window.addEventListener('resize', () => {
+            updateValuesCarousel();
+        });
+
+        // Auto-advance every 5 seconds
+        setInterval(() => {
+            moveValuesCarousel(1);
+        }, 5000);
+    </script>
+</body>
+</html>
