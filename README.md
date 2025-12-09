@@ -50,7 +50,6 @@ Our portfolio showcases real-world projects we've built for clients:
 
 - **Custom Controls of GA**: Professional website for UL 508A certified panel shop specializing in automated industry solutions
 - **DrParkRx**: Modern online pharmacy platform with prescription services, transfers, and patient portal integration
-- **Central Delivery**: Comprehensive food delivery platform with restaurant management dashboard and mobile app
 
 ## File Structure
 
@@ -61,7 +60,6 @@ wildtigerdesign.com/
 ├── portfolio.html                  # Portfolio showcase page with project cards
 ├── portfolio-customcontrols.html   # Custom Controls of GA portfolio page
 ├── portfolio-drparkrx.html         # DrParkRx portfolio page
-├── portfolio-centraldelivery.html  # Central Delivery portfolio page
 ├── web-design.html                 # Web design services landing page
 ├── prices.html                     # Web design pricing page
 ├── web-hosting.html                # Web hosting services page
@@ -81,8 +79,7 @@ wildtigerdesign.com/
 ├── images/
 │   └── portfolio/                  # Portfolio project screenshots
 │       ├── customcontrolsofgasite.png
-│       ├── drparkrx.png
-│       └── centraldeliverysite.png
+│       └── drparkrx.png
 └── README.md                       # This file
 ```
 
