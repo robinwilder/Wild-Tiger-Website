@@ -1,0 +1,18 @@
+# Enable URL Rewriting
+RewriteEngine On
+
+# Redirect .html URLs to extensionless URLs (301 permanent redirect)
+RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
+RewriteRule ^ /%1 [NC,L,R=301]
+
+# Internally add .html extension to extensionless URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L]
+
+# Handle toolbox subdirectory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/toolbox/$1.html -f
+RewriteRule ^toolbox/(.+)$ toolbox/$1.html [L]
