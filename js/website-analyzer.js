@@ -26,6 +26,69 @@ const PAGESPEED_API_KEY = 'AIzaSyAwCl4sPUWqaBgiddfJwPEpeGsuw5sUNrk';
 
 let analysisData = {};
 
+// Hosting Provider Detection Patterns
+const HOSTING_PATTERNS = {
+    // Cloud Providers
+    'amazon': 'Amazon Web Services (AWS)',
+    'aws': 'Amazon Web Services (AWS)',
+    'ec2': 'Amazon Web Services (AWS)',
+    'cloudfront': 'Amazon CloudFront (AWS)',
+    'google': 'Google Cloud Platform',
+    'googleapis': 'Google Cloud Platform',
+    'microsoft': 'Microsoft Azure',
+    'azure': 'Microsoft Azure',
+    'digitalocean': 'DigitalOcean',
+    'linode': 'Linode (Akamai)',
+    'akamai': 'Akamai',
+    'vultr': 'Vultr',
+    'ovh': 'OVH',
+    'hetzner': 'Hetzner',
+
+    // CDN/Edge
+    'cloudflare': 'Cloudflare',
+    'fastly': 'Fastly',
+    'stackpath': 'StackPath',
+
+    // Managed WordPress
+    'wpengine': 'WP Engine',
+    'wp engine': 'WP Engine',
+    'kinsta': 'Kinsta',
+    'flywheel': 'Flywheel',
+    'pantheon': 'Pantheon',
+    'pressable': 'Pressable',
+
+    // Shared Hosting
+    'godaddy': 'GoDaddy',
+    'hostgator': 'HostGator',
+    'bluehost': 'Bluehost',
+    'siteground': 'SiteGround',
+    'dreamhost': 'DreamHost',
+    'hostinger': 'Hostinger',
+    'namecheap': 'Namecheap',
+    'a2hosting': 'A2 Hosting',
+    'inmotion': 'InMotion Hosting',
+
+    // Platform-as-a-Service
+    'heroku': 'Heroku',
+    'vercel': 'Vercel',
+    'netlify': 'Netlify',
+    'render': 'Render',
+    'railway': 'Railway',
+    'fly.io': 'Fly.io',
+
+    // Website Builders
+    'shopify': 'Shopify',
+    'squarespace': 'Squarespace',
+    'wix': 'Wix',
+    'weebly': 'Weebly',
+    'webflow': 'Webflow',
+
+    // Enterprise
+    'rackspace': 'Rackspace',
+    'ibm': 'IBM Cloud',
+    'oracle': 'Oracle Cloud'
+};
+
 // Validate and normalize URL
 function normalizeUrl(url) {
     url = url.trim();
@@ -119,10 +182,85 @@ function createScoreGauge(containerId, score) {
     container.appendChild(scoreText);
 }
 
+// Get IP address from domain using Google DNS API
+async function getIPAddress(domain) {
+    try {
+        const response = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
+        const data = await response.json();
+
+        if (data.Answer && data.Answer.length > 0) {
+            const aRecord = data.Answer.find(record => record.type === 1);
+            return aRecord ? aRecord.data : null;
+        }
+        return null;
+    } catch (error) {
+        console.error('DNS lookup failed:', error);
+        return null;
+    }
+}
+
+// Get hosting information from IP using IP-API
+async function getHostingInfo(ip) {
+    try {
+        // IMPORTANT: Use HTTP not HTTPS for CORS to work with free tier
+        const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,regionName,city,isp,org,as`);
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            return {
+                country: data.country || 'Unknown',
+                region: data.regionName || 'Unknown',
+                city: data.city || 'Unknown',
+                isp: data.isp || 'Unknown',
+                org: data.org || 'Unknown',
+                as: data.as || 'Unknown'
+            };
+        }
+        return null;
+    } catch (error) {
+        console.error('IP geolocation failed:', error);
+        return null;
+    }
+}
+
+// Detect hosting provider from ISP/organization name
+function detectHostingProvider(isp, org, asn) {
+    const searchText = `${isp} ${org} ${asn}`.toLowerCase();
+
+    for (const [pattern, provider] of Object.entries(HOSTING_PATTERNS)) {
+        if (searchText.includes(pattern.toLowerCase())) {
+            return provider;
+        }
+    }
+
+    // Return ISP name if no specific provider detected
+    return isp || 'Unknown';
+}
+
+// Infer technology stack from hosting provider
+function inferTechnology(hostingProvider) {
+    const provider = hostingProvider.toLowerCase();
+
+    // Platform detection based on hosting
+    if (provider.includes('shopify')) return 'Shopify';
+    if (provider.includes('squarespace')) return 'Squarespace';
+    if (provider.includes('wix')) return 'Wix';
+    if (provider.includes('weebly')) return 'Weebly';
+    if (provider.includes('webflow')) return 'Webflow';
+    if (provider.includes('wp engine') || provider.includes('wpengine') ||
+        provider.includes('kinsta') || provider.includes('flywheel') ||
+        provider.includes('pantheon')) return 'WordPress (likely)';
+
+    return null;
+}
+
 // Analyze website
 async function analyzeWebsite(url) {
     try {
         showLoading('Fetching performance data...');
+
+        // Extract domain from URL
+        const domain = new URL(url).hostname;
 
         // Fetch PageSpeed data
         const pagespeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${PAGESPEED_API_KEY}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`;
@@ -142,6 +280,7 @@ async function analyzeWebsite(url) {
 
         analysisData = {
             url: url,
+            domain: domain,
             timestamp: new Date().toLocaleString(),
             scores: {
                 performance: Math.round(categories.performance.score * 100),
@@ -161,7 +300,9 @@ async function analyzeWebsite(url) {
                 hasTitle: audits['document-title']?.score === 1,
                 hasViewport: audits['viewport']?.score === 1
             },
-            opportunities: []
+            opportunities: [],
+            hosting: null,
+            technology: null
         };
 
         // Get top 5 opportunities
@@ -181,6 +322,28 @@ async function analyzeWebsite(url) {
                 savings: audit.displayValue || ''
             };
         });
+
+        // Fetch hosting information
+        showLoading('Checking hosting information...');
+        const ip = await getIPAddress(domain);
+
+        if (ip) {
+            const hostingInfo = await getHostingInfo(ip);
+
+            if (hostingInfo) {
+                const hostingProvider = detectHostingProvider(hostingInfo.isp, hostingInfo.org, hostingInfo.as);
+                const detectedTech = inferTechnology(hostingProvider);
+
+                analysisData.hosting = {
+                    ip: ip,
+                    provider: hostingProvider,
+                    location: `${hostingInfo.city}, ${hostingInfo.region}, ${hostingInfo.country}`,
+                    organization: hostingInfo.org
+                };
+
+                analysisData.technology = detectedTech;
+            }
+        }
 
         hideLoading();
         displayResults();
@@ -237,21 +400,67 @@ function displayResults() {
         document.getElementById('opportunities-list').innerHTML = opportunitiesHtml;
     }
 
-    // Display Hosting Info (placeholder)
-    document.getElementById('hosting-info').innerHTML = `
-        <div class="col-span-2 text-center py-8">
-            <p class="text-gray-400 mb-2">🚀 More hosting details coming soon!</p>
-            <p class="text-sm text-gray-500">IP lookup, server location, and hosting provider detection</p>
+    // Display Hosting Info
+    if (analysisData.hosting) {
+        document.getElementById('hosting-info').innerHTML = `
+            <div class="text-sm">
+                <span class="text-gray-400">IP Address:</span>
+                <span class="font-semibold ml-2">${analysisData.hosting.ip}</span>
+            </div>
+            <div class="text-sm">
+                <span class="text-gray-400">Hosting Provider:</span>
+                <span class="font-semibold ml-2">${analysisData.hosting.provider}</span>
+            </div>
+            <div class="text-sm">
+                <span class="text-gray-400">Server Location:</span>
+                <span class="font-semibold ml-2">${analysisData.hosting.location}</span>
+            </div>
+            <div class="text-sm">
+                <span class="text-gray-400">Organization:</span>
+                <span class="font-semibold ml-2">${analysisData.hosting.organization}</span>
+            </div>
+        `;
+    } else {
+        document.getElementById('hosting-info').innerHTML = `
+            <div class="col-span-2 text-center py-4">
+                <p class="text-gray-400 text-sm">Unable to retrieve hosting information</p>
+            </div>
+        `;
+    }
+
+    // Display Tech Stack
+    let techStackHtml = '';
+
+    if (analysisData.technology) {
+        techStackHtml += `
+            <div class="mb-4">
+                <span class="text-gray-400">Detected Platform:</span>
+                <span class="font-semibold ml-2 text-primary">${analysisData.technology}</span>
+            </div>
+        `;
+    }
+
+    techStackHtml += `
+        <div class="text-sm text-gray-400 mb-3">For detailed technology breakdown:</div>
+        <div class="flex flex-wrap gap-3">
+            <a href="https://builtwith.com/${analysisData.domain}" target="_blank"
+               class="inline-flex items-center px-4 py-2 bg-dark-lighter border border-gray-700 rounded-lg hover:border-primary transition-colors text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+                View on BuiltWith
+            </a>
+            <a href="https://www.wappalyzer.com/lookup/${analysisData.domain}" target="_blank"
+               class="inline-flex items-center px-4 py-2 bg-dark-lighter border border-gray-700 rounded-lg hover:border-primary transition-colors text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+                View on Wappalyzer
+            </a>
         </div>
     `;
 
-    // Display Tech Stack (placeholder)
-    document.getElementById('tech-stack').innerHTML = `
-        <div class="text-center py-8">
-            <p class="text-gray-400 mb-2">🛠️ Technology detection coming soon!</p>
-            <p class="text-sm text-gray-500">CMS, frameworks, and third-party integrations</p>
-        </div>
-    `;
+    document.getElementById('tech-stack').innerHTML = techStackHtml;
 
     // Display Security Info
     const isHttps = analysisData.url.startsWith('https://');
@@ -367,17 +576,40 @@ function generatePDF() {
         });
     }
 
+    // Hosting Information
+    if (analysisData.hosting) {
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Hosting Information', 20, 185);
+
+        doc.setFontSize(10);
+        doc.text(`IP Address: ${analysisData.hosting.ip}`, 25, 195);
+        doc.text(`Provider: ${analysisData.hosting.provider}`, 25, 201);
+        doc.text(`Location: ${analysisData.hosting.location}`, 25, 207);
+    }
+
+    // Technology Stack
+    doc.setFontSize(14);
+    doc.text('Technology Stack', 20, 220);
+
+    doc.setFontSize(10);
+    if (analysisData.technology) {
+        doc.text(`Detected Platform: ${analysisData.technology}`, 25, 230);
+    } else {
+        doc.text('Platform: Not automatically detected', 25, 230);
+    }
+
     // CTA
     doc.setFontSize(12);
     doc.setTextColor(20, 103, 101);
-    doc.text('Want a Complete Professional Audit?', 20, 230);
+    doc.text('Want a Complete Professional Audit?', 20, 245);
 
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
-    doc.text('Contact Wild Tiger Design for a comprehensive analysis:', 20, 240);
-    doc.text('Email: robin@wildtigerdesign.com', 20, 248);
-    doc.text('Phone: 706-567-5373', 20, 254);
-    doc.text('Web: wildtigerdesign.com', 20, 260);
+    doc.text('Contact Wild Tiger Design for a comprehensive analysis:', 20, 255);
+    doc.text('Email: robin@wildtigerdesign.com', 20, 263);
+    doc.text('Phone: 706-567-5373', 20, 269);
+    doc.text('Web: wildtigerdesign.com', 20, 275);
 
     // Footer
     doc.setFontSize(8);
