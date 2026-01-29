@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .drop-zone {
+            border: 2px dashed #374151;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #146765;
+            background-color: rgba(20, 103, 101, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    Image Compressor
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Reduce image file sizes while maintaining quality. Perfect for web optimization.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Client-Side</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Privacy First</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1200px] mx-auto px-6 lg:px-12">
+
+            <!-- Image Compressor Module -->
+            <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl overflow-hidden">
+
+                <!-- Upload Section -->
+                <div class="p-6">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Upload Image</label>
+                    <div id="drop-zone" class="drop-zone p-12 rounded-lg text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        <p class="text-lg font-medium text-gray-300 mb-2">Drop your image here or click to browse</p>
+                        <p class="text-sm text-gray-500">Supports JPG, PNG, WebP</p>
+                        <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Quality Control -->
+                <div id="controls-section" class="p-6 pt-0 hidden">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Compression Quality: <span id="quality-value" class="text-white">80</span>%</label>
+                    <input type="range" id="quality-slider" min="1" max="100" value="80" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary">
+                    <div class="flex justify-between text-xs text-gray-500 mt-2">
+                        <span>Smaller File</span>
+                        <span>Better Quality</span>
+                    </div>
+
+                    <!-- File Format Selection -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Output Format</label>
+                        <div class="flex gap-3">
+                            <button data-format="jpeg" class="format-btn flex-1 px-4 py-3 bg-primary text-white rounded-lg transition-all font-medium text-sm">
+                                JPEG
+                            </button>
+                            <button data-format="png" class="format-btn flex-1 px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm">
+                                PNG
+                            </button>
+                            <button data-format="webp" class="format-btn flex-1 px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm">
+                                WebP
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Size Comparison -->
+                <div id="comparison-section" class="p-6 pt-0 hidden">
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-black/30 border border-gray-700 rounded-lg p-4">
+                            <p class="text-sm text-gray-400 mb-1">Original Size</p>
+                            <p id="original-size" class="text-2xl font-bold text-white">0 KB</p>
+                        </div>
+                        <div class="bg-black/30 border border-gray-700 rounded-lg p-4">
+                            <p class="text-sm text-gray-400 mb-1">Compressed Size</p>
+                            <p id="compressed-size" class="text-2xl font-bold text-primary">0 KB</p>
+                        </div>
+                        <div class="bg-black/30 border border-gray-700 rounded-lg p-4">
+                            <p class="text-sm text-gray-400 mb-1">Size Reduction</p>
+                            <p id="size-reduction" class="text-2xl font-bold text-green-400">0%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div id="preview-section" class="p-6 pt-0 hidden">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Preview</label>
+                    <div class="bg-black/30 border border-gray-700 rounded-lg p-4 flex items-center justify-center min-h-[300px]">
+                        <img id="preview-image" src="" alt="Preview" class="max-w-full max-h-[500px] rounded-lg">
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div id="actions-section" class="p-6 pt-0 hidden">
+                    <div class="flex flex-wrap gap-3">
+                        <button id="download-btn" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium">
+                            Download Compressed Image
+                        </button>
+                        <button id="reset-btn" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                            Upload New Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Image Compressor Logic
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const controlsSection = document.getElementById('controls-section');
+        const comparisonSection = document.getElementById('comparison-section');
+        const previewSection = document.getElementById('preview-section');
+        const actionsSection = document.getElementById('actions-section');
+        const qualitySlider = document.getElementById('quality-slider');
+        const qualityValue = document.getElementById('quality-value');
+        const previewImage = document.getElementById('preview-image');
+        const originalSizeEl = document.getElementById('original-size');
+        const compressedSizeEl = document.getElementById('compressed-size');
+        const sizeReductionEl = document.getElementById('size-reduction');
+        const downloadBtn = document.getElementById('download-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const formatButtons = document.querySelectorAll('.format-btn');
+
+        let originalFile = null;
+        let originalImage = null;
+        let currentFormat = 'jpeg';
+        let compressedBlob = null;
+
+        // Drop zone click to trigger file input
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleFile(file);
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+        // Handle file upload
+        function handleFile(file) {
+            originalFile = file;
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    originalImage = img;
+                    originalSizeEl.textContent = formatFileSize(file.size);
+                    compressImage();
+                    showSections();
+                };
+                img.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // Show all sections
+        function showSections() {
+            controlsSection.classList.remove('hidden');
+            comparisonSection.classList.remove('hidden');
+            previewSection.classList.remove('hidden');
+            actionsSection.classList.remove('hidden');
+        }
+
+        // Compress image
+        function compressImage() {
+            const canvas = document.createElement('canvas');
+            canvas.width = originalImage.width;
+            canvas.height = originalImage.height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(originalImage, 0, 0);
+
+            const quality = qualitySlider.value / 100;
+            const mimeType = `image/${currentFormat}`;
+
+            canvas.toBlob((blob) => {
+                compressedBlob = blob;
+                const url = URL.createObjectURL(blob);
+                previewImage.src = url;
+
+                // Update file size comparison
+                compressedSizeEl.textContent = formatFileSize(blob.size);
+                const reduction = ((1 - blob.size / originalFile.size) * 100).toFixed(1);
+                sizeReductionEl.textContent = reduction + '%';
+
+                // Update color based on reduction
+                if (reduction > 50) {
+                    sizeReductionEl.className = 'text-2xl font-bold text-green-400';
+                } else if (reduction > 25) {
+                    sizeReductionEl.className = 'text-2xl font-bold text-yellow-400';
+                } else {
+                    sizeReductionEl.className = 'text-2xl font-bold text-orange-400';
+                }
+            }, mimeType, quality);
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        // Quality slider change
+        qualitySlider.addEventListener('input', (e) => {
+            qualityValue.textContent = e.target.value;
+        });
+
+        qualitySlider.addEventListener('change', () => {
+            if (originalImage) {
+                compressImage();
+            }
+        });
+
+        // Format button handlers
+        formatButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                formatButtons.forEach(b => {
+                    b.classList.remove('bg-primary');
+                    b.classList.add('bg-gray-800', 'hover:bg-gray-700');
+                });
+                btn.classList.add('bg-primary');
+                btn.classList.remove('bg-gray-800', 'hover:bg-gray-700');
+
+                // Update format and recompress
+                currentFormat = btn.dataset.format;
+                if (originalImage) {
+                    compressImage();
+                }
+            });
+        });
+
+        // Download button
+        downloadBtn.addEventListener('click', () => {
+            if (compressedBlob) {
+                const url = URL.createObjectURL(compressedBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                const extension = currentFormat === 'jpeg' ? 'jpg' : currentFormat;
+                a.download = `compressed-image.${extension}`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        });
+
+        // Reset button
+        resetBtn.addEventListener('click', () => {
+            originalFile = null;
+            originalImage = null;
+            compressedBlob = null;
+            fileInput.value = '';
+            previewImage.src = '';
+            controlsSection.classList.add('hidden');
+            comparisonSection.classList.add('hidden');
+            previewSection.classList.add('hidden');
+            actionsSection.classList.add('hidden');
+            qualitySlider.value = 80;
+            qualityValue.textContent = '80';
+
+            // Reset format to JPEG
+            formatButtons.forEach(b => {
+                b.classList.remove('bg-primary');
+                b.classList.add('bg-gray-800', 'hover:bg-gray-700');
+            });
+            formatButtons[0].classList.add('bg-primary');
+            formatButtons[0].classList.remove('bg-gray-800', 'hover:bg-gray-700');
+            currentFormat = 'jpeg';
+        });
+    </script>
+</body>
+</html>

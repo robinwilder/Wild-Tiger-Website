@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Splitter - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <!-- PDF-Lib -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .drop-zone {
+            border: 2px dashed #374151;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #146765;
+            background-color: rgba(20, 103, 101, 0.1);
+        }
+
+        .page-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-item.selected {
+            border-color: #146765;
+            background-color: rgba(20, 103, 101, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    PDF Splitter
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Extract specific pages from PDFs or split into multiple documents
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Client-Side</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Privacy First</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1200px] mx-auto px-6 lg:px-12">
+
+            <!-- PDF Splitter Module -->
+            <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl overflow-hidden">
+
+                <!-- Upload Section -->
+                <div class="p-6">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Upload PDF</label>
+                    <div id="drop-zone" class="drop-zone p-12 rounded-lg text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        <p class="text-lg font-medium text-gray-300 mb-2">Drop your PDF file here or click to browse</p>
+                        <p class="text-sm text-gray-500">Upload a single PDF file</p>
+                        <input type="file" id="file-input" accept="application/pdf" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Split Options -->
+                <div id="options-section" class="p-6 pt-0 hidden">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Split Mode</label>
+                    <div class="grid md:grid-cols-3 gap-3 mb-6">
+                        <button data-mode="select" class="mode-btn px-4 py-3 bg-primary text-white rounded-lg transition-all font-medium text-sm">
+                            Select Pages
+                        </button>
+                        <button data-mode="range" class="mode-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm">
+                            Page Range
+                        </button>
+                        <button data-mode="individual" class="mode-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm">
+                            Split All Pages
+                        </button>
+                    </div>
+
+                    <!-- Range Input (hidden by default) -->
+                    <div id="range-input" class="hidden mb-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Page Range (e.g., 1-3, 5, 7-9)</label>
+                        <input type="text" id="page-range" placeholder="1-3, 5, 7-9" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                    </div>
+                </div>
+
+                <!-- Page Selection Section -->
+                <div id="pages-section" class="p-6 pt-0 hidden">
+                    <div class="flex items-center justify-between mb-3">
+                        <label class="block text-sm font-medium text-gray-400">
+                            Pages (<span id="selected-count">0</span> selected)
+                        </label>
+                        <div class="flex gap-2">
+                            <button id="select-all-btn" class="text-sm text-primary hover:text-primary/80 transition-colors">
+                                Select All
+                            </button>
+                            <button id="deselect-all-btn" class="text-sm text-gray-400 hover:text-white transition-colors">
+                                Deselect All
+                            </button>
+                        </div>
+                    </div>
+                    <div id="pages-grid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                        <!-- Page items will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div id="actions-section" class="p-6 pt-0 hidden">
+                    <div class="flex flex-wrap gap-3">
+                        <button id="extract-btn" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium">
+                            <span id="extract-btn-text">Extract Pages</span>
+                            <span id="extract-btn-spinner" class="hidden">Processing...</span>
+                        </button>
+                        <button id="reset-btn" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                            Upload New PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // PDF Splitter Logic
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const optionsSection = document.getElementById('options-section');
+        const pagesSection = document.getElementById('pages-section');
+        const actionsSection = document.getElementById('actions-section');
+        const pagesGrid = document.getElementById('pages-grid');
+        const selectedCount = document.getElementById('selected-count');
+        const extractBtn = document.getElementById('extract-btn');
+        const extractBtnText = document.getElementById('extract-btn-text');
+        const extractBtnSpinner = document.getElementById('extract-btn-spinner');
+        const resetBtn = document.getElementById('reset-btn');
+        const selectAllBtn = document.getElementById('select-all-btn');
+        const deselectAllBtn = document.getElementById('deselect-all-btn');
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        const rangeInput = document.getElementById('range-input');
+        const pageRangeEl = document.getElementById('page-range');
+
+        let pdfDoc = null;
+        let pdfData = null;
+        let selectedPages = new Set();
+        let currentMode = 'select';
+
+        // Drop zone click to trigger file input
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type === 'application/pdf') {
+                handleFile(file);
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+        // Handle file upload
+        async function handleFile(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                pdfData = arrayBuffer;
+                const { PDFDocument } = PDFLib;
+                pdfDoc = await PDFDocument.load(arrayBuffer);
+
+                displayPages();
+                showSections();
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                alert('Error loading PDF. Please try again.');
+            }
+        }
+
+        // Display pages
+        function displayPages() {
+            pagesGrid.innerHTML = '';
+            selectedPages.clear();
+            const pageCount = pdfDoc.getPageCount();
+
+            for (let i = 1; i <= pageCount; i++) {
+                const pageItem = document.createElement('div');
+                pageItem.className = 'page-item bg-gray-800/50 p-3 rounded-lg border border-gray-700 text-center hover:border-primary/50 transition-all';
+                pageItem.dataset.page = i;
+
+                pageItem.innerHTML = `
+                    <div class="w-full aspect-[3/4] bg-gray-900 rounded mb-2 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-sm font-medium">Page ${i}</p>
+                `;
+
+                pageItem.addEventListener('click', () => {
+                    if (currentMode === 'select') {
+                        togglePage(i, pageItem);
+                    }
+                });
+
+                pagesGrid.appendChild(pageItem);
+            }
+
+            updateSelectedCount();
+        }
+
+        // Toggle page selection
+        function togglePage(pageNum, element) {
+            if (selectedPages.has(pageNum)) {
+                selectedPages.delete(pageNum);
+                element.classList.remove('selected');
+            } else {
+                selectedPages.add(pageNum);
+                element.classList.add('selected');
+            }
+            updateSelectedCount();
+        }
+
+        // Update selected count
+        function updateSelectedCount() {
+            selectedCount.textContent = selectedPages.size;
+        }
+
+        // Mode buttons
+        modeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                modeButtons.forEach(b => {
+                    b.classList.remove('bg-primary');
+                    b.classList.add('bg-gray-800', 'hover:bg-gray-700');
+                });
+                btn.classList.add('bg-primary');
+                btn.classList.remove('bg-gray-800', 'hover:bg-gray-700');
+
+                currentMode = btn.dataset.mode;
+
+                // Show/hide relevant sections
+                if (currentMode === 'range') {
+                    rangeInput.classList.remove('hidden');
+                    pagesSection.classList.add('hidden');
+                } else if (currentMode === 'select') {
+                    rangeInput.classList.add('hidden');
+                    pagesSection.classList.remove('hidden');
+                } else {
+                    rangeInput.classList.add('hidden');
+                    pagesSection.classList.add('hidden');
+                }
+            });
+        });
+
+        // Select all
+        selectAllBtn.addEventListener('click', () => {
+            const pageCount = pdfDoc.getPageCount();
+            selectedPages.clear();
+            for (let i = 1; i <= pageCount; i++) {
+                selectedPages.add(i);
+            }
+            document.querySelectorAll('.page-item').forEach(item => {
+                item.classList.add('selected');
+            });
+            updateSelectedCount();
+        });
+
+        // Deselect all
+        deselectAllBtn.addEventListener('click', () => {
+            selectedPages.clear();
+            document.querySelectorAll('.page-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            updateSelectedCount();
+        });
+
+        // Show sections
+        function showSections() {
+            optionsSection.classList.remove('hidden');
+            if (currentMode === 'select') {
+                pagesSection.classList.remove('hidden');
+            }
+            actionsSection.classList.remove('hidden');
+        }
+
+        // Extract pages
+        extractBtn.addEventListener('click', async () => {
+            extractBtnText.classList.add('hidden');
+            extractBtnSpinner.classList.remove('hidden');
+            extractBtn.disabled = true;
+
+            try {
+                const { PDFDocument } = PDFLib;
+
+                if (currentMode === 'individual') {
+                    // Split into individual pages
+                    const pageCount = pdfDoc.getPageCount();
+                    for (let i = 0; i < pageCount; i++) {
+                        const newPdf = await PDFDocument.create();
+                        const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
+                        newPdf.addPage(copiedPage);
+
+                        const pdfBytes = await newPdf.save();
+                        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                        const url = URL.createObjectURL(blob);
+
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `page-${i + 1}.pdf`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+                    }
+                } else if (currentMode === 'range') {
+                    // Parse range
+                    const pages = parsePageRange(pageRangeEl.value, pdfDoc.getPageCount());
+                    if (pages.length === 0) {
+                        alert('Please enter a valid page range');
+                        return;
+                    }
+
+                    const newPdf = await PDFDocument.create();
+                    const copiedPages = await newPdf.copyPages(pdfDoc, pages.map(p => p - 1));
+                    copiedPages.forEach(page => newPdf.addPage(page));
+
+                    const pdfBytes = await newPdf.save();
+                    downloadPdf(pdfBytes, 'extracted-pages.pdf');
+                } else {
+                    // Selected pages
+                    if (selectedPages.size === 0) {
+                        alert('Please select at least one page');
+                        return;
+                    }
+
+                    const pages = Array.from(selectedPages).sort((a, b) => a - b);
+                    const newPdf = await PDFDocument.create();
+                    const copiedPages = await newPdf.copyPages(pdfDoc, pages.map(p => p - 1));
+                    copiedPages.forEach(page => newPdf.addPage(page));
+
+                    const pdfBytes = await newPdf.save();
+                    downloadPdf(pdfBytes, 'extracted-pages.pdf');
+                }
+
+            } catch (error) {
+                console.error('Error extracting pages:', error);
+                alert('Error extracting pages. Please try again.');
+            } finally {
+                extractBtnText.classList.remove('hidden');
+                extractBtnSpinner.classList.add('hidden');
+                extractBtn.disabled = false;
+            }
+        });
+
+        // Parse page range (e.g., "1-3, 5, 7-9")
+        function parsePageRange(rangeStr, maxPage) {
+            const pages = new Set();
+            const parts = rangeStr.split(',').map(s => s.trim());
+
+            for (const part of parts) {
+                if (part.includes('-')) {
+                    const [start, end] = part.split('-').map(s => parseInt(s.trim()));
+                    if (!isNaN(start) && !isNaN(end) && start > 0 && end <= maxPage && start <= end) {
+                        for (let i = start; i <= end; i++) {
+                            pages.add(i);
+                        }
+                    }
+                } else {
+                    const page = parseInt(part);
+                    if (!isNaN(page) && page > 0 && page <= maxPage) {
+                        pages.add(page);
+                    }
+                }
+            }
+
+            return Array.from(pages).sort((a, b) => a - b);
+        }
+
+        // Download PDF
+        function downloadPdf(pdfBytes, filename) {
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Reset
+        resetBtn.addEventListener('click', () => {
+            pdfDoc = null;
+            pdfData = null;
+            selectedPages.clear();
+            fileInput.value = '';
+            pagesGrid.innerHTML = '';
+            optionsSection.classList.add('hidden');
+            pagesSection.classList.add('hidden');
+            actionsSection.classList.add('hidden');
+            rangeInput.classList.add('hidden');
+            pageRangeEl.value = '';
+
+            // Reset mode to select
+            modeButtons.forEach(b => {
+                b.classList.remove('bg-primary');
+                b.classList.add('bg-gray-800', 'hover:bg-gray-700');
+            });
+            modeButtons[0].classList.add('bg-primary');
+            modeButtons[0].classList.remove('bg-gray-800', 'hover:bg-gray-700');
+            currentMode = 'select';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Converter - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- File Converter Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    File Converter
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Convert images between formats, convert HEIC files, and create PDFs - all in your browser
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">No Uploads</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Completely Private</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1200px] mx-auto px-6 lg:px-12">
+
+<!-- FILE CONVERTER MODULE -->
+<style>
+.fc-module{--fc-bg:rgb(10,10,15);--fc-bg-card:rgba(26,26,26,0.7);--fc-bg-card-solid:rgb(26,26,26);--fc-teal:rgb(20,103,101);--fc-teal-light:rgb(30,130,127);--fc-teal-bg:rgba(20,103,101,0.1);--fc-border:rgb(31,41,55);--fc-border-light:rgb(55,65,81);--fc-text:rgb(255,255,255);--fc-text-muted:rgb(156,163,175);--fc-text-dim:rgb(107,114,128);--fc-success:rgb(34,197,94);--fc-error:rgb(239,68,68);--fc-radius:8px;--fc-radius-lg:12px;--fc-radius-xl:16px;font-family:'Inter',-apple-system,system-ui,'Segoe UI',sans-serif;color:var(--fc-text);line-height:1.6}
+.fc-module *,.fc-module *::before,.fc-module *::after{box-sizing:border-box}
+.fc-container{background:var(--fc-bg-card);border:1px solid var(--fc-border);border-radius:var(--fc-radius-xl);overflow:hidden;backdrop-filter:blur(10px)}
+.fc-tabs{display:flex;border-bottom:1px solid var(--fc-border);background:rgba(0,0,0,0.2);margin:0;padding:0;list-style:none}
+.fc-tab{flex:1;padding:1rem 1.5rem;background:transparent;border:none;color:var(--fc-text-muted);font-family:inherit;font-size:0.9rem;font-weight:500;cursor:pointer;transition:all 0.2s ease;position:relative}
+.fc-tab:hover{color:var(--fc-text);background:rgba(255,255,255,0.02)}
+.fc-tab.active{color:var(--fc-teal);background:rgba(20,103,101,0.08)}
+.fc-tab.active::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--fc-teal)}
+.fc-content{padding:2rem}
+.fc-panel{display:none}
+.fc-panel.active{display:block;animation:fcFadeIn 0.3s ease}
+@keyframes fcFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fc-dropzone{border:2px dashed var(--fc-border);border-radius:var(--fc-radius-lg);padding:3rem 2rem;text-align:center;transition:all 0.3s ease;cursor:pointer;background:rgba(0,0,0,0.2)}
+.fc-dropzone:hover,.fc-dropzone.dragover{border-color:var(--fc-teal);background:var(--fc-teal-bg)}
+.fc-dropzone-icon{width:64px;height:64px;margin:0 auto 1.5rem;background:var(--fc-teal-bg);border-radius:var(--fc-radius-lg);display:flex;align-items:center;justify-content:center;transition:transform 0.2s ease}
+.fc-dropzone-icon svg{width:28px;height:28px;color:var(--fc-teal)}
+.fc-dropzone:hover .fc-dropzone-icon{transform:scale(1.05)}
+.fc-dropzone h3{font-size:1.1rem;font-weight:600;margin:0 0 0.5rem 0;color:var(--fc-text)}
+.fc-dropzone p{color:var(--fc-text-muted);font-size:0.9rem;margin:0}
+.fc-dropzone input[type="file"]{display:none}
+.fc-filetypes{margin-top:1.25rem;display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap}
+.fc-filetype{font-size:0.7rem;font-weight:500;background:rgba(255,255,255,0.05);padding:0.25rem 0.6rem;border-radius:4px;color:var(--fc-text-dim);text-transform:uppercase;letter-spacing:0.5px}
+.fc-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
+.fc-option-group{background:rgba(0,0,0,0.3);border:1px solid var(--fc-border);border-radius:var(--fc-radius);padding:1rem}
+.fc-option-label{display:block;font-size:0.75rem;font-weight:500;color:var(--fc-text-dim);margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:0.5px}
+.fc-select{width:100%;background:var(--fc-bg-card-solid);border:1px solid var(--fc-border);border-radius:var(--fc-radius);padding:0.75rem 1rem;color:var(--fc-text);font-family:inherit;font-size:0.9rem;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239CA3AF' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.fc-select:focus{outline:none;border-color:var(--fc-teal)}
+.fc-slider{width:100%;height:6px;background:var(--fc-border);border-radius:3px;appearance:none;cursor:pointer;margin-top:0.5rem}
+.fc-slider::-webkit-slider-thumb{appearance:none;width:18px;height:18px;background:var(--fc-teal);border-radius:50%;cursor:pointer;transition:transform 0.2s ease}
+.fc-slider::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.fc-slider-value{font-size:0.8rem;color:var(--fc-teal);font-weight:500}
+.fc-preview{margin-top:1.5rem;display:none}
+.fc-preview.active{display:block}
+.fc-preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.fc-preview-title{font-size:0.9rem;font-weight:500}
+.fc-preview-count{font-size:0.8rem;color:var(--fc-text-dim)}
+.fc-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:0.75rem}
+.fc-preview-item{background:rgba(0,0,0,0.3);border:1px solid var(--fc-border);border-radius:var(--fc-radius);overflow:hidden;position:relative;aspect-ratio:1}
+.fc-preview-item img{width:100%;height:100%;object-fit:cover}
+.fc-preview-item-overlay{position:absolute;bottom:0;left:0;right:0;padding:0.5rem;background:linear-gradient(transparent,rgba(0,0,0,0.85))}
+.fc-preview-item-name{font-size:0.65rem;color:var(--fc-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fc-preview-item-remove{position:absolute;top:0.4rem;right:0.4rem;width:22px;height:22px;background:rgba(239,68,68,0.9);border:none;border-radius:50%;color:white;font-size:0.75rem;cursor:pointer;opacity:0;transition:opacity 0.2s ease;display:flex;align-items:center;justify-content:center;line-height:1}
+.fc-preview-item:hover .fc-preview-item-remove{opacity:1}
+.fc-actions{margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap}
+.fc-btn{padding:0.875rem 1.75rem;border-radius:var(--fc-radius);font-family:inherit;font-size:0.95rem;font-weight:500;cursor:pointer;transition:all 0.2s ease;border:none;display:inline-flex;align-items:center;justify-content:center;gap:0.5rem}
+.fc-btn-primary{background:white;color:var(--fc-teal);flex:1}
+.fc-btn-primary:hover{background:var(--fc-teal);color:white;transform:translateY(-1px)}
+.fc-btn-primary:disabled{background:var(--fc-border);color:var(--fc-text-dim);cursor:not-allowed;transform:none}
+.fc-btn-secondary{background:transparent;border:1px solid var(--fc-border);color:var(--fc-text-muted)}
+.fc-btn-secondary:hover{border-color:var(--fc-border-light);color:var(--fc-text)}
+.fc-progress{margin-top:1.5rem;display:none}
+.fc-progress.active{display:block}
+.fc-progress-bar{height:6px;background:var(--fc-border);border-radius:3px;overflow:hidden}
+.fc-progress-fill{height:100%;background:linear-gradient(90deg,var(--fc-teal),var(--fc-teal-light));border-radius:3px;transition:width 0.3s ease}
+.fc-progress-text{margin-top:0.75rem;font-size:0.8rem;color:var(--fc-text-dim);text-align:center}
+.fc-results{margin-top:1.5rem;display:none}
+.fc-results.active{display:block}
+.fc-results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.fc-results-success{display:flex;align-items:center;gap:0.5rem;color:var(--fc-success);font-weight:500;font-size:0.9rem}
+.fc-results-list{display:flex;flex-direction:column;gap:0.5rem}
+.fc-result-item{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.3);border:1px solid var(--fc-border);padding:1rem;border-radius:var(--fc-radius)}
+.fc-result-info{display:flex;align-items:center;gap:1rem}
+.fc-result-icon{width:40px;height:40px;background:var(--fc-teal-bg);border-radius:var(--fc-radius);display:flex;align-items:center;justify-content:center;color:var(--fc-teal)}
+.fc-result-name{font-weight:500;font-size:0.9rem;margin-bottom:0.15rem}
+.fc-result-size{font-size:0.75rem;color:var(--fc-text-dim)}
+.fc-result-download{background:var(--fc-teal);color:white;padding:0.5rem 1rem;border-radius:var(--fc-radius);border:none;font-family:inherit;font-weight:500;font-size:0.85rem;cursor:pointer;transition:all 0.2s ease}
+.fc-result-download:hover{background:var(--fc-teal-light)}
+.fc-toast-container{position:fixed;bottom:2rem;right:2rem;z-index:10000;display:flex;flex-direction:column;gap:0.5rem}
+.fc-toast{background:var(--fc-bg-card-solid);border:1px solid var(--fc-border);border-radius:var(--fc-radius);padding:1rem 1.5rem;display:flex;align-items:center;gap:0.75rem;animation:fcSlideIn 0.3s ease;box-shadow:0 10px 40px rgba(0,0,0,0.4);font-size:0.9rem;color:var(--fc-text)}
+@keyframes fcSlideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.fc-toast.success{border-color:var(--fc-success)}
+.fc-toast.error{border-color:var(--fc-error)}
+@media(max-width:640px){.fc-content{padding:1.25rem}.fc-dropzone{padding:2rem 1rem}.fc-tabs{overflow-x:auto}.fc-tab{white-space:nowrap;padding:0.875rem 1rem;font-size:0.85rem}}
+</style>
+
+<div class="fc-module">
+  <div class="fc-container">
+    <div class="fc-tabs">
+      <button class="fc-tab active" data-fc-tab="image">Image Converter</button>
+      <button class="fc-tab" data-fc-tab="heic">HEIC to JPG/PNG</button>
+      <button class="fc-tab" data-fc-tab="pdf">Images to PDF</button>
+    </div>
+    <div class="fc-content">
+      <div id="fc-panel-image" class="fc-panel active">
+        <div class="fc-dropzone" id="fc-dropzone-image">
+          <div class="fc-dropzone-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+          <h3>Drop images here or click to browse</h3>
+          <p>Convert between JPG, PNG, WebP, and more</p>
+          <div class="fc-filetypes"><span class="fc-filetype">JPG</span><span class="fc-filetype">PNG</span><span class="fc-filetype">WebP</span><span class="fc-filetype">GIF</span><span class="fc-filetype">BMP</span></div>
+          <input type="file" id="fc-input-image" accept="image/*" multiple>
+        </div>
+        <div class="fc-options">
+          <div class="fc-option-group"><label class="fc-option-label">Output Format</label><select class="fc-select" id="fc-format-image"><option value="jpeg">JPEG (.jpg)</option><option value="png">PNG (.png)</option><option value="webp">WebP (.webp)</option></select></div>
+          <div class="fc-option-group"><label class="fc-option-label">Quality <span class="fc-slider-value" id="fc-quality-image-value">90%</span></label><input type="range" class="fc-slider" id="fc-quality-image" min="10" max="100" value="90"></div>
+        </div>
+        <div class="fc-preview" id="fc-preview-image"><div class="fc-preview-header"><span class="fc-preview-title">Selected Files</span><span class="fc-preview-count" id="fc-count-image">0 files</span></div><div class="fc-preview-grid" id="fc-grid-image"></div></div>
+        <div class="fc-actions"><button class="fc-btn fc-btn-primary" id="fc-convert-image" disabled>Convert Files</button><button class="fc-btn fc-btn-secondary" id="fc-clear-image">Clear All</button></div>
+        <div class="fc-progress" id="fc-progress-image"><div class="fc-progress-bar"><div class="fc-progress-fill" id="fc-progress-fill-image" style="width:0%"></div></div><div class="fc-progress-text" id="fc-progress-text-image">Processing...</div></div>
+        <div class="fc-results" id="fc-results-image"><div class="fc-results-header"><div class="fc-results-success"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Conversion Complete</div></div><div class="fc-results-list" id="fc-results-list-image"></div></div>
+      </div>
+      <div id="fc-panel-heic" class="fc-panel">
+        <div class="fc-dropzone" id="fc-dropzone-heic">
+          <div class="fc-dropzone-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+          <h3>Drop HEIC/HEIF files here</h3>
+          <p>Convert iPhone photos to standard formats</p>
+          <div class="fc-filetypes"><span class="fc-filetype">HEIC</span><span class="fc-filetype">HEIF</span></div>
+          <input type="file" id="fc-input-heic" accept=".heic,.heif,image/heic,image/heif" multiple>
+        </div>
+        <div class="fc-options">
+          <div class="fc-option-group"><label class="fc-option-label">Output Format</label><select class="fc-select" id="fc-format-heic"><option value="image/jpeg">JPEG (.jpg)</option><option value="image/png">PNG (.png)</option></select></div>
+          <div class="fc-option-group"><label class="fc-option-label">Quality <span class="fc-slider-value" id="fc-quality-heic-value">90%</span></label><input type="range" class="fc-slider" id="fc-quality-heic" min="10" max="100" value="90"></div>
+        </div>
+        <div class="fc-preview" id="fc-preview-heic"><div class="fc-preview-header"><span class="fc-preview-title">Selected Files</span><span class="fc-preview-count" id="fc-count-heic">0 files</span></div><div class="fc-preview-grid" id="fc-grid-heic"></div></div>
+        <div class="fc-actions"><button class="fc-btn fc-btn-primary" id="fc-convert-heic" disabled>Convert HEIC Files</button><button class="fc-btn fc-btn-secondary" id="fc-clear-heic">Clear All</button></div>
+        <div class="fc-progress" id="fc-progress-heic"><div class="fc-progress-bar"><div class="fc-progress-fill" id="fc-progress-fill-heic" style="width:0%"></div></div><div class="fc-progress-text" id="fc-progress-text-heic">Processing HEIC files...</div></div>
+        <div class="fc-results" id="fc-results-heic"><div class="fc-results-header"><div class="fc-results-success"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>Conversion Complete</div></div><div class="fc-results-list" id="fc-results-list-heic"></div></div>
+      </div>
+      <div id="fc-panel-pdf" class="fc-panel">
+        <div class="fc-dropzone" id="fc-dropzone-pdf">
+          <div class="fc-dropzone-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+          <h3>Drop images to combine into PDF</h3>
+          <p>Create a PDF from multiple images</p>
+          <div class="fc-filetypes"><span class="fc-filetype">JPG</span><span class="fc-filetype">PNG</span><span class="fc-filetype">WebP</span><span class="fc-filetype">GIF</span></div>
+          <input type="file" id="fc-input-pdf" accept="image/*" multiple>
+        </div>
+        <div class="fc-options">
+          <div class="fc-option-group"><label class="fc-option-label">Page Size</label><select class="fc-select" id="fc-pagesize-pdf"><option value="a4">A4</option><option value="letter">Letter</option><option value="legal">Legal</option><option value="fit">Fit to Image</option></select></div>
+          <div class="fc-option-group"><label class="fc-option-label">Orientation</label><select class="fc-select" id="fc-orientation-pdf"><option value="portrait">Portrait</option><option value="landscape">Landscape</option><option value="auto">Auto (based on image)</option></select></div>
+        </div>
+        <div class="fc-preview" id="fc-preview-pdf"><div class="fc-preview-header"><span class="fc-preview-title">Pages (drag to reorder)</span><span class="fc-preview-count" id="fc-count-pdf">0 pages</span></div><div class="fc-preview-grid" id="fc-grid-pdf"></div></div>
+        <div class="fc-actions"><button class="fc-btn fc-btn-primary" id="fc-convert-pdf" disabled>Create PDF</button><button class="fc-btn fc-btn-secondary" id="fc-clear-pdf">Clear All</button></div>
+        <div class="fc-progress" id="fc-progress-pdf"><div class="fc-progress-bar"><div class="fc-progress-fill" id="fc-progress-fill-pdf" style="width:0%"></div></div><div class="fc-progress-text" id="fc-progress-text-pdf">Creating PDF...</div></div>
+        <div class="fc-results" id="fc-results-pdf"><div class="fc-results-header"><div class="fc-results-success"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>PDF Created</div></div><div class="fc-results-list" id="fc-results-list-pdf"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-toast-container" id="fc-toast-container"></div>
+</div>
+
+<script>
+(function(){const FC={state:{image:{files:[],converted:[]},heic:{files:[],converted:[]},pdf:{files:[],converted:[]}},el:{}};function init(){['image','heic','pdf'].forEach(t=>{FC.el[t]={dropzone:document.getElementById('fc-dropzone-'+t),input:document.getElementById('fc-input-'+t),preview:document.getElementById('fc-preview-'+t),grid:document.getElementById('fc-grid-'+t),count:document.getElementById('fc-count-'+t),convert:document.getElementById('fc-convert-'+t),clear:document.getElementById('fc-clear-'+t),progress:document.getElementById('fc-progress-'+t),progressFill:document.getElementById('fc-progress-fill-'+t),progressText:document.getElementById('fc-progress-text-'+t),results:document.getElementById('fc-results-'+t),resultsList:document.getElementById('fc-results-list-'+t)}});document.querySelectorAll('.fc-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.fc-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.fc-panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('fc-panel-'+tab.dataset.fcTab).classList.add('active')})});['image','heic','pdf'].forEach(t=>{const dz=FC.el[t].dropzone,inp=FC.el[t].input;dz.addEventListener('click',()=>inp.click());dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover')});dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragover');handleFiles(t,e.dataTransfer.files)});inp.addEventListener('change',e=>handleFiles(t,e.target.files))});['image','heic'].forEach(t=>{const sl=document.getElementById('fc-quality-'+t),val=document.getElementById('fc-quality-'+t+'-value');sl.addEventListener('input',()=>val.textContent=sl.value+'%')});FC.el.image.convert.addEventListener('click',convertImages);FC.el.image.clear.addEventListener('click',()=>clearFiles('image'));FC.el.heic.convert.addEventListener('click',convertHeic);FC.el.heic.clear.addEventListener('click',()=>clearFiles('heic'));FC.el.pdf.convert.addEventListener('click',createPdf);FC.el.pdf.clear.addEventListener('click',()=>clearFiles('pdf'))}function handleFiles(t,fl){const files=Array.from(fl).filter(f=>t==='heic'?f.name.toLowerCase().match(/\.hei[cf]$/)||f.type.match(/^image\/hei[cf]$/):f.type.startsWith('image/'));if(!files.length){showToast('No valid files selected','error');return}FC.state[t].files=[...FC.state[t].files,...files];updatePreview(t);FC.el[t].convert.disabled=false;showToast('Added '+files.length+' file(s)','success')}function updatePreview(t){const el=FC.el[t],files=FC.state[t].files;el.preview.classList.add('active');el.count.textContent=files.length+(t==='pdf'?' pages':' files');el.grid.innerHTML='';files.forEach((f,i)=>{const item=document.createElement('div');item.className='fc-preview-item';item.draggable=t==='pdf';item.dataset.index=i;if(t==='heic'){item.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color:var(--fc-teal)"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="fc-preview-item-overlay"><div class="fc-preview-item-name">'+f.name+'</div></div><button class="fc-preview-item-remove" data-t="'+t+'" data-i="'+i+'">×</button>';item.querySelector('.fc-preview-item-remove').onclick=removeHandler}else{const r=new FileReader();r.onload=e=>{item.innerHTML='<img src="'+e.target.result+'"><div class="fc-preview-item-overlay"><div class="fc-preview-item-name">'+f.name+'</div></div><button class="fc-preview-item-remove" data-t="'+t+'" data-i="'+i+'">×</button>';item.querySelector('.fc-preview-item-remove').onclick=removeHandler};r.readAsDataURL(f)}el.grid.appendChild(item)});if(t==='pdf')initDrag(el.grid)}function removeHandler(e){const t=e.target.dataset.t,i=parseInt(e.target.dataset.i);FC.state[t].files.splice(i,1);updatePreview(t);if(!FC.state[t].files.length){FC.el[t].preview.classList.remove('active');FC.el[t].convert.disabled=true}}function clearFiles(t){FC.state[t]={files:[],converted:[]};FC.el[t].preview.classList.remove('active');FC.el[t].results.classList.remove('active');FC.el[t].progress.classList.remove('active');FC.el[t].convert.disabled=true;FC.el[t].input.value=''}async function convertImages(){const el=FC.el.image,files=FC.state.image.files,fmt=document.getElementById('fc-format-image').value,q=document.getElementById('fc-quality-image').value/100;el.progress.classList.add('active');el.results.classList.remove('active');el.convert.disabled=true;const results=[];for(let i=0;i<files.length;i++){el.progressFill.style.width=((i+1)/files.length*100)+'%';el.progressText.textContent='Converting '+(i+1)+' of '+files.length+'...';try{results.push(await convertImg(files[i],fmt,q))}catch(e){showToast('Failed: '+files[i].name,'error')}}FC.state.image.converted=results;showResults('image',results,fmt);el.progress.classList.remove('active');el.convert.disabled=false}function convertImg(f,fmt,q){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const ctx=c.getContext('2d');if(fmt==='jpeg'){ctx.fillStyle='#FFF';ctx.fillRect(0,0,c.width,c.height)}ctx.drawImage(img,0,0);c.toBlob(b=>{const ext=fmt==='jpeg'?'jpg':fmt;res({blob:b,name:f.name.replace(/\.[^.]+$/,'.'+ext),size:b.size})},'image/'+fmt,q)};img.onerror=rej;img.src=e.target.result};r.onerror=rej;r.readAsDataURL(f)})}async function convertHeic(){const el=FC.el.heic,files=FC.state.heic.files,fmt=document.getElementById('fc-format-heic').value,q=document.getElementById('fc-quality-heic').value/100;el.progress.classList.add('active');el.results.classList.remove('active');el.convert.disabled=true;const results=[];for(let i=0;i<files.length;i++){el.progressFill.style.width=((i+1)/files.length*100)+'%';el.progressText.textContent='Converting '+(i+1)+' of '+files.length+'...';try{const b=await heic2any({blob:files[i],toType:fmt,quality:q});const blob=Array.isArray(b)?b[0]:b;const ext=fmt==='image/jpeg'?'jpg':'png';results.push({blob,name:files[i].name.replace(/\.hei[cf]$/i,'.'+ext),size:blob.size})}catch(e){showToast('Failed: '+files[i].name,'error')}}FC.state.heic.converted=results;showResults('heic',results,fmt==='image/jpeg'?'jpeg':'png');el.progress.classList.remove('active');el.convert.disabled=false}async function createPdf(){const el=FC.el.pdf,files=FC.state.pdf.files,ps=document.getElementById('fc-pagesize-pdf').value,ori=document.getElementById('fc-orientation-pdf').value;el.progress.classList.add('active');el.results.classList.remove('active');el.convert.disabled=true;const{jsPDF}=window.jspdf;try{const imgs=[];for(let i=0;i<files.length;i++){el.progressFill.style.width=((i+1)/files.length*50)+'%';el.progressText.textContent='Loading '+(i+1)+' of '+files.length+'...';imgs.push(await loadImg(files[i]))}let fOri=ori;if(ori==='auto'&&imgs.length)fOri=imgs[0].w>imgs[0].h?'landscape':'portrait';const opt={orientation:fOri==='auto'?'portrait':fOri,unit:'mm'};if(ps!=='fit')opt.format=ps;const pdf=new jsPDF(opt);for(let i=0;i<imgs.length;i++){el.progressFill.style.width=(50+(i+1)/imgs.length*50)+'%';el.progressText.textContent='Adding page '+(i+1)+'...';const img=imgs[i];if(i>0){let pOri=ori;if(ori==='auto')pOri=img.w>img.h?'landscape':'portrait';pdf.addPage(ps==='fit'?[img.w*0.264583,img.h*0.264583]:ps,pOri)}const pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();let iw,ih,x,y;if(ps==='fit'){iw=img.w*0.264583;ih=img.h*0.264583;x=y=0}else{const r=Math.min(pw/img.w,ph/img.h);iw=img.w*r*0.95;ih=img.h*r*0.95;x=(pw-iw)/2;y=(ph-ih)/2}pdf.addImage(img.d,'JPEG',x,y,iw,ih)}const blob=pdf.output('blob');FC.state.pdf.converted=[{blob,name:'converted-'+Date.now()+'.pdf',size:blob.size}];showResults('pdf',FC.state.pdf.converted,'pdf')}catch(e){showToast('Failed to create PDF','error')}el.progress.classList.remove('active');el.convert.disabled=false}function loadImg(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>res({d:e.target.result,w:img.width,h:img.height});img.onerror=rej;img.src=e.target.result};r.onerror=rej;r.readAsDataURL(f)})}function showResults(t,results,fmt){const el=FC.el[t];el.results.classList.add('active');el.resultsList.innerHTML='';results.forEach((r,i)=>{const item=document.createElement('div');item.className='fc-result-item';const sz=r.size<1024?r.size+' B':r.size<1048576?(r.size/1024).toFixed(1)+' KB':(r.size/1048576).toFixed(1)+' MB';const path=fmt==='pdf'?'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z':'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z';item.innerHTML='<div class="fc-result-info"><div class="fc-result-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="'+path+'"/></svg></div><div><div class="fc-result-name">'+r.name+'</div><div class="fc-result-size">'+sz+'</div></div></div><button class="fc-result-download" data-t="'+t+'" data-i="'+i+'">Download</button>';item.querySelector('.fc-result-download').onclick=downloadHandler;el.resultsList.appendChild(item)});showToast(results.length+' file(s) converted!','success')}function downloadHandler(e){const t=e.target.dataset.t,i=parseInt(e.target.dataset.i),r=FC.state[t].converted[i],url=URL.createObjectURL(r.blob),a=document.createElement('a');a.href=url;a.download=r.name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}function initDrag(grid){let dragged=null;grid.querySelectorAll('.fc-preview-item').forEach(item=>{item.ondragstart=()=>{dragged=item;item.style.opacity='0.5'};item.ondragend=()=>{item.style.opacity='1';dragged=null};item.ondragover=e=>e.preventDefault();item.ondrop=e=>{e.preventDefault();if(dragged&&dragged!==item){const from=parseInt(dragged.dataset.index),to=parseInt(item.dataset.index);const[rem]=FC.state.pdf.files.splice(from,1);FC.state.pdf.files.splice(to,0,rem);updatePreview('pdf')}}})}function showToast(msg,type){const c=document.getElementById('fc-toast-container'),t=document.createElement('div');t.className='fc-toast '+type;t.innerHTML='<span>'+(type==='success'?'✓':'✕')+'</span> '+msg;c.appendChild(t);setTimeout(()=>{t.style.animation='fcSlideIn 0.3s ease reverse';setTimeout(()=>t.remove(),300)},3000)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
+</script>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking links
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

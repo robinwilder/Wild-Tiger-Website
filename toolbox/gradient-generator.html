@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient Generator - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .gradient-preview {
+            min-height: 400px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    Gradient Generator
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Create beautiful CSS gradients with live preview and instant code export
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Live Preview</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Copy CSS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Preview Panel -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Live Preview</label>
+                    <div id="gradient-preview" class="gradient-preview border-2 border-gray-800"></div>
+
+                    <!-- Quick Presets -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Popular Presets</label>
+                        <div class="grid grid-cols-4 gap-3" id="preset-grid">
+                            <!-- Presets will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls Panel -->
+                <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl p-6">
+
+                    <!-- Gradient Type -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Gradient Type</label>
+                        <div class="flex gap-3">
+                            <button id="type-linear" class="flex-1 px-4 py-3 bg-primary text-white rounded-lg transition-all font-medium">
+                                Linear
+                            </button>
+                            <button id="type-radial" class="flex-1 px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                                Radial
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Direction/Angle (for linear) -->
+                    <div class="mb-6" id="direction-control">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Direction: <span id="angle-value">90°</span></label>
+                        <input type="range" id="angle-slider" min="0" max="360" value="90" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-gray-500 mt-2">
+                            <span>0°</span>
+                            <span>90°</span>
+                            <span>180°</span>
+                            <span>270°</span>
+                            <span>360°</span>
+                        </div>
+                    </div>
+
+                    <!-- Color Stops -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <label class="block text-sm font-medium text-gray-400">Color Stops</label>
+                            <button id="add-stop" class="text-sm text-primary hover:text-primary/80">+ Add Color</button>
+                        </div>
+                        <div id="color-stops" class="space-y-3">
+                            <!-- Color stops will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- CSS Code -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <label class="block text-sm font-medium text-gray-400">CSS Code</label>
+                            <button id="copy-css" class="text-sm px-3 py-1 bg-primary hover:bg-primary/90 text-white rounded transition-all">
+                                Copy
+                            </button>
+                        </div>
+                        <textarea id="css-code" readonly class="w-full h-32 bg-black/30 border border-gray-700 rounded-lg p-4 text-sm text-white font-mono focus:outline-none focus:border-primary resize-none"></textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex gap-3">
+                        <button id="export-image" class="flex-1 px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                            Export as PNG
+                        </button>
+                        <button id="randomize" class="flex-1 px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                            Randomize
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Gradient Generator Logic
+        const gradientPreview = document.getElementById('gradient-preview');
+        const typeLinear = document.getElementById('type-linear');
+        const typeRadial = document.getElementById('type-radial');
+        const directionControl = document.getElementById('direction-control');
+        const angleSlider = document.getElementById('angle-slider');
+        const angleValue = document.getElementById('angle-value');
+        const colorStopsContainer = document.getElementById('color-stops');
+        const addStopBtn = document.getElementById('add-stop');
+        const cssCode = document.getElementById('css-code');
+        const copyCssBtn = document.getElementById('copy-css');
+        const exportImageBtn = document.getElementById('export-image');
+        const randomizeBtn = document.getElementById('randomize');
+        const presetGrid = document.getElementById('preset-grid');
+
+        let gradientType = 'linear';
+        let angle = 90;
+        let colorStops = [
+            { color: '#667eea', position: 0 },
+            { color: '#764ba2', position: 100 }
+        ];
+
+        // Preset gradients
+        const presets = [
+            { colors: ['#667eea', '#764ba2'], type: 'linear', angle: 135 },
+            { colors: ['#f093fb', '#f5576c'], type: 'linear', angle: 90 },
+            { colors: ['#4facfe', '#00f2fe'], type: 'linear', angle: 45 },
+            { colors: ['#43e97b', '#38f9d7'], type: 'linear', angle: 90 },
+            { colors: ['#fa709a', '#fee140'], type: 'linear', angle: 135 },
+            { colors: ['#30cfd0', '#330867'], type: 'linear', angle: 90 },
+            { colors: ['#a8edea', '#fed6e3'], type: 'linear', angle: 135 },
+            { colors: ['#ff9a9e', '#fecfef'], type: 'linear', angle: 120 },
+            { colors: ['#ffecd2', '#fcb69f'], type: 'linear', angle: 90 },
+            { colors: ['#ff6e7f', '#bfe9ff'], type: 'linear', angle: 45 },
+            { colors: ['#e0c3fc', '#8ec5fc'], type: 'linear', angle: 135 },
+            { colors: ['#f093fb', '#f5576c', '#4facfe'], type: 'linear', angle: 90 }
+        ];
+
+        // Initialize presets
+        presets.forEach((preset, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'aspect-square rounded-lg border-2 border-gray-700 hover:border-primary transition-all cursor-pointer';
+
+            const colors = preset.colors.map((c, i) => `${c} ${(i / (preset.colors.length - 1)) * 100}%`).join(', ');
+            btn.style.background = `linear-gradient(${preset.angle}deg, ${colors})`;
+
+            btn.addEventListener('click', () => {
+                gradientType = preset.type;
+                angle = preset.angle;
+                colorStops = preset.colors.map((c, i) => ({
+                    color: c,
+                    position: (i / (preset.colors.length - 1)) * 100
+                }));
+
+                updateGradientType();
+                updateColorStops();
+                updateGradient();
+            });
+
+            presetGrid.appendChild(btn);
+        });
+
+        // Gradient type toggle
+        typeLinear.addEventListener('click', () => {
+            gradientType = 'linear';
+            updateGradientType();
+            updateGradient();
+        });
+
+        typeRadial.addEventListener('click', () => {
+            gradientType = 'radial';
+            updateGradientType();
+            updateGradient();
+        });
+
+        function updateGradientType() {
+            if (gradientType === 'linear') {
+                typeLinear.classList.add('bg-primary');
+                typeLinear.classList.remove('bg-gray-800');
+                typeRadial.classList.remove('bg-primary');
+                typeRadial.classList.add('bg-gray-800');
+                directionControl.style.display = 'block';
+            } else {
+                typeRadial.classList.add('bg-primary');
+                typeRadial.classList.remove('bg-gray-800');
+                typeLinear.classList.remove('bg-primary');
+                typeLinear.classList.add('bg-gray-800');
+                directionControl.style.display = 'none';
+            }
+        }
+
+        // Angle slider
+        angleSlider.addEventListener('input', (e) => {
+            angle = parseInt(e.target.value);
+            angleValue.textContent = angle + '°';
+            updateGradient();
+        });
+
+        // Add color stop
+        addStopBtn.addEventListener('click', () => {
+            if (colorStops.length >= 5) {
+                alert('Maximum 5 color stops');
+                return;
+            }
+
+            const newPosition = colorStops.length > 0
+                ? Math.round((colorStops[colorStops.length - 1].position + 100) / 2)
+                : 50;
+
+            colorStops.push({
+                color: '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'),
+                position: newPosition
+            });
+
+            updateColorStops();
+            updateGradient();
+        });
+
+        // Update color stops UI
+        function updateColorStops() {
+            colorStopsContainer.innerHTML = '';
+
+            colorStops.forEach((stop, index) => {
+                const stopDiv = document.createElement('div');
+                stopDiv.className = 'flex items-center gap-3 bg-black/30 border border-gray-700 rounded-lg p-3';
+
+                stopDiv.innerHTML = `
+                    <input type="color" value="${stop.color}" class="w-12 h-12 rounded cursor-pointer" data-index="${index}">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <input type="text" value="${stop.color}" class="color-hex flex-1 bg-transparent text-white text-sm font-mono focus:outline-none" data-index="${index}">
+                            <span class="text-xs text-gray-500">${stop.position}%</span>
+                        </div>
+                        <input type="range" value="${stop.position}" min="0" max="100" class="position-slider w-full h-1 bg-gray-700 rounded appearance-none cursor-pointer" data-index="${index}">
+                    </div>
+                    ${colorStops.length > 2 ? `<button class="remove-stop text-red-500 hover:text-red-400" data-index="${index}">×</button>` : ''}
+                `;
+
+                colorStopsContainer.appendChild(stopDiv);
+            });
+
+            // Add event listeners
+            document.querySelectorAll('input[type="color"]').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    colorStops[index].color = e.target.value;
+                    document.querySelector(`.color-hex[data-index="${index}"]`).value = e.target.value;
+                    updateGradient();
+                });
+            });
+
+            document.querySelectorAll('.color-hex').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                        colorStops[index].color = e.target.value;
+                        updateGradient();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.position-slider').forEach(slider => {
+                slider.addEventListener('input', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    colorStops[index].position = parseInt(e.target.value);
+                    updateColorStops();
+                    updateGradient();
+                });
+            });
+
+            document.querySelectorAll('.remove-stop').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    colorStops.splice(index, 1);
+                    updateColorStops();
+                    updateGradient();
+                });
+            });
+        }
+
+        // Update gradient
+        function updateGradient() {
+            const sortedStops = [...colorStops].sort((a, b) => a.position - b.position);
+            const colorString = sortedStops.map(s => `${s.color} ${s.position}%`).join(', ');
+
+            let gradient;
+            if (gradientType === 'linear') {
+                gradient = `linear-gradient(${angle}deg, ${colorString})`;
+            } else {
+                gradient = `radial-gradient(circle, ${colorString})`;
+            }
+
+            gradientPreview.style.background = gradient;
+            cssCode.value = `background: ${gradient};`;
+        }
+
+        // Copy CSS
+        copyCssBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(cssCode.value).then(() => {
+                const originalText = copyCssBtn.textContent;
+                copyCssBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyCssBtn.textContent = originalText;
+                }, 2000);
+            });
+        });
+
+        // Export as image
+        exportImageBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1920;
+            canvas.height = 1080;
+            const ctx = canvas.getContext('2d');
+
+            // Create gradient
+            let gradient;
+            if (gradientType === 'linear') {
+                const angleRad = (angle - 90) * Math.PI / 180;
+                const x1 = canvas.width / 2 + Math.cos(angleRad) * canvas.width;
+                const y1 = canvas.height / 2 + Math.sin(angleRad) * canvas.height;
+                const x2 = canvas.width / 2 - Math.cos(angleRad) * canvas.width;
+                const y2 = canvas.height / 2 - Math.sin(angleRad) * canvas.height;
+                gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+            } else {
+                gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, Math.max(canvas.width, canvas.height)/2);
+            }
+
+            const sortedStops = [...colorStops].sort((a, b) => a.position - b.position);
+            sortedStops.forEach(stop => {
+                gradient.addColorStop(stop.position / 100, stop.color);
+            });
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'gradient.png';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        });
+
+        // Randomize
+        randomizeBtn.addEventListener('click', () => {
+            const numStops = 2 + Math.floor(Math.random() * 2); // 2-3 colors
+            colorStops = [];
+
+            for (let i = 0; i < numStops; i++) {
+                colorStops.push({
+                    color: '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'),
+                    position: (i / (numStops - 1)) * 100
+                });
+            }
+
+            angle = Math.floor(Math.random() * 360);
+            angleSlider.value = angle;
+            angleValue.textContent = angle + '°';
+
+            updateColorStops();
+            updateGradient();
+        });
+
+        // Initialize
+        updateColorStops();
+        updateGradient();
+    </script>
+</body>
+</html>

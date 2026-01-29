@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Counter - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    Word Counter
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Count words, characters, sentences, and paragraphs in real-time
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Real-Time</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Privacy-First</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1200px] mx-auto px-6 lg:px-12">
+
+            <!-- Word Counter Module -->
+            <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl overflow-hidden">
+                <!-- Stats Bar -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-black/20 border-b border-gray-800">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary" id="word-count">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Words</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary" id="char-count">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Characters</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary" id="sentence-count">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Sentences</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-primary" id="paragraph-count">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Paragraphs</div>
+                    </div>
+                </div>
+
+                <!-- Additional Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-black/10 border-b border-gray-800">
+                    <div class="text-center">
+                        <div class="text-xl font-semibold text-white" id="char-no-spaces">0</div>
+                        <div class="text-xs text-gray-500 mt-1">Characters (no spaces)</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xl font-semibold text-white" id="read-time">0</div>
+                        <div class="text-xs text-gray-500 mt-1">Reading time (min)</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xl font-semibold text-white" id="speak-time">0</div>
+                        <div class="text-xs text-gray-500 mt-1">Speaking time (min)</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-xl font-semibold text-white" id="avg-word-length">0</div>
+                        <div class="text-xs text-gray-500 mt-1">Avg word length</div>
+                    </div>
+                </div>
+
+                <!-- Text Input -->
+                <div class="p-6">
+                    <textarea
+                        id="text-input"
+                        class="w-full h-96 bg-black/30 border border-gray-700 rounded-lg p-4 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                        placeholder="Start typing or paste your text here..."
+                    ></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div class="p-6 pt-0 flex gap-3">
+                    <button
+                        id="clear-btn"
+                        class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium"
+                    >
+                        Clear Text
+                    </button>
+                    <button
+                        id="copy-stats-btn"
+                        class="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium"
+                    >
+                        Copy Stats
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking links
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Word Counter Logic
+        const textInput = document.getElementById('text-input');
+        const wordCount = document.getElementById('word-count');
+        const charCount = document.getElementById('char-count');
+        const sentenceCount = document.getElementById('sentence-count');
+        const paragraphCount = document.getElementById('paragraph-count');
+        const charNoSpaces = document.getElementById('char-no-spaces');
+        const readTime = document.getElementById('read-time');
+        const speakTime = document.getElementById('speak-time');
+        const avgWordLength = document.getElementById('avg-word-length');
+        const clearBtn = document.getElementById('clear-btn');
+        const copyStatsBtn = document.getElementById('copy-stats-btn');
+
+        function updateCounts() {
+            const text = textInput.value;
+
+            // Words (split by whitespace, filter empty)
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            const wordCountVal = text.trim() === '' ? 0 : words.length;
+
+            // Characters
+            const charCountVal = text.length;
+            const charNoSpacesVal = text.replace(/\s/g, '').length;
+
+            // Sentences (split by . ! ?)
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const sentenceCountVal = sentences.length;
+
+            // Paragraphs (split by double newlines or single newlines)
+            const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
+            const paragraphCountVal = paragraphs.length;
+
+            // Reading time (average 200 words per minute)
+            const readTimeVal = Math.ceil(wordCountVal / 200);
+
+            // Speaking time (average 130 words per minute)
+            const speakTimeVal = Math.ceil(wordCountVal / 130);
+
+            // Average word length
+            const avgWordLengthVal = wordCountVal > 0
+                ? (words.reduce((sum, word) => sum + word.length, 0) / wordCountVal).toFixed(1)
+                : 0;
+
+            // Update UI
+            wordCount.textContent = wordCountVal.toLocaleString();
+            charCount.textContent = charCountVal.toLocaleString();
+            sentenceCount.textContent = sentenceCountVal.toLocaleString();
+            paragraphCount.textContent = paragraphCountVal.toLocaleString();
+            charNoSpaces.textContent = charNoSpacesVal.toLocaleString();
+            readTime.textContent = readTimeVal;
+            speakTime.textContent = speakTimeVal;
+            avgWordLength.textContent = avgWordLengthVal;
+        }
+
+        // Real-time updates
+        textInput.addEventListener('input', updateCounts);
+
+        // Clear button
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            updateCounts();
+        });
+
+        // Copy stats button
+        copyStatsBtn.addEventListener('click', () => {
+            const stats = `Words: ${wordCount.textContent}
+Characters: ${charCount.textContent}
+Characters (no spaces): ${charNoSpaces.textContent}
+Sentences: ${sentenceCount.textContent}
+Paragraphs: ${paragraphCount.textContent}
+Reading time: ${readTime.textContent} min
+Speaking time: ${speakTime.textContent} min
+Average word length: ${avgWordLength.textContent}`;
+
+            navigator.clipboard.writeText(stats).then(() => {
+                const originalText = copyStatsBtn.textContent;
+                copyStatsBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyStatsBtn.textContent = originalText;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

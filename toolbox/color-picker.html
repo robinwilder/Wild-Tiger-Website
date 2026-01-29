@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Picker - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom color input styling */
+        input[type="color"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 200px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        input[type="color"]::-moz-color-swatch {
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    Color Picker & Palette Generator
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Pick colors, convert formats, and generate beautiful color palettes based on color theory
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Instant</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">No Tracking</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1200px] mx-auto px-6 lg:px-12">
+
+            <!-- Color Picker Module -->
+            <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl overflow-hidden">
+
+                <div class="grid lg:grid-cols-2 gap-6 p-6">
+                    <!-- Color Picker -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Pick a Color</label>
+                        <input type="color" id="color-picker" value="#146765" class="mb-4">
+
+                        <!-- Quick Colors -->
+                        <label class="block text-sm font-medium text-gray-400 mb-3 mt-6">Quick Colors</label>
+                        <div class="grid grid-cols-8 gap-2">
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #FF0000;" data-color="#FF0000"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #FF7F00;" data-color="#FF7F00"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #FFFF00;" data-color="#FFFF00"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #00FF00;" data-color="#00FF00"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #0000FF;" data-color="#0000FF"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #4B0082;" data-color="#4B0082"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #9400D3;" data-color="#9400D3"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #FF1493;" data-color="#FF1493"></button>
+
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #000000;" data-color="#000000"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #1a1a1a;" data-color="#1a1a1a"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #333333;" data-color="#333333"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #666666;" data-color="#666666"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #999999;" data-color="#999999"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #CCCCCC;" data-color="#CCCCCC"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #EEEEEE;" data-color="#EEEEEE"></button>
+                            <button class="quick-color w-full aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: #FFFFFF;" data-color="#FFFFFF"></button>
+                        </div>
+                    </div>
+
+                    <!-- Color Formats -->
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Color Formats</label>
+
+                        <!-- HEX -->
+                        <div class="bg-black/30 border border-gray-700 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="text-xs text-gray-500 mb-1">HEX</div>
+                                    <div class="text-lg font-mono" id="hex-value">#146765</div>
+                                </div>
+                                <button class="copy-btn px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all text-sm font-medium" data-format="hex">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- RGB -->
+                        <div class="bg-black/30 border border-gray-700 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="text-xs text-gray-500 mb-1">RGB</div>
+                                    <div class="text-lg font-mono" id="rgb-value">rgb(20, 103, 101)</div>
+                                </div>
+                                <button class="copy-btn px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all text-sm font-medium" data-format="rgb">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- HSL -->
+                        <div class="bg-black/30 border border-gray-700 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="text-xs text-gray-500 mb-1">HSL</div>
+                                    <div class="text-lg font-mono" id="hsl-value">hsl(178, 68%, 24%)</div>
+                                </div>
+                                <button class="copy-btn px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all text-sm font-medium" data-format="hsl">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- HSV -->
+                        <div class="bg-black/30 border border-gray-700 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="text-xs text-gray-500 mb-1">HSV</div>
+                                    <div class="text-lg font-mono" id="hsv-value">hsv(178, 81%, 40%)</div>
+                                </div>
+                                <button class="copy-btn px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all text-sm font-medium" data-format="hsv">
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Color Palettes -->
+                <div class="p-6 pt-0">
+                    <div class="flex items-center justify-between mb-4">
+                        <label class="block text-sm font-medium text-gray-400">Color Palettes</label>
+                        <div class="flex gap-3">
+                            <select id="palette-type" class="bg-black/30 border border-gray-700 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-primary">
+                                <option value="complementary">Complementary</option>
+                                <option value="analogous">Analogous</option>
+                                <option value="triadic">Triadic</option>
+                                <option value="tetradic">Tetradic (Square)</option>
+                                <option value="split">Split Complementary</option>
+                                <option value="monochromatic">Monochromatic</option>
+                            </select>
+                            <button id="download-palette-btn" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all text-sm font-medium">
+                                Download Palette
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="palette-display" class="grid grid-cols-5 gap-3">
+                        <!-- Palette colors will be inserted here -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Download Modal -->
+            <div id="download-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                <div class="bg-dark-lighter border border-gray-800 rounded-2xl p-8 max-w-md w-full mx-4">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold">Download Palette</h3>
+                        <button id="close-modal" class="text-gray-400 hover:text-white">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <p class="text-gray-400 mb-6">Choose your download format:</p>
+
+                    <div class="space-y-3">
+                        <button class="download-option w-full p-4 bg-black/30 hover:bg-black/50 border border-gray-700 hover:border-primary rounded-lg text-left transition-all" data-format="image">
+                            <div class="font-semibold mb-1">PNG Image</div>
+                            <div class="text-sm text-gray-400">Visual palette with color swatches</div>
+                        </button>
+
+                        <button class="download-option w-full p-4 bg-black/30 hover:bg-black/50 border border-gray-700 hover:border-primary rounded-lg text-left transition-all" data-format="css">
+                            <div class="font-semibold mb-1">CSS Variables</div>
+                            <div class="text-sm text-gray-400">:root { --color-1: #...; }</div>
+                        </button>
+
+                        <button class="download-option w-full p-4 bg-black/30 hover:bg-black/50 border border-gray-700 hover:border-primary rounded-lg text-left transition-all" data-format="json">
+                            <div class="font-semibold mb-1">JSON</div>
+                            <div class="text-sm text-gray-400">["#...", "#...", ...]</div>
+                        </button>
+
+                        <button class="download-option w-full p-4 bg-black/30 hover:bg-black/50 border border-gray-700 hover:border-primary rounded-lg text-left transition-all" data-format="text">
+                            <div class="font-semibold mb-1">Text File</div>
+                            <div class="text-sm text-gray-400">Plain text with hex codes</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Color Picker Logic
+        const colorPicker = document.getElementById('color-picker');
+        const hexValue = document.getElementById('hex-value');
+        const rgbValue = document.getElementById('rgb-value');
+        const hslValue = document.getElementById('hsl-value');
+        const hsvValue = document.getElementById('hsv-value');
+        const quickColors = document.querySelectorAll('.quick-color');
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        const paletteType = document.getElementById('palette-type');
+        const paletteDisplay = document.getElementById('palette-display');
+        const downloadPaletteBtn = document.getElementById('download-palette-btn');
+        const downloadModal = document.getElementById('download-modal');
+        const closeModal = document.getElementById('close-modal');
+        const downloadOptions = document.querySelectorAll('.download-option');
+
+        let currentPalette = [];
+
+        // Color conversion functions
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                l: Math.round(l * 100)
+            };
+        }
+
+        function rgbToHsv(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            const d = max - min;
+            let h, s = max === 0 ? 0 : d / max;
+            const v = max;
+
+            if (max === min) {
+                h = 0;
+            } else {
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                v: Math.round(v * 100)
+            };
+        }
+
+        function updateColorFormats(hex) {
+            const rgb = hexToRgb(hex);
+            if (!rgb) return;
+
+            const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+            const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
+
+            hexValue.textContent = hex.toUpperCase();
+            rgbValue.textContent = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+            hslValue.textContent = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+            hsvValue.textContent = `hsv(${hsv.h}, ${hsv.s}%, ${hsv.v}%)`;
+        }
+
+        // Quick colors
+        quickColors.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const color = btn.dataset.color;
+                colorPicker.value = color;
+                updateColorFormats(color);
+                updatePalette();
+            });
+        });
+
+        // Copy buttons
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const format = btn.dataset.format;
+                let textToCopy = '';
+
+                switch(format) {
+                    case 'hex': textToCopy = hexValue.textContent; break;
+                    case 'rgb': textToCopy = rgbValue.textContent; break;
+                    case 'hsl': textToCopy = hslValue.textContent; break;
+                    case 'hsv': textToCopy = hsvValue.textContent; break;
+                }
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 2000);
+                });
+            });
+        });
+
+        // Palette generation functions
+        function hslToHex(h, s, l) {
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`;
+        }
+
+        function generatePalette(baseHex, type) {
+            const rgb = hexToRgb(baseHex);
+            const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+            const palette = [];
+
+            switch(type) {
+                case 'complementary':
+                    // Base color + opposite on color wheel
+                    palette.push(baseHex);
+                    palette.push(hslToHex((hsl.h + 180) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 15, 100)));
+                    palette.push(hslToHex((hsl.h + 180) % 360, hsl.s, Math.min(hsl.l + 15, 100)));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 15, 0)));
+                    break;
+
+                case 'analogous':
+                    // Colors adjacent on color wheel
+                    palette.push(hslToHex((hsl.h - 30 + 360) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex((hsl.h - 15 + 360) % 360, hsl.s, hsl.l));
+                    palette.push(baseHex);
+                    palette.push(hslToHex((hsl.h + 15) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex((hsl.h + 30) % 360, hsl.s, hsl.l));
+                    break;
+
+                case 'triadic':
+                    // Three colors evenly spaced on color wheel
+                    palette.push(baseHex);
+                    palette.push(hslToHex((hsl.h + 120) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex((hsl.h + 240) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 15, 100)));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 15, 0)));
+                    break;
+
+                case 'tetradic':
+                    // Four colors evenly spaced (square)
+                    palette.push(baseHex);
+                    palette.push(hslToHex((hsl.h + 90) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex((hsl.h + 180) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex((hsl.h + 270) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 15, 100)));
+                    break;
+
+                case 'split':
+                    // Base + two colors adjacent to complement
+                    palette.push(baseHex);
+                    palette.push(hslToHex((hsl.h + 150) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex((hsl.h + 210) % 360, hsl.s, hsl.l));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 15, 100)));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 15, 0)));
+                    break;
+
+                case 'monochromatic':
+                    // Variations of same hue with different lightness
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 30, 10)));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 15, 10)));
+                    palette.push(baseHex);
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 15, 90)));
+                    palette.push(hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 30, 90)));
+                    break;
+            }
+
+            return palette;
+        }
+
+        function updatePalette() {
+            const type = paletteType.value;
+            const palette = generatePalette(colorPicker.value, type);
+            currentPalette = palette; // Store for download
+
+            paletteDisplay.innerHTML = '';
+
+            palette.forEach((color, index) => {
+                const colorBox = document.createElement('div');
+                colorBox.className = 'palette-color-box group relative cursor-pointer';
+                colorBox.innerHTML = `
+                    <div class="aspect-square rounded-lg border-2 border-gray-700 hover:border-white transition-all" style="background-color: ${color};">
+                    </div>
+                    <div class="text-xs text-center mt-2 font-mono text-gray-400">${color.toUpperCase()}</div>
+                    <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/70 hover:bg-black text-white text-xs px-2 py-1 rounded">
+                        Copy
+                    </button>
+                `;
+
+                // Copy functionality
+                const copyBtn = colorBox.querySelector('button');
+                copyBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(color.toUpperCase()).then(() => {
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => {
+                            copyBtn.textContent = 'Copy';
+                        }, 1500);
+                    });
+                });
+
+                // Click to apply color
+                colorBox.addEventListener('click', () => {
+                    colorPicker.value = color;
+                    updateColorFormats(color);
+                    updatePalette();
+                });
+
+                paletteDisplay.appendChild(colorBox);
+            });
+        }
+
+        // Update palette when color or type changes
+        colorPicker.addEventListener('input', (e) => {
+            updateColorFormats(e.target.value);
+            updatePalette();
+        });
+
+        paletteType.addEventListener('change', updatePalette);
+
+        // Download palette functionality
+        downloadPaletteBtn.addEventListener('click', () => {
+            downloadModal.classList.remove('hidden');
+        });
+
+        closeModal.addEventListener('click', () => {
+            downloadModal.classList.add('hidden');
+        });
+
+        downloadModal.addEventListener('click', (e) => {
+            if (e.target === downloadModal) {
+                downloadModal.classList.add('hidden');
+            }
+        });
+
+        downloadOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const format = option.dataset.format;
+                downloadPaletteAs(format);
+                downloadModal.classList.add('hidden');
+            });
+        });
+
+        function downloadPaletteAs(format) {
+            const paletteName = paletteType.options[paletteType.selectedIndex].text;
+
+            switch(format) {
+                case 'image':
+                    downloadAsImage(paletteName);
+                    break;
+                case 'css':
+                    downloadAsCSS(paletteName);
+                    break;
+                case 'json':
+                    downloadAsJSON(paletteName);
+                    break;
+                case 'text':
+                    downloadAsText(paletteName);
+                    break;
+            }
+        }
+
+        function downloadAsImage(paletteName) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1200;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            ctx.fillStyle = '#0a0a0f';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Title
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 32px Inter, sans-serif';
+            ctx.fillText(paletteName + ' Palette', 40, 60);
+
+            // Color swatches
+            const swatchWidth = 200;
+            const swatchHeight = 200;
+            const startY = 120;
+            const gap = 20;
+
+            currentPalette.forEach((color, index) => {
+                const x = 40 + (swatchWidth + gap) * index;
+
+                // Color swatch
+                ctx.fillStyle = color;
+                ctx.fillRect(x, startY, swatchWidth, swatchHeight);
+
+                // Hex code
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 20px monospace';
+                ctx.fillText(color.toUpperCase(), x + 10, startY + swatchHeight + 40);
+            });
+
+            // Download
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${paletteName.toLowerCase().replace(/\s+/g, '-')}-palette.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        function downloadAsCSS(paletteName) {
+            let css = `/* ${paletteName} Palette */\n:root {\n`;
+            currentPalette.forEach((color, index) => {
+                css += `  --color-${index + 1}: ${color};\n`;
+            });
+            css += '}\n';
+
+            downloadFile(css, `${paletteName.toLowerCase().replace(/\s+/g, '-')}-palette.css`, 'text/css');
+        }
+
+        function downloadAsJSON(paletteName) {
+            const json = JSON.stringify({
+                name: paletteName,
+                colors: currentPalette
+            }, null, 2);
+
+            downloadFile(json, `${paletteName.toLowerCase().replace(/\s+/g, '-')}-palette.json`, 'application/json');
+        }
+
+        function downloadAsText(paletteName) {
+            let text = `${paletteName} Palette\n\n`;
+            currentPalette.forEach((color, index) => {
+                text += `Color ${index + 1}: ${color}\n`;
+            });
+
+            downloadFile(text, `${paletteName.toLowerCase().replace(/\s+/g, '-')}-palette.txt`, 'text/plain');
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize with default color
+        updateColorFormats(colorPicker.value);
+        updatePalette();
+    </script>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .preview-container {
+            background:
+                linear-gradient(45deg, #ccc 25%, transparent 25%),
+                linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ccc 75%),
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    Image Resizer
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Resize images to exact dimensions or use social media presets for Facebook, Instagram, X, LinkedIn, TikTok, and YouTube
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Client-Side</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">High Quality</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+
+            <!-- Image Resizer Module -->
+            <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl overflow-hidden">
+
+                <!-- Upload Section -->
+                <div class="p-6" id="upload-section">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Upload Image</label>
+                    <div class="border-2 border-dashed border-gray-700 rounded-lg p-12 text-center hover:border-primary transition-all cursor-pointer bg-black/20" id="dropzone">
+                        <div class="mb-4">
+                            <svg class="w-16 h-16 mx-auto text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Drop image here or click to browse</h3>
+                        <p class="text-gray-400 text-sm">Supports JPG, PNG, WebP, GIF (Max 10MB)</p>
+                        <input type="file" id="image-input" accept="image/*" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Resize Options (Hidden until image uploaded) -->
+                <div class="p-6 pt-0 hidden" id="resize-section">
+
+                    <!-- Preset Categories -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Quick Presets</label>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <button class="platform-btn px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all text-sm font-medium" data-platform="facebook">Facebook</button>
+                            <button class="platform-btn px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all text-sm font-medium" data-platform="instagram">Instagram</button>
+                            <button class="platform-btn px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all text-sm font-medium" data-platform="twitter">X / Twitter</button>
+                            <button class="platform-btn px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all text-sm font-medium" data-platform="linkedin">LinkedIn</button>
+                            <button class="platform-btn px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all text-sm font-medium" data-platform="tiktok">TikTok</button>
+                            <button class="platform-btn px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all text-sm font-medium" data-platform="youtube">YouTube</button>
+                            <button class="platform-btn px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all text-sm font-medium" data-platform="custom">Custom Size</button>
+                        </div>
+
+                        <!-- Preset Sizes (populated dynamically) -->
+                        <div id="preset-sizes" class="grid grid-cols-2 md:grid-cols-3 gap-3 hidden">
+                        </div>
+                    </div>
+
+                    <!-- Custom Dimensions (shown when Custom Size selected) -->
+                    <div class="mb-6 hidden" id="custom-dimensions">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Custom Dimensions</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-2">Width (px)</label>
+                                <input type="number" id="custom-width" class="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary" placeholder="1920" min="1">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-2">Height (px)</label>
+                                <input type="number" id="custom-height" class="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary" placeholder="1080" min="1">
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" id="maintain-aspect" class="mr-2" checked>
+                                <span class="text-sm text-gray-400">Maintain aspect ratio</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Preview -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-3">Preview</label>
+                        <div class="preview-container rounded-lg p-4 flex items-center justify-center min-h-[300px]">
+                            <canvas id="preview-canvas" class="max-w-full h-auto border-2 border-gray-700 rounded-lg"></canvas>
+                        </div>
+                        <div class="text-center mt-3">
+                            <span class="text-sm text-gray-400">Current size: <span id="current-dimensions" class="text-white font-medium">-</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-wrap gap-3">
+                        <button id="download-btn" class="flex-1 px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium">
+                            Download Resized Image
+                        </button>
+                        <button id="reset-btn" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                            Upload New Image
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Image Resizer Logic
+        const dropzone = document.getElementById('dropzone');
+        const imageInput = document.getElementById('image-input');
+        const uploadSection = document.getElementById('upload-section');
+        const resizeSection = document.getElementById('resize-section');
+        const platformButtons = document.querySelectorAll('.platform-btn');
+        const presetSizes = document.getElementById('preset-sizes');
+        const customDimensions = document.getElementById('custom-dimensions');
+        const customWidth = document.getElementById('custom-width');
+        const customHeight = document.getElementById('custom-height');
+        const maintainAspect = document.getElementById('maintain-aspect');
+        const previewCanvas = document.getElementById('preview-canvas');
+        const currentDimensions = document.getElementById('current-dimensions');
+        const downloadBtn = document.getElementById('download-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        let originalImage = null;
+        let currentWidth = 0;
+        let currentHeight = 0;
+
+        // Social Media Presets
+        const presets = {
+            facebook: [
+                { name: 'Profile Picture', width: 180, height: 180 },
+                { name: 'Cover Photo', width: 820, height: 312 },
+                { name: 'Post Image', width: 1200, height: 630 }
+            ],
+            instagram: [
+                { name: 'Profile Picture', width: 320, height: 320 },
+                { name: 'Square Post', width: 1080, height: 1080 },
+                { name: 'Portrait Post', width: 1080, height: 1350 },
+                { name: 'Story', width: 1080, height: 1920 },
+                { name: 'Reel', width: 1080, height: 1920 }
+            ],
+            twitter: [
+                { name: 'Profile Picture', width: 400, height: 400 },
+                { name: 'Header Image', width: 1500, height: 500 },
+                { name: 'Post Image', width: 1200, height: 675 }
+            ],
+            linkedin: [
+                { name: 'Profile Picture', width: 400, height: 400 },
+                { name: 'Cover Photo', width: 1584, height: 396 },
+                { name: 'Post Image', width: 1200, height: 627 }
+            ],
+            tiktok: [
+                { name: 'Profile Picture', width: 200, height: 200 },
+                { name: 'Video', width: 1080, height: 1920 }
+            ],
+            youtube: [
+                { name: 'Profile Picture', width: 800, height: 800 },
+                { name: 'Channel Banner', width: 2560, height: 1440 },
+                { name: 'Thumbnail', width: 1280, height: 720 }
+            ]
+        };
+
+        // Drag and drop
+        dropzone.addEventListener('click', () => imageInput.click());
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('border-primary');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('border-primary');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('border-primary');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                alert('Please upload a valid image file');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File too large. Maximum size is 10MB');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    originalImage = img;
+                    currentWidth = img.width;
+                    currentHeight = img.height;
+
+                    resizeSection.classList.remove('hidden');
+
+                    // Show original image
+                    drawImage(img.width, img.height);
+                    currentDimensions.textContent = `${img.width} × ${img.height}px`;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Platform selection
+        platformButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const platform = btn.dataset.platform;
+
+                platformButtons.forEach(b => b.classList.remove('bg-primary', 'text-white'));
+                btn.classList.add('bg-primary', 'text-white');
+
+                if (platform === 'custom') {
+                    presetSizes.classList.add('hidden');
+                    customDimensions.classList.remove('hidden');
+                } else {
+                    customDimensions.classList.add('hidden');
+                    showPresets(platform);
+                }
+            });
+        });
+
+        function showPresets(platform) {
+            presetSizes.innerHTML = '';
+            presetSizes.classList.remove('hidden');
+
+            presets[platform].forEach(preset => {
+                const btn = document.createElement('button');
+                btn.className = 'preset-btn p-4 bg-black/30 hover:bg-black/50 border-2 border-gray-700 hover:border-primary rounded-lg text-left transition-all';
+                btn.innerHTML = `
+                    <div class="font-semibold text-sm mb-1">${preset.name}</div>
+                    <div class="text-xs text-gray-400">${preset.width} × ${preset.height}px</div>
+                `;
+                btn.addEventListener('click', () => {
+                    resizeImage(preset.width, preset.height);
+                    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('border-primary'));
+                    btn.classList.add('border-primary');
+                });
+                presetSizes.appendChild(btn);
+            });
+        }
+
+        // Custom dimensions
+        customWidth.addEventListener('input', () => {
+            if (maintainAspect.checked && originalImage) {
+                const aspectRatio = originalImage.width / originalImage.height;
+                customHeight.value = Math.round(customWidth.value / aspectRatio);
+            }
+            if (customWidth.value && customHeight.value) {
+                resizeImage(parseInt(customWidth.value), parseInt(customHeight.value));
+            }
+        });
+
+        customHeight.addEventListener('input', () => {
+            if (maintainAspect.checked && originalImage) {
+                const aspectRatio = originalImage.width / originalImage.height;
+                customWidth.value = Math.round(customHeight.value * aspectRatio);
+            }
+            if (customWidth.value && customHeight.value) {
+                resizeImage(parseInt(customWidth.value), parseInt(customHeight.value));
+            }
+        });
+
+        function resizeImage(width, height) {
+            if (!originalImage) return;
+
+            currentWidth = width;
+            currentHeight = height;
+            drawImage(width, height);
+            currentDimensions.textContent = `${width} × ${height}px`;
+        }
+
+        function drawImage(width, height) {
+            previewCanvas.width = width;
+            previewCanvas.height = height;
+
+            const ctx = previewCanvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+
+            // Calculate scaling to cover the canvas
+            const scale = Math.max(width / originalImage.width, height / originalImage.height);
+            const scaledWidth = originalImage.width * scale;
+            const scaledHeight = originalImage.height * scale;
+
+            // Center the image
+            const x = (width - scaledWidth) / 2;
+            const y = (height - scaledHeight) / 2;
+
+            ctx.drawImage(originalImage, x, y, scaledWidth, scaledHeight);
+        }
+
+        // Download
+        downloadBtn.addEventListener('click', () => {
+            if (!originalImage) return;
+
+            previewCanvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `resized-${currentWidth}x${currentHeight}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        });
+
+        // Reset
+        resetBtn.addEventListener('click', () => {
+            originalImage = null;
+            imageInput.value = '';
+            resizeSection.classList.add('hidden');
+            presetSizes.classList.add('hidden');
+            customDimensions.classList.add('hidden');
+            platformButtons.forEach(b => b.classList.remove('bg-primary', 'text-white'));
+            previewCanvas.width = 0;
+            previewCanvas.height = 0;
+        });
+    </script>
+</body>
+</html>

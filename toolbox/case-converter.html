@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Converter - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    Case Converter
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Convert text between UPPERCASE, lowercase, Title Case, and more
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Instant</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">No Login</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1200px] mx-auto px-6 lg:px-12">
+
+            <!-- Case Converter Module -->
+            <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl overflow-hidden">
+
+                <!-- Input Section -->
+                <div class="p-6">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Your Text</label>
+                    <textarea
+                        id="text-input"
+                        class="w-full h-48 bg-black/30 border border-gray-700 rounded-lg p-4 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                        placeholder="Enter your text here..."
+                    ></textarea>
+                </div>
+
+                <!-- Conversion Options -->
+                <div class="p-6 pt-0">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Choose Conversion</label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                        <button
+                            data-case="upper"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            UPPERCASE
+                        </button>
+                        <button
+                            data-case="lower"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            lowercase
+                        </button>
+                        <button
+                            data-case="title"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            Title Case
+                        </button>
+                        <button
+                            data-case="sentence"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            Sentence case
+                        </button>
+                        <button
+                            data-case="camel"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            camelCase
+                        </button>
+                        <button
+                            data-case="pascal"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            PascalCase
+                        </button>
+                        <button
+                            data-case="snake"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            snake_case
+                        </button>
+                        <button
+                            data-case="kebab"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            kebab-case
+                        </button>
+                        <button
+                            data-case="constant"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            CONSTANT_CASE
+                        </button>
+                        <button
+                            data-case="alternating"
+                            class="case-btn px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium text-sm"
+                        >
+                            aLtErNaTiNg
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Output Section -->
+                <div class="p-6 pt-0">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Result</label>
+                    <textarea
+                        id="text-output"
+                        readonly
+                        class="w-full h-48 bg-black/30 border border-gray-700 rounded-lg p-4 text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-all resize-none"
+                        placeholder="Your converted text will appear here..."
+                    ></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div class="p-6 pt-0 flex flex-wrap gap-3">
+                    <button
+                        id="copy-btn"
+                        class="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium"
+                    >
+                        Copy Result
+                    </button>
+                    <button
+                        id="clear-btn"
+                        class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium"
+                    >
+                        Clear All
+                    </button>
+                    <button
+                        id="swap-btn"
+                        class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium"
+                    >
+                        ↕ Swap Input/Output
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Case Converter Logic
+        const textInput = document.getElementById('text-input');
+        const textOutput = document.getElementById('text-output');
+        const caseButtons = document.querySelectorAll('.case-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const swapBtn = document.getElementById('swap-btn');
+
+        // Case conversion functions
+        const conversions = {
+            upper: (text) => text.toUpperCase(),
+            lower: (text) => text.toLowerCase(),
+            title: (text) => text.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()),
+            sentence: (text) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase(),
+            camel: (text) => {
+                const words = text.toLowerCase().split(/[\s_-]+/);
+                return words[0] + words.slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+            },
+            pascal: (text) => {
+                const words = text.toLowerCase().split(/[\s_-]+/);
+                return words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+            },
+            snake: (text) => text.toLowerCase().replace(/[\s-]+/g, '_'),
+            kebab: (text) => text.toLowerCase().replace(/[\s_]+/g, '-'),
+            constant: (text) => text.toUpperCase().replace(/[\s-]+/g, '_'),
+            alternating: (text) => {
+                return text.split('').map((char, i) =>
+                    i % 2 === 0 ? char.toLowerCase() : char.toUpperCase()
+                ).join('');
+            }
+        };
+
+        // Handle case button clicks
+        caseButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const caseType = btn.dataset.case;
+                const inputText = textInput.value;
+
+                if (inputText.trim() === '') {
+                    textOutput.value = '';
+                    return;
+                }
+
+                textOutput.value = conversions[caseType](inputText);
+            });
+        });
+
+        // Copy button
+        copyBtn.addEventListener('click', () => {
+            if (textOutput.value.trim() === '') {
+                return;
+            }
+
+            navigator.clipboard.writeText(textOutput.value).then(() => {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        });
+
+        // Clear button
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            textOutput.value = '';
+        });
+
+        // Swap button
+        swapBtn.addEventListener('click', () => {
+            const temp = textInput.value;
+            textInput.value = textOutput.value;
+            textOutput.value = temp;
+        });
+    </script>
+</body>
+</html>

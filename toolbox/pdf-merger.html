@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Merger - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <!-- PDF-Lib -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .drop-zone {
+            border: 2px dashed #374151;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #146765;
+            background-color: rgba(20, 103, 101, 0.1);
+        }
+
+        .pdf-item {
+            cursor: move;
+        }
+
+        .pdf-item.dragging {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index.html" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio.html" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index.html#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../toolbox.html" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about.html" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index.html#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio.html" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index.html#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../toolbox.html" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about.html" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index.html#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox.html" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    PDF Merger
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Combine multiple PDF files into a single document with drag-and-drop ordering
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Client-Side</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Privacy First</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1200px] mx-auto px-6 lg:px-12">
+
+            <!-- PDF Merger Module -->
+            <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl overflow-hidden">
+
+                <!-- Upload Section -->
+                <div class="p-6">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Upload PDFs</label>
+                    <div id="drop-zone" class="drop-zone p-12 rounded-lg text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        <p class="text-lg font-medium text-gray-300 mb-2">Drop your PDF files here or click to browse</p>
+                        <p class="text-sm text-gray-500">You can upload multiple PDFs at once</p>
+                        <input type="file" id="file-input" accept="application/pdf" multiple class="hidden">
+                    </div>
+                </div>
+
+                <!-- PDF List Section -->
+                <div id="pdf-list-section" class="p-6 pt-0 hidden">
+                    <div class="flex items-center justify-between mb-3">
+                        <label class="block text-sm font-medium text-gray-400">
+                            PDF Files (<span id="pdf-count">0</span>)
+                        </label>
+                        <button id="clear-all-btn" class="text-sm text-red-400 hover:text-red-300 transition-colors">
+                            Clear All
+                        </button>
+                    </div>
+                    <div class="bg-black/30 border border-gray-700 rounded-lg p-4">
+                        <p class="text-xs text-gray-500 mb-3">Drag to reorder PDFs</p>
+                        <div id="pdf-list" class="space-y-2">
+                            <!-- PDF items will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div id="actions-section" class="p-6 pt-0 hidden">
+                    <div class="flex flex-wrap gap-3">
+                        <button id="merge-btn" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium">
+                            <span id="merge-btn-text">Merge PDFs</span>
+                            <span id="merge-btn-spinner" class="hidden">Merging...</span>
+                        </button>
+                        <button id="add-more-btn" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                            Add More PDFs
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index.html" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio.html" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox.html" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about.html" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index.html#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design.html" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting.html" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting.html" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy.html" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service.html" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // PDF Merger Logic
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const pdfListSection = document.getElementById('pdf-list-section');
+        const actionsSection = document.getElementById('actions-section');
+        const pdfList = document.getElementById('pdf-list');
+        const pdfCount = document.getElementById('pdf-count');
+        const mergeBtn = document.getElementById('merge-btn');
+        const mergeBtnText = document.getElementById('merge-btn-text');
+        const mergeBtnSpinner = document.getElementById('merge-btn-spinner');
+        const addMoreBtn = document.getElementById('add-more-btn');
+        const clearAllBtn = document.getElementById('clear-all-btn');
+
+        let pdfFiles = [];
+        let draggedItem = null;
+
+        // Drop zone click to trigger file input
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop handlers for upload
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        });
+
+        // Handle file upload
+        async function handleFiles(files) {
+            for (const file of files) {
+                const arrayBuffer = await file.arrayBuffer();
+                pdfFiles.push({
+                    id: Date.now() + Math.random(),
+                    name: file.name,
+                    file: file,
+                    data: arrayBuffer
+                });
+            }
+            updatePdfList();
+            showSections();
+        }
+
+        // Update PDF list display
+        function updatePdfList() {
+            pdfList.innerHTML = '';
+            pdfCount.textContent = pdfFiles.length;
+
+            pdfFiles.forEach((pdf, index) => {
+                const item = document.createElement('div');
+                item.className = 'pdf-item flex items-center justify-between bg-gray-800/50 p-3 rounded-lg border border-gray-700 hover:border-primary/50 transition-all';
+                item.draggable = true;
+                item.dataset.id = pdf.id;
+
+                item.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-gray-400 cursor-move" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        <div>
+                            <p class="text-sm font-medium text-white">${pdf.name}</p>
+                            <p class="text-xs text-gray-500">${(pdf.file.size / 1024).toFixed(1)} KB</p>
+                        </div>
+                    </div>
+                    <button class="remove-btn text-red-400 hover:text-red-300 transition-colors" data-id="${pdf.id}">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                `;
+
+                // Drag handlers
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                item.addEventListener('dragend', handleDragEnd);
+
+                // Remove button
+                item.querySelector('.remove-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    removePdf(pdf.id);
+                });
+
+                pdfList.appendChild(item);
+            });
+        }
+
+        // Drag and drop reordering handlers
+        function handleDragStart(e) {
+            draggedItem = e.currentTarget;
+            e.currentTarget.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            const afterElement = getDragAfterElement(pdfList, e.clientY);
+            if (afterElement == null) {
+                pdfList.appendChild(draggedItem);
+            } else {
+                pdfList.insertBefore(draggedItem, afterElement);
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Update the order in the array
+            const items = Array.from(pdfList.children);
+            const newOrder = items.map(item => {
+                const id = parseFloat(item.dataset.id);
+                return pdfFiles.find(pdf => pdf.id === id);
+            });
+            pdfFiles = newOrder;
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.pdf-item:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        // Remove PDF
+        function removePdf(id) {
+            pdfFiles = pdfFiles.filter(pdf => pdf.id !== id);
+            updatePdfList();
+            if (pdfFiles.length === 0) {
+                hideSections();
+            }
+        }
+
+        // Show sections
+        function showSections() {
+            pdfListSection.classList.remove('hidden');
+            actionsSection.classList.remove('hidden');
+        }
+
+        // Hide sections
+        function hideSections() {
+            pdfListSection.classList.add('hidden');
+            actionsSection.classList.add('hidden');
+        }
+
+        // Merge PDFs
+        mergeBtn.addEventListener('click', async () => {
+            if (pdfFiles.length === 0) return;
+
+            mergeBtnText.classList.add('hidden');
+            mergeBtnSpinner.classList.remove('hidden');
+            mergeBtn.disabled = true;
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const mergedPdf = await PDFDocument.create();
+
+                // Copy pages from each PDF
+                for (const pdf of pdfFiles) {
+                    const pdfDoc = await PDFDocument.load(pdf.data);
+                    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+                    copiedPages.forEach((page) => {
+                        mergedPdf.addPage(page);
+                    });
+                }
+
+                // Save the merged PDF
+                const mergedPdfBytes = await mergedPdf.save();
+                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+
+                // Download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'merged-document.pdf';
+                a.click();
+                URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error('Error merging PDFs:', error);
+                alert('Error merging PDFs. Please try again.');
+            } finally {
+                mergeBtnText.classList.remove('hidden');
+                mergeBtnSpinner.classList.add('hidden');
+                mergeBtn.disabled = false;
+            }
+        });
+
+        // Add more PDFs
+        addMoreBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Clear all
+        clearAllBtn.addEventListener('click', () => {
+            pdfFiles = [];
+            updatePdfList();
+            hideSections();
+            fileInput.value = '';
+        });
+    </script>
+</body>
+</html>
