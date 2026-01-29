@@ -21,8 +21,8 @@ const loadingStatus = document.getElementById('loading-status');
 const resultsSection = document.getElementById('results-section');
 const downloadPdfBtn = document.getElementById('download-pdf-btn');
 
-// API Key - You'll need to add your Google PageSpeed API key here
-const PAGESPEED_API_KEY = 'YOUR_API_KEY_HERE';
+// API Key - Google PageSpeed Insights API
+const PAGESPEED_API_KEY = 'AIzaSyAwCl4sPUWqaBgiddfJwPEpeGsuw5sUNrk';
 
 let analysisData = {};
 
