@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Remover | Wild Tiger Design</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            background: rgb(10, 10, 15);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(26, 26, 46, 0.7);
+            border: 1px solid rgb(31, 41, 55);
+            border-radius: 16px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgb(156, 163, 175);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        /* Dropzone */
+        .dropzone {
+            border: 2px dashed rgb(31, 41, 55);
+            border-radius: 12px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .dropzone:hover,
+        .dropzone.active {
+            border-color: rgb(20, 103, 101);
+            background: rgba(20, 103, 101, 0.1);
+        }
+
+        .dropzone-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .dropzone-text {
+            font-size: 18px;
+            color: rgb(255, 255, 255);
+            margin-bottom: 8px;
+        }
+
+        .dropzone-subtext {
+            font-size: 14px;
+            color: rgb(156, 163, 175);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        /* Preview */
+        .preview-section {
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .preview-section.visible {
+            display: block;
+        }
+
+        .single-preview {
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgb(31, 41, 55);
+        }
+
+        .preview-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 400px;
+            object-fit: contain;
+        }
+
+        /* Comparison Slider */
+        .comparison-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: ew-resize;
+            background: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%),
+                linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ccc 75%),
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            display: none;
+        }
+
+        .comparison-container.visible {
+            display: block;
+        }
+
+        .comparison-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 400px;
+            object-fit: contain;
+        }
+
+        .comparison-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slider-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #fff;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            left: 50%;
+        }
+
+        .slider-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: rgb(20, 103, 101);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            font-size: 16px;
+            color: #fff;
+            user-select: none;
+        }
+
+        .label {
+            position: absolute;
+            top: 12px;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .label-original {
+            left: 12px;
+            background: rgba(0,0,0,0.6);
+        }
+
+        .label-processed {
+            right: 12px;
+            background: rgba(20, 103, 101, 0.9);
+        }
+
+        /* Error */
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: rgb(252, 165, 165);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error.visible {
+            display: block;
+        }
+
+        /* Controls */
+        .controls {
+            display: none;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .controls.visible {
+            display: flex;
+        }
+
+        .format-section label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgb(255, 255, 255);
+            margin-bottom: 12px;
+        }
+
+        .format-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .format-button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 16px;
+            border: 2px solid rgb(31, 41, 55);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .format-button:hover {
+            border-color: rgb(55, 65, 81);
+        }
+
+        .format-button.active {
+            border-color: rgb(20, 103, 101);
+            background: rgba(20, 103, 101, 0.1);
+        }
+
+        .format-button strong {
+            font-size: 14px;
+            color: rgb(255, 255, 255);
+        }
+
+        .format-button span {
+            font-size: 11px;
+            color: rgb(156, 163, 175);
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: rgb(20, 103, 101);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(20, 103, 101, 0.4);
+            background: rgb(30, 130, 127);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: rgb(156, 163, 175);
+            border: 2px solid rgb(31, 41, 55);
+        }
+
+        .btn-secondary:hover {
+            border-color: rgb(55, 65, 81);
+            color: rgb(255, 255, 255);
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: rgb(20, 103, 101);
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            display: none;
+        }
+
+        .btn-link.visible {
+            display: block;
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .spinner.visible {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: rgb(156, 163, 175);
+            font-size: 14px;
+            margin-top: 24px;
+        }
+
+        .footer a {
+            color: rgb(20, 103, 101);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .card {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .dropzone {
+                padding: 40px 20px;
+            }
+
+            .format-buttons {
+                flex-direction: column;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Background Remover</h1>
+            <p class="subtitle">Upload an image to remove its background instantly</p>
+
+            <!-- Info Notice -->
+            <div style="background: rgba(20, 103, 101, 0.1); border: 1px solid rgba(20, 103, 101, 0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 14px; color: rgb(156, 163, 175);">
+                <strong style="color: rgb(20, 103, 101);">ℹ️ First-time use:</strong> The AI server may take 30-60 seconds to start up if it hasn't been used recently. Subsequent requests will be much faster! Progress updates will show below.
+            </div>
+
+            <!-- Dropzone -->
+            <div class="dropzone" id="dropzone">
+                <input type="file" id="file-input" accept="image/*">
+                <div class="dropzone-icon">📷</div>
+                <p class="dropzone-text">Drag and drop an image here, or click to select</p>
+                <p class="dropzone-subtext">Supports PNG, JPEG, WebP (Max 10MB)</p>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="preview-section" id="preview-section">
+                <!-- Single Preview (before processing) -->
+                <div class="single-preview" id="single-preview">
+                    <img src="" alt="Original" class="preview-image" id="original-preview">
+                </div>
+
+                <!-- Comparison Slider (after processing) -->
+                <div class="comparison-container" id="comparison-container">
+                    <img src="" alt="Original" class="comparison-image" id="comparison-original">
+                    <div class="comparison-overlay" id="comparison-overlay">
+                        <img src="" alt="Processed" class="comparison-image" id="comparison-processed">
+                    </div>
+                    <div class="slider-line" id="slider-line">
+                        <div class="slider-handle">⟷</div>
+                    </div>
+                    <div class="label label-original">Original</div>
+                    <div class="label label-processed">Processed</div>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div class="error" id="error"></div>
+
+            <!-- Controls -->
+            <div class="controls" id="controls">
+                <!-- Format Selection -->
+                <div class="format-section">
+                    <label>Output Format:</label>
+                    <div class="format-buttons">
+                        <button class="format-button active" data-format="png">
+                            <strong>PNG</strong>
+                            <span>Transparent background</span>
+                        </button>
+                        <button class="format-button" data-format="webp">
+                            <strong>WebP</strong>
+                            <span>Smaller file, transparent</span>
+                        </button>
+                        <button class="format-button" data-format="jpeg">
+                            <strong>JPEG</strong>
+                            <span>White background</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="actions">
+                    <button class="btn btn-primary" id="process-btn">
+                        <span class="spinner" id="spinner"></span>
+                        <span id="process-text">Remove Background</span>
+                    </button>
+                    <button class="btn btn-secondary" id="reset-btn">Cancel</button>
+                </div>
+
+                <!-- Re-process link -->
+                <button class="btn-link" id="reprocess-btn">Re-process with different format</button>
+            </div>
+        </div>
+
+        <p class="footer">
+            Powered by AI • No images stored on server<br>
+            Built by <a href="https://wildtigerdesign.com" target="_blank">Wild Tiger Design</a>
+        </p>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION - Update this for your server
+        // ============================================
+        // const API_URL = 'http://localhost:8000'; // Local development
+        const API_URL = 'https://wild-tiger-bg-remover.onrender.com'; // Production - Render.com
+        // Example: const API_URL = 'https://background-remover-production.up.railway.app';
+
+        // ============================================
+        // State
+        // ============================================
+        let originalFile = null;
+        let originalDataUrl = null;
+        let processedBlob = null;
+        let processedUrl = null;
+        let outputFormat = 'png';
+        let isProcessing = false;
+
+        // ============================================
+        // Elements
+        // ============================================
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('file-input');
+        const previewSection = document.getElementById('preview-section');
+        const singlePreview = document.getElementById('single-preview');
+        const originalPreview = document.getElementById('original-preview');
+        const comparisonContainer = document.getElementById('comparison-container');
+        const comparisonOriginal = document.getElementById('comparison-original');
+        const comparisonOverlay = document.getElementById('comparison-overlay');
+        const comparisonProcessed = document.getElementById('comparison-processed');
+        const sliderLine = document.getElementById('slider-line');
+        const errorDiv = document.getElementById('error');
+        const controls = document.getElementById('controls');
+        const formatButtons = document.querySelectorAll('.format-button');
+        const processBtn = document.getElementById('process-btn');
+        const processText = document.getElementById('process-text');
+        const spinner = document.getElementById('spinner');
+        const resetBtn = document.getElementById('reset-btn');
+        const reprocessBtn = document.getElementById('reprocess-btn');
+
+        // ============================================
+        // Drag & Drop
+        // ============================================
+        dropzone.addEventListener('click', () => fileInput.click());
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('active');
+        });
+
+        dropzone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('active');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('active');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        // ============================================
+        // File Handling
+        // ============================================
+        function handleFile(file) {
+            if (!file) return;
+
+            // Validate type
+            if (!file.type.startsWith('image/')) {
+                showError('Please upload an image file (PNG, JPEG, or WebP)');
+                return;
+            }
+
+            // Validate size (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                showError('File too large. Maximum size is 10MB');
+                return;
+            }
+
+            hideError();
+            resetProcessed();
+
+            originalFile = file;
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                originalDataUrl = e.target.result;
+                originalPreview.src = originalDataUrl;
+                comparisonOriginal.src = originalDataUrl;
+                
+                dropzone.style.display = 'none';
+                previewSection.classList.add('visible');
+                singlePreview.style.display = 'block';
+                controls.classList.add('visible');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ============================================
+        // Format Selection
+        // ============================================
+        formatButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (isProcessing) return;
+                formatButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                outputFormat = btn.dataset.format;
+            });
+        });
+
+        // ============================================
+        // Process Image
+        // ============================================
+        processBtn.addEventListener('click', async () => {
+            if (processedBlob && !reprocessBtn.classList.contains('visible')) {
+                // Download mode
+                downloadImage();
+                return;
+            }
+
+            if (!originalFile || isProcessing) return;
+
+            isProcessing = true;
+            hideError();
+
+            const formData = new FormData();
+            formData.append('file', originalFile);
+
+            const startTime = Date.now();
+            let statusInterval;
+
+            try {
+                // Show initial loading state
+                setProcessingWithMessage('Connecting to AI server...');
+
+                // Update status every 5 seconds for cold starts
+                statusInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                    if (elapsed > 10) {
+                        setProcessingWithMessage(`Still processing... (${elapsed}s) - Server may be waking up`);
+                    } else if (elapsed > 5) {
+                        setProcessingWithMessage('Processing your image with AI...');
+                    }
+                }, 5000);
+
+                const response = await fetch(
+                    `${API_URL}/remove-background?output_format=${outputFormat}`,
+                    {
+                        method: 'POST',
+                        body: formData,
+                    }
+                );
+
+                clearInterval(statusInterval);
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.detail || 'Failed to process image');
+                }
+
+                setProcessingWithMessage('Finalizing...');
+
+                processedBlob = await response.blob();
+                processedUrl = URL.createObjectURL(processedBlob);
+
+                // Show comparison
+                comparisonProcessed.src = processedUrl;
+                singlePreview.style.display = 'none';
+                comparisonContainer.classList.add('visible');
+
+                // Update button
+                processText.textContent = `Download ${outputFormat.toUpperCase()}`;
+                resetBtn.textContent = 'Start Over';
+                reprocessBtn.classList.add('visible');
+
+                const totalTime = Math.floor((Date.now() - startTime) / 1000);
+                if (totalTime > 30) {
+                    showSuccess(`Done! Background removed in ${totalTime}s (first request is slower)`);
+                }
+
+            } catch (err) {
+                clearInterval(statusInterval);
+                showError(err.message || 'Failed to process image. Is the server running?');
+            } finally {
+                isProcessing = false;
+                setProcessing(false);
+            }
+        });
+
+        // ============================================
+        // Re-process
+        // ============================================
+        reprocessBtn.addEventListener('click', async () => {
+            if (isProcessing) return;
+            
+            // Reset to allow reprocessing
+            processText.textContent = 'Remove Background';
+            reprocessBtn.classList.remove('visible');
+            
+            // Trigger process
+            processBtn.click();
+        });
+
+        // ============================================
+        // Download
+        // ============================================
+        function downloadImage() {
+            if (!processedBlob) return;
+
+            const baseName = originalFile.name.split('.')[0];
+            const filename = `${baseName}_no_bg.${outputFormat}`;
+
+            const link = document.createElement('a');
+            link.href = processedUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // ============================================
+        // Reset
+        // ============================================
+        resetBtn.addEventListener('click', () => {
+            reset();
+        });
+
+        function reset() {
+            originalFile = null;
+            originalDataUrl = null;
+            resetProcessed();
+
+            dropzone.style.display = 'block';
+            previewSection.classList.remove('visible');
+            controls.classList.remove('visible');
+            singlePreview.style.display = 'block';
+            comparisonContainer.classList.remove('visible');
+            
+            fileInput.value = '';
+            hideError();
+        }
+
+        function resetProcessed() {
+            if (processedUrl) {
+                URL.revokeObjectURL(processedUrl);
+            }
+            processedBlob = null;
+            processedUrl = null;
+            processText.textContent = 'Remove Background';
+            resetBtn.textContent = 'Cancel';
+            reprocessBtn.classList.remove('visible');
+        }
+
+        // ============================================
+        // Comparison Slider
+        // ============================================
+        let isDragging = false;
+
+        comparisonContainer.addEventListener('mousedown', () => isDragging = true);
+        document.addEventListener('mouseup', () => isDragging = false);
+        comparisonContainer.addEventListener('mousemove', handleSlider);
+        comparisonContainer.addEventListener('touchmove', handleSliderTouch);
+
+        function handleSlider(e) {
+            if (!isDragging && e.type === 'mousemove') return;
+            
+            const rect = comparisonContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+            
+            sliderLine.style.left = `${percentage}%`;
+            comparisonOverlay.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+        }
+
+        function handleSliderTouch(e) {
+            const touch = e.touches[0];
+            const rect = comparisonContainer.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+            
+            sliderLine.style.left = `${percentage}%`;
+            comparisonOverlay.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+        }
+
+        // ============================================
+        // UI Helpers
+        // ============================================
+        function setProcessing(processing) {
+            processBtn.disabled = processing;
+            spinner.classList.toggle('visible', processing);
+            processText.textContent = processing ? 'Processing...' : 'Remove Background';
+        }
+
+        function setProcessingWithMessage(message) {
+            processBtn.disabled = true;
+            spinner.classList.add('visible');
+            processText.textContent = message;
+        }
+
+        function showError(message) {
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.classList.add('visible');
+        }
+
+        function showSuccess(message) {
+            errorDiv.textContent = '✅ ' + message;
+            errorDiv.style.background = 'rgba(34, 197, 94, 0.1)';
+            errorDiv.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+            errorDiv.style.color = 'rgb(134, 239, 172)';
+            errorDiv.classList.add('visible');
+            setTimeout(() => {
+                hideError();
+            }, 5000);
+        }
+
+        function hideError() {
+            errorDiv.classList.remove('visible');
+            errorDiv.style.background = '';
+            errorDiv.style.borderColor = '';
+            errorDiv.style.color = '';
+        }
+    </script>
+</body>
+</html>
