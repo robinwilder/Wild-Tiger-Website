@@ -117,9 +117,9 @@
                     <p class="text-xl text-gray-400">Edit and create images with ease - all free, all client-side</p>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <div class="mb-16">
                     <!-- File Converter Card -->
-                    <div class="group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
+                    <div class="group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300 max-w-2xl">
                         <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
                             <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
@@ -127,36 +127,14 @@
                         </div>
                         <h3 class="text-2xl font-bold mb-4">File Converter</h3>
                         <p class="text-gray-400 leading-relaxed mb-4">
-                            Convert images between formats (JPG, PNG, WebP), convert iPhone HEIC photos, and combine multiple images into PDFs
+                            Convert images between formats (JPG, PNG, WebP), convert iPhone HEIC photos, and combine multiple images into PDFs. All processing happens in your browser - no uploads, completely private.
                         </p>
                         <div class="flex flex-wrap gap-2">
                             <span class="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">Image Conversion</span>
                             <span class="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">HEIC to JPG</span>
                             <span class="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">Images to PDF</span>
+                            <span class="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">100% Client-Side</span>
                         </div>
-                    </div>
-
-                    <!-- Background Remover Card -->
-                    <div class="group p-8 bg-dark-lighter rounded-2xl border border-gray-800 hover:border-primary/50 transition-all duration-300">
-                        <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                            <svg class="w-7 h-7 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-4">Background Remover</h3>
-                        <p class="text-gray-400 leading-relaxed mb-4">
-                            AI-powered background removal tool. Requires backend server setup for processing. Perfect for product photos and portraits.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full">Requires Server</span>
-                            <span class="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">AI-Powered</span>
-                        </div>
-                        <button onclick="document.getElementById('bg-remover-section').scrollIntoView({behavior: 'smooth'})" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors font-medium">
-                            Use Tool Below
-                            <svg class="ml-2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                            </svg>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -312,35 +290,6 @@
 <script>
 (function(){const FC={state:{image:{files:[],converted:[]},heic:{files:[],converted:[]},pdf:{files:[],converted:[]}},el:{}};function init(){['image','heic','pdf'].forEach(t=>{FC.el[t]={dropzone:document.getElementById('fc-dropzone-'+t),input:document.getElementById('fc-input-'+t),preview:document.getElementById('fc-preview-'+t),grid:document.getElementById('fc-grid-'+t),count:document.getElementById('fc-count-'+t),convert:document.getElementById('fc-convert-'+t),clear:document.getElementById('fc-clear-'+t),progress:document.getElementById('fc-progress-'+t),progressFill:document.getElementById('fc-progress-fill-'+t),progressText:document.getElementById('fc-progress-text-'+t),results:document.getElementById('fc-results-'+t),resultsList:document.getElementById('fc-results-list-'+t)}});document.querySelectorAll('.fc-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.fc-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.fc-panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('fc-panel-'+tab.dataset.fcTab).classList.add('active')})});['image','heic','pdf'].forEach(t=>{const dz=FC.el[t].dropzone,inp=FC.el[t].input;dz.addEventListener('click',()=>inp.click());dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover')});dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragover');handleFiles(t,e.dataTransfer.files)});inp.addEventListener('change',e=>handleFiles(t,e.target.files))});['image','heic'].forEach(t=>{const sl=document.getElementById('fc-quality-'+t),val=document.getElementById('fc-quality-'+t+'-value');sl.addEventListener('input',()=>val.textContent=sl.value+'%')});FC.el.image.convert.addEventListener('click',convertImages);FC.el.image.clear.addEventListener('click',()=>clearFiles('image'));FC.el.heic.convert.addEventListener('click',convertHeic);FC.el.heic.clear.addEventListener('click',()=>clearFiles('heic'));FC.el.pdf.convert.addEventListener('click',createPdf);FC.el.pdf.clear.addEventListener('click',()=>clearFiles('pdf'))}function handleFiles(t,fl){const files=Array.from(fl).filter(f=>t==='heic'?f.name.toLowerCase().match(/\.hei[cf]$/)||f.type.match(/^image\/hei[cf]$/):f.type.startsWith('image/'));if(!files.length){showToast('No valid files selected','error');return}FC.state[t].files=[...FC.state[t].files,...files];updatePreview(t);FC.el[t].convert.disabled=false;showToast('Added '+files.length+' file(s)','success')}function updatePreview(t){const el=FC.el[t],files=FC.state[t].files;el.preview.classList.add('active');el.count.textContent=files.length+(t==='pdf'?' pages':' files');el.grid.innerHTML='';files.forEach((f,i)=>{const item=document.createElement('div');item.className='fc-preview-item';item.draggable=t==='pdf';item.dataset.index=i;if(t==='heic'){item.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3)"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color:var(--fc-teal)"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="fc-preview-item-overlay"><div class="fc-preview-item-name">'+f.name+'</div></div><button class="fc-preview-item-remove" data-t="'+t+'" data-i="'+i+'">×</button>';item.querySelector('.fc-preview-item-remove').onclick=removeHandler}else{const r=new FileReader();r.onload=e=>{item.innerHTML='<img src="'+e.target.result+'"><div class="fc-preview-item-overlay"><div class="fc-preview-item-name">'+f.name+'</div></div><button class="fc-preview-item-remove" data-t="'+t+'" data-i="'+i+'">×</button>';item.querySelector('.fc-preview-item-remove').onclick=removeHandler};r.readAsDataURL(f)}el.grid.appendChild(item)});if(t==='pdf')initDrag(el.grid)}function removeHandler(e){const t=e.target.dataset.t,i=parseInt(e.target.dataset.i);FC.state[t].files.splice(i,1);updatePreview(t);if(!FC.state[t].files.length){FC.el[t].preview.classList.remove('active');FC.el[t].convert.disabled=true}}function clearFiles(t){FC.state[t]={files:[],converted:[]};FC.el[t].preview.classList.remove('active');FC.el[t].results.classList.remove('active');FC.el[t].progress.classList.remove('active');FC.el[t].convert.disabled=true;FC.el[t].input.value=''}async function convertImages(){const el=FC.el.image,files=FC.state.image.files,fmt=document.getElementById('fc-format-image').value,q=document.getElementById('fc-quality-image').value/100;el.progress.classList.add('active');el.results.classList.remove('active');el.convert.disabled=true;const results=[];for(let i=0;i<files.length;i++){el.progressFill.style.width=((i+1)/files.length*100)+'%';el.progressText.textContent='Converting '+(i+1)+' of '+files.length+'...';try{results.push(await convertImg(files[i],fmt,q))}catch(e){showToast('Failed: '+files[i].name,'error')}}FC.state.image.converted=results;showResults('image',results,fmt);el.progress.classList.remove('active');el.convert.disabled=false}function convertImg(f,fmt,q){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.width;c.height=img.height;const ctx=c.getContext('2d');if(fmt==='jpeg'){ctx.fillStyle='#FFF';ctx.fillRect(0,0,c.width,c.height)}ctx.drawImage(img,0,0);c.toBlob(b=>{const ext=fmt==='jpeg'?'jpg':fmt;res({blob:b,name:f.name.replace(/\.[^.]+$/,'.'+ext),size:b.size})},'image/'+fmt,q)};img.onerror=rej;img.src=e.target.result};r.onerror=rej;r.readAsDataURL(f)})}async function convertHeic(){const el=FC.el.heic,files=FC.state.heic.files,fmt=document.getElementById('fc-format-heic').value,q=document.getElementById('fc-quality-heic').value/100;el.progress.classList.add('active');el.results.classList.remove('active');el.convert.disabled=true;const results=[];for(let i=0;i<files.length;i++){el.progressFill.style.width=((i+1)/files.length*100)+'%';el.progressText.textContent='Converting '+(i+1)+' of '+files.length+'...';try{const b=await heic2any({blob:files[i],toType:fmt,quality:q});const blob=Array.isArray(b)?b[0]:b;const ext=fmt==='image/jpeg'?'jpg':'png';results.push({blob,name:files[i].name.replace(/\.hei[cf]$/i,'.'+ext),size:blob.size})}catch(e){showToast('Failed: '+files[i].name,'error')}}FC.state.heic.converted=results;showResults('heic',results,fmt==='image/jpeg'?'jpeg':'png');el.progress.classList.remove('active');el.convert.disabled=false}async function createPdf(){const el=FC.el.pdf,files=FC.state.pdf.files,ps=document.getElementById('fc-pagesize-pdf').value,ori=document.getElementById('fc-orientation-pdf').value;el.progress.classList.add('active');el.results.classList.remove('active');el.convert.disabled=true;const{jsPDF}=window.jspdf;try{const imgs=[];for(let i=0;i<files.length;i++){el.progressFill.style.width=((i+1)/files.length*50)+'%';el.progressText.textContent='Loading '+(i+1)+' of '+files.length+'...';imgs.push(await loadImg(files[i]))}let fOri=ori;if(ori==='auto'&&imgs.length)fOri=imgs[0].w>imgs[0].h?'landscape':'portrait';const opt={orientation:fOri==='auto'?'portrait':fOri,unit:'mm'};if(ps!=='fit')opt.format=ps;const pdf=new jsPDF(opt);for(let i=0;i<imgs.length;i++){el.progressFill.style.width=(50+(i+1)/imgs.length*50)+'%';el.progressText.textContent='Adding page '+(i+1)+'...';const img=imgs[i];if(i>0){let pOri=ori;if(ori==='auto')pOri=img.w>img.h?'landscape':'portrait';pdf.addPage(ps==='fit'?[img.w*0.264583,img.h*0.264583]:ps,pOri)}const pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();let iw,ih,x,y;if(ps==='fit'){iw=img.w*0.264583;ih=img.h*0.264583;x=y=0}else{const r=Math.min(pw/img.w,ph/img.h);iw=img.w*r*0.95;ih=img.h*r*0.95;x=(pw-iw)/2;y=(ph-ih)/2}pdf.addImage(img.d,'JPEG',x,y,iw,ih)}const blob=pdf.output('blob');FC.state.pdf.converted=[{blob,name:'converted-'+Date.now()+'.pdf',size:blob.size}];showResults('pdf',FC.state.pdf.converted,'pdf')}catch(e){showToast('Failed to create PDF','error')}el.progress.classList.remove('active');el.convert.disabled=false}function loadImg(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>res({d:e.target.result,w:img.width,h:img.height});img.onerror=rej;img.src=e.target.result};r.onerror=rej;r.readAsDataURL(f)})}function showResults(t,results,fmt){const el=FC.el[t];el.results.classList.add('active');el.resultsList.innerHTML='';results.forEach((r,i)=>{const item=document.createElement('div');item.className='fc-result-item';const sz=r.size<1024?r.size+' B':r.size<1048576?(r.size/1024).toFixed(1)+' KB':(r.size/1048576).toFixed(1)+' MB';const path=fmt==='pdf'?'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z':'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z';item.innerHTML='<div class="fc-result-info"><div class="fc-result-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="'+path+'"/></svg></div><div><div class="fc-result-name">'+r.name+'</div><div class="fc-result-size">'+sz+'</div></div></div><button class="fc-result-download" data-t="'+t+'" data-i="'+i+'">Download</button>';item.querySelector('.fc-result-download').onclick=downloadHandler;el.resultsList.appendChild(item)});showToast(results.length+' file(s) converted!','success')}function downloadHandler(e){const t=e.target.dataset.t,i=parseInt(e.target.dataset.i),r=FC.state[t].converted[i],url=URL.createObjectURL(r.blob),a=document.createElement('a');a.href=url;a.download=r.name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}function initDrag(grid){let dragged=null;grid.querySelectorAll('.fc-preview-item').forEach(item=>{item.ondragstart=()=>{dragged=item;item.style.opacity='0.5'};item.ondragend=()=>{item.style.opacity='1';dragged=null};item.ondragover=e=>e.preventDefault();item.ondrop=e=>{e.preventDefault();if(dragged&&dragged!==item){const from=parseInt(dragged.dataset.index),to=parseInt(item.dataset.index);const[rem]=FC.state.pdf.files.splice(from,1);FC.state.pdf.files.splice(to,0,rem);updatePreview('pdf')}}})}function showToast(msg,type){const c=document.getElementById('fc-toast-container'),t=document.createElement('div');t.className='fc-toast '+type;t.innerHTML='<span>'+(type==='success'?'✓':'✕')+'</span> '+msg;c.appendChild(t);setTimeout(()=>{t.style.animation='fcSlideIn 0.3s ease reverse';setTimeout(()=>t.remove(),300)},3000)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
 </script>
-            </div>
-
-            <!-- Background Remover Tool (Embedded) -->
-            <div id="bg-remover-section" class="mb-20">
-                <div class="mb-8">
-                    <h3 class="text-3xl font-bold mb-3">Background Remover</h3>
-                    <p class="text-lg text-gray-400">AI-powered background removal - requires backend server</p>
-                </div>
-
-                <!-- Background Remover Iframe -->
-                <div class="bg-dark-lighter rounded-2xl border border-gray-800 overflow-hidden">
-                    <iframe
-                        src="background-remover/index.html"
-                        style="width: 100%; min-height: 800px; border: none;"
-                        title="Background Remover Tool">
-                    </iframe>
-                </div>
-
-                <div class="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-                    <div class="flex items-start gap-3">
-                        <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <div>
-                            <p class="text-sm text-amber-200 font-medium mb-1">Backend Server Required</p>
-                            <p class="text-sm text-amber-300/80">This tool requires a Python backend server to process images. See <span class="font-mono text-xs">background-remover/DEPLOYMENT.md</span> for setup instructions.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </div>
