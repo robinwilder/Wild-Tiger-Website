@@ -9,6 +9,11 @@
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" href="favicon.png">
 
+    <!-- Preload Inter font for faster rendering -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -106,7 +111,7 @@
     <section class="relative min-h-screen flex items-center overflow-hidden pt-24">
         <!-- Background Image -->
         <div class="absolute inset-0">
-            <img src="jungleimagehero.png" alt="" class="w-full h-full object-cover opacity-20">
+            <img src="jungleimagehero.jpg" alt="" class="w-full h-full object-cover opacity-20">
         </div>
 
         <!-- Background Blobs -->
@@ -269,7 +274,7 @@
     <section id="contact" class="relative py-32 overflow-hidden">
         <!-- Background Image -->
         <div class="absolute inset-0">
-            <img src="jungleimage3.png" alt="" class="w-full h-full object-cover opacity-20">
+            <img src="jungleimage3.jpg" alt="" class="w-full h-full object-cover opacity-20" loading="lazy">
         </div>
 
         <!-- Background Blob -->
@@ -311,7 +316,7 @@
                 <!-- Company Info -->
                 <div>
                     <div class="flex items-center space-x-2 mb-4">
-                        <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <img src="tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto" loading="lazy">
                         <span class="text-lg font-bold">Wild Tiger Design</span>
                     </div>
                     <p class="text-gray-400 text-sm">
