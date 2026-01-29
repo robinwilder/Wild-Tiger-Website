@@ -28,11 +28,13 @@ let analysisData = {};
 
 // Hosting Provider Detection Patterns
 const HOSTING_PATTERNS = {
-    // Cloud Providers
+    // Cloud Providers - check more specific patterns first
+    'amazon.com': 'Amazon Web Services (AWS)',
     'amazon': 'Amazon Web Services (AWS)',
     'aws': 'Amazon Web Services (AWS)',
     'ec2': 'Amazon Web Services (AWS)',
     'cloudfront': 'Amazon CloudFront (AWS)',
+    'google cloud': 'Google Cloud Platform',
     'google': 'Google Cloud Platform',
     'googleapis': 'Google Cloud Platform',
     'microsoft': 'Microsoft Azure',
@@ -182,6 +184,30 @@ function createScoreGauge(containerId, score) {
     container.appendChild(scoreText);
 }
 
+// Check CNAME record for hosting detection (Vercel, Netlify, etc.)
+async function getCNAME(domain) {
+    try {
+        // Check both www and naked domain
+        const domains = [`www.${domain}`, domain];
+
+        for (const d of domains) {
+            const response = await fetch(`https://dns.google/resolve?name=${d}&type=CNAME`);
+            const data = await response.json();
+
+            if (data.Answer && data.Answer.length > 0) {
+                const cnameRecord = data.Answer.find(record => record.type === 5);
+                if (cnameRecord) {
+                    return cnameRecord.data;
+                }
+            }
+        }
+        return null;
+    } catch (error) {
+        console.error('CNAME lookup failed:', error);
+        return null;
+    }
+}
+
 // Get IP address from domain using Google DNS API
 async function getIPAddress(domain) {
     try {
@@ -199,21 +225,26 @@ async function getIPAddress(domain) {
     }
 }
 
-// Get hosting information from IP using IP-API
+// Get hosting information from IP using ipinfo.io
 async function getHostingInfo(ip) {
     try {
-        // IMPORTANT: Use HTTP not HTTPS for CORS to work with free tier
-        const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,regionName,city,isp,org,as`);
+        // Using ipinfo.io which supports HTTPS (free tier: 50k requests/month)
+        const response = await fetch(`https://ipinfo.io/${ip}/json`);
         const data = await response.json();
 
-        if (data.status === 'success') {
+        if (data.ip) {
+            // ipinfo.io returns org field with format "AS##### Organization Name"
+            const orgParts = (data.org || '').split(' ');
+            const asn = orgParts[0] || 'Unknown';
+            const orgName = orgParts.slice(1).join(' ') || 'Unknown';
+
             return {
                 country: data.country || 'Unknown',
-                region: data.regionName || 'Unknown',
+                region: data.region || 'Unknown',
                 city: data.city || 'Unknown',
-                isp: data.isp || 'Unknown',
-                org: data.org || 'Unknown',
-                as: data.as || 'Unknown'
+                isp: orgName,
+                org: orgName,
+                as: asn
             };
         }
         return null;
@@ -223,8 +254,24 @@ async function getHostingInfo(ip) {
     }
 }
 
-// Detect hosting provider from ISP/organization name
-function detectHostingProvider(isp, org, asn) {
+// Detect hosting provider from CNAME or ISP/organization name
+function detectHostingProvider(isp, org, asn, cname = null) {
+    // First, check CNAME for PaaS platforms (more accurate)
+    if (cname) {
+        const cnameLower = cname.toLowerCase();
+        if (cnameLower.includes('vercel')) return 'Vercel';
+        if (cnameLower.includes('netlify')) return 'Netlify';
+        if (cnameLower.includes('github.io')) return 'GitHub Pages';
+        if (cnameLower.includes('herokuapp')) return 'Heroku';
+        if (cnameLower.includes('cloudfront')) return 'Amazon CloudFront (AWS)';
+        if (cnameLower.includes('azurewebsites')) return 'Microsoft Azure';
+        if (cnameLower.includes('shopify')) return 'Shopify';
+        if (cnameLower.includes('squarespace')) return 'Squarespace';
+        if (cnameLower.includes('webflow')) return 'Webflow';
+        if (cnameLower.includes('wixdns')) return 'Wix';
+    }
+
+    // Fall back to ISP/organization detection
     const searchText = `${isp} ${org} ${asn}`.toLowerCase();
 
     for (const [pattern, provider] of Object.entries(HOSTING_PATTERNS)) {
@@ -247,6 +294,9 @@ function inferTechnology(hostingProvider) {
     if (provider.includes('wix')) return 'Wix';
     if (provider.includes('weebly')) return 'Weebly';
     if (provider.includes('webflow')) return 'Webflow';
+    if (provider.includes('github pages')) return 'Static Site (GitHub Pages)';
+    if (provider.includes('vercel')) return 'Next.js / React (likely)';
+    if (provider.includes('netlify')) return 'Static Site / JAMstack';
     if (provider.includes('wp engine') || provider.includes('wpengine') ||
         provider.includes('kinsta') || provider.includes('flywheel') ||
         provider.includes('pantheon')) return 'WordPress (likely)';
@@ -325,13 +375,16 @@ async function analyzeWebsite(url) {
 
         // Fetch hosting information
         showLoading('Checking hosting information...');
+
+        // Check CNAME first (more accurate for PaaS platforms)
+        const cname = await getCNAME(domain);
         const ip = await getIPAddress(domain);
 
         if (ip) {
             const hostingInfo = await getHostingInfo(ip);
 
             if (hostingInfo) {
-                const hostingProvider = detectHostingProvider(hostingInfo.isp, hostingInfo.org, hostingInfo.as);
+                const hostingProvider = detectHostingProvider(hostingInfo.isp, hostingInfo.org, hostingInfo.as, cname);
                 const detectedTech = inferTechnology(hostingProvider);
 
                 analysisData.hosting = {
