@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Signature Generator - Wild Tiger Design</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#146765',
+                        'accent': '#4d65ff',
+                        'dark': '#0a0a0f',
+                        'dark-lighter': '#1a1a2e',
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .template-option {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .template-option.selected {
+            border-color: #146765;
+            background-color: rgba(20, 103, 101, 0.1);
+        }
+
+        #signature-preview {
+            background: white;
+            color: #000;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white antialiased">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 bg-dark/95 backdrop-blur-lg shadow-lg transition-all duration-300">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between py-6">
+                <!-- Logo -->
+                <a href="../index" class="flex items-center space-x-2">
+                    <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-10 w-auto">
+                    <span class="text-xl font-bold">Wild Tiger Design</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-10">
+                    <a href="../portfolio" class="text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                    <a href="../index#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
+                    <a href="../website-analyzer" class="text-gray-300 hover:text-white transition-colors">Website Analyzer</a>
+                    <a href="../toolbox" class="text-white font-semibold transition-colors">Toolbox</a>
+                    <a href="../about" class="text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="../index#contact" class="px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-dark-lighter border-t border-gray-800">
+            <div class="px-6 py-6 space-y-4">
+                <a href="../portfolio" class="block text-gray-300 hover:text-white transition-colors">Portfolio</a>
+                <a href="../index#services" class="block text-gray-300 hover:text-white transition-colors">Services</a>
+                <a href="../website-analyzer" class="block text-gray-300 hover:text-white transition-colors">Website Analyzer</a>
+                <a href="../toolbox" class="block text-white font-semibold transition-colors">Toolbox</a>
+                <a href="../about" class="block text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="../index#contact" class="block px-6 py-3 bg-white text-primary rounded-lg hover:bg-white/90 transition-all font-medium text-center">
+                    Contact
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-12 overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="../jungleimagehero.jpg" alt="" class="w-full h-full object-cover opacity-20">
+        </div>
+
+        <div class="relative max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="max-w-3xl">
+                <a href="../toolbox" class="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Toolbox
+                </a>
+                <h1 class="text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+                    Email Signature Generator
+                </h1>
+                <p class="text-xl lg:text-2xl text-gray-400 leading-relaxed">
+                    Create professional email signatures with step-by-step setup instructions
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">100% Free</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">No Watermarks</span>
+                    <span class="text-sm bg-primary/10 text-primary px-4 py-2 rounded-full font-medium">Step-by-Step</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Need Help CTA (Sticky) -->
+    <div id="help-widget" class="fixed bottom-6 right-6 z-40">
+        <a href="../index#contact" class="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-full shadow-xl transition-all font-medium">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Need Help?
+        </a>
+    </div>
+
+    <!-- Tool Section -->
+    <section class="relative py-12 pb-20">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+
+            <div class="grid lg:grid-cols-2 gap-8">
+
+                <!-- Left Column: Wizard Form -->
+                <div>
+                    <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl p-8">
+
+                        <!-- Step Indicator -->
+                        <div class="mb-8">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <div id="step-indicator-1" class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">1</div>
+                                    <span class="text-sm font-medium">Info</span>
+                                </div>
+                                <div class="flex-1 h-1 bg-gray-700 mx-2"></div>
+                                <div class="flex items-center space-x-2">
+                                    <div id="step-indicator-2" class="w-8 h-8 rounded-full bg-gray-700 text-gray-400 flex items-center justify-center text-sm font-bold">2</div>
+                                    <span class="text-sm font-medium text-gray-400">Logo</span>
+                                </div>
+                                <div class="flex-1 h-1 bg-gray-700 mx-2"></div>
+                                <div class="flex items-center space-x-2">
+                                    <div id="step-indicator-3" class="w-8 h-8 rounded-full bg-gray-700 text-gray-400 flex items-center justify-center text-sm font-bold">3</div>
+                                    <span class="text-sm font-medium text-gray-400">Design</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Basic Information -->
+                        <div id="step-1" class="step-content active">
+                            <h2 class="text-2xl font-bold mb-6">Basic Information</h2>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Full Name *</label>
+                                    <input type="text" id="input-name" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="John Smith">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Job Title</label>
+                                    <input type="text" id="input-title" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="Marketing Director">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Company Name</label>
+                                    <input type="text" id="input-company" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="Acme Corp">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
+                                    <input type="tel" id="input-phone" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="(555) 123-4567">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
+                                    <input type="email" id="input-email" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="john@example.com">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Website URL</label>
+                                    <input type="url" id="input-website" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="https://example.com">
+                                </div>
+                            </div>
+
+                            <button onclick="goToStep(2)" class="mt-6 w-full px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium">
+                                Next Step
+                            </button>
+                        </div>
+
+                        <!-- Step 2: Logo Upload -->
+                        <div id="step-2" class="step-content">
+                            <h2 class="text-2xl font-bold mb-6">Logo (Optional)</h2>
+
+                            <div class="space-y-4">
+                                <div class="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center">
+                                    <input type="file" id="logo-upload" accept="image/*" class="hidden">
+                                    <div id="logo-upload-area">
+                                        <svg class="w-12 h-12 mx-auto mb-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                        <button onclick="document.getElementById('logo-upload').click()" class="px-6 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                                            Choose Logo
+                                        </button>
+                                        <p class="text-sm text-gray-500 mt-3">PNG, JPG, SVG • Max 150px height • Under 100KB recommended</p>
+                                    </div>
+                                    <div id="logo-preview-area" class="hidden">
+                                        <img id="logo-preview" class="mx-auto mb-4 max-h-32">
+                                        <button onclick="removeLogo()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all text-sm">
+                                            Remove Logo
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="bg-primary/10 border border-primary/30 rounded-lg p-4">
+                                    <p class="text-sm text-primary font-medium mb-2">⚠️ Important: Image Hosting</p>
+                                    <p class="text-sm text-gray-400">Your logo will need to be hosted online. We'll provide detailed instructions for hosting options (Google Drive, your website, Imgur, etc.) after you generate your signature.</p>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Logo URL (if already hosted)</label>
+                                    <input type="url" id="input-logo-url" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" placeholder="https://example.com/logo.png">
+                                </div>
+                            </div>
+
+                            <div class="flex gap-3 mt-6">
+                                <button onclick="goToStep(1)" class="flex-1 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                                    Back
+                                </button>
+                                <button onclick="goToStep(3)" class="flex-1 px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium">
+                                    Next Step
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Design Selection -->
+                        <div id="step-3" class="step-content">
+                            <h2 class="text-2xl font-bold mb-6">Choose Design</h2>
+
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-3">Template</label>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div class="template-option selected border-2 border-gray-700 rounded-lg p-4 hover:border-primary/50" data-template="classic" onclick="selectTemplate('classic')">
+                                            <div class="text-sm font-medium mb-2">Classic</div>
+                                            <div class="text-xs text-gray-500">Simple and professional</div>
+                                        </div>
+                                        <div class="template-option border-2 border-gray-700 rounded-lg p-4 hover:border-primary/50" data-template="modern" onclick="selectTemplate('modern')">
+                                            <div class="text-sm font-medium mb-2">Modern</div>
+                                            <div class="text-xs text-gray-500">Clean with dividers</div>
+                                        </div>
+                                        <div class="template-option border-2 border-gray-700 rounded-lg p-4 hover:border-primary/50" data-template="minimal" onclick="selectTemplate('minimal')">
+                                            <div class="text-sm font-medium mb-2">Minimal</div>
+                                            <div class="text-xs text-gray-500">Text-focused</div>
+                                        </div>
+                                        <div class="template-option border-2 border-gray-700 rounded-lg p-4 hover:border-primary/50" data-template="bold" onclick="selectTemplate('bold')">
+                                            <div class="text-sm font-medium mb-2">Bold</div>
+                                            <div class="text-xs text-gray-500">Strong branding</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-3">Accent Color</label>
+                                    <div class="flex items-center gap-3">
+                                        <input type="color" id="input-color" value="#146765" class="w-16 h-12 rounded cursor-pointer">
+                                        <input type="text" id="input-color-hex" value="#146765" class="flex-1 bg-black/30 border border-gray-700 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-400 mb-3">Font</label>
+                                    <select id="input-font" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20">
+                                        <option value="Arial, sans-serif">Arial</option>
+                                        <option value="Verdana, sans-serif">Verdana</option>
+                                        <option value="Georgia, serif">Georgia</option>
+                                        <option value="Tahoma, sans-serif">Tahoma</option>
+                                        <option value="'Times New Roman', serif">Times New Roman</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-3 mt-6">
+                                <button onclick="goToStep(2)" class="flex-1 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all font-medium">
+                                    Back
+                                </button>
+                                <button onclick="generateSignature()" class="flex-1 px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium">
+                                    Generate Signature
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Preview -->
+                <div>
+                    <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl p-8 sticky top-24">
+                        <h3 class="text-xl font-bold mb-4">Live Preview</h3>
+                        <div id="signature-preview" class="border border-gray-700 rounded-lg p-6">
+                            <p class="text-gray-400 text-center">Fill in your information to see a preview</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Generated Signature Section (Hidden Initially) -->
+            <div id="output-section" class="hidden mt-12">
+                <div class="bg-dark-lighter/70 backdrop-blur-lg border border-gray-800 rounded-2xl p-8">
+
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold mb-3">Your Signature is Ready! 🎉</h2>
+                        <p class="text-gray-400">Copy the HTML code and follow the setup instructions below</p>
+                    </div>
+
+                    <!-- CTA: Need Help? -->
+                    <div class="bg-primary/10 border border-primary/30 rounded-xl p-6 mb-8 text-center">
+                        <h3 class="text-xl font-bold mb-2">These steps look complicated?</h3>
+                        <p class="text-gray-400 mb-4">Our team can handle the entire setup for you, including professional design customization.</p>
+                        <a href="../index#contact" class="inline-block px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium">
+                            Let Us Handle It →
+                        </a>
+                    </div>
+
+                    <!-- Copy HTML Code -->
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between mb-3">
+                            <label class="text-lg font-bold">HTML Code</label>
+                            <button onclick="copyHTML()" id="copy-html-btn" class="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all font-medium text-sm">
+                                Copy HTML
+                            </button>
+                        </div>
+                        <textarea id="html-output" readonly class="w-full h-48 bg-black/30 border border-gray-700 rounded-lg p-4 text-white text-xs font-mono focus:outline-none focus:border-primary resize-none"></textarea>
+                    </div>
+
+                    <!-- Email Client Instructions -->
+                    <div class="mb-8">
+                        <label class="block text-lg font-bold mb-3">Choose Your Email Client</label>
+                        <select id="email-client-select" class="w-full bg-black/30 border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 mb-6">
+                            <option value="">-- Select your email client --</option>
+                            <option value="gmail-web">Gmail (Web)</option>
+                            <option value="gmail-ios">Gmail (Mobile - iOS)</option>
+                            <option value="gmail-android">Gmail (Mobile - Android)</option>
+                            <option value="outlook-windows">Microsoft Outlook (Desktop - Windows)</option>
+                            <option value="outlook-mac">Microsoft Outlook (Desktop - Mac)</option>
+                            <option value="outlook-web">Outlook.com / Outlook Web</option>
+                            <option value="outlook-mobile">Outlook Mobile (iOS/Android)</option>
+                            <option value="apple-mail-mac">Apple Mail (Mac)</option>
+                            <option value="apple-mail-ios">Apple Mail (iPhone/iPad)</option>
+                            <option value="yahoo">Yahoo Mail</option>
+                            <option value="thunderbird">Thunderbird</option>
+                        </select>
+
+                        <!-- Instructions Container -->
+                        <div id="instructions-container" class="hidden bg-black/30 border border-gray-700 rounded-lg p-6">
+                            <div id="instructions-content"></div>
+                        </div>
+                    </div>
+
+                    <!-- Spam Prevention Tips -->
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
+                        <h3 class="text-lg font-bold mb-3 text-yellow-400">📋 Deliverability Tips</h3>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li>• Keep your signature simple and professional</li>
+                            <li>• Limit external links to 3-4 maximum</li>
+                            <li>• Avoid URL shorteners (bit.ly, tinyurl, etc.)</li>
+                            <li>• Keep images under 100KB</li>
+                            <li>• Test by sending to yourself first</li>
+                            <li>• Make sure your logo is hosted on a reliable service</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 py-12">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../tigerlogoforweb.png" alt="Wild Tiger Design" class="h-8 w-auto">
+                        <span class="text-lg font-bold">Wild Tiger Design</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Empowering businesses with cutting-edge digital solutions that drive real results.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../index" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="../portfolio" class="text-gray-400 hover:text-primary transition-colors">Portfolio</a></li>
+                        <li><a href="../toolbox" class="text-gray-400 hover:text-primary transition-colors">Toolbox</a></li>
+                        <li><a href="../about" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                        <li><a href="../index#contact" class="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../web-design" class="text-gray-400 hover:text-primary transition-colors">Web Design</a></li>
+                        <li><a href="../web-hosting" class="text-gray-400 hover:text-primary transition-colors">Web Hosting</a></li>
+                        <li><a href="../ai-consulting" class="text-gray-400 hover:text-primary transition-colors">AI Consulting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2025 Wild Tiger Design. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="../privacy-policy" class="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                    <a href="../terms-of-service" class="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Global state
+        let currentStep = 1;
+        let selectedTemplate = 'classic';
+        let logoDataUrl = null;
+
+        // Step navigation
+        function goToStep(step) {
+            // Hide current step
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            document.getElementById(`step-indicator-${currentStep}`).classList.remove('bg-primary', 'text-white');
+            document.getElementById(`step-indicator-${currentStep}`).classList.add('bg-gray-700', 'text-gray-400');
+
+            // Show new step
+            currentStep = step;
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            document.getElementById(`step-indicator-${currentStep}`).classList.remove('bg-gray-700', 'text-gray-400');
+            document.getElementById(`step-indicator-${currentStep}`).classList.add('bg-primary', 'text-white');
+
+            updatePreview();
+        }
+
+        // Template selection
+        function selectTemplate(template) {
+            selectedTemplate = template;
+            document.querySelectorAll('.template-option').forEach(el => el.classList.remove('selected'));
+            document.querySelector(`[data-template="${template}"]`).classList.add('selected');
+            updatePreview();
+        }
+
+        // Logo handling
+        document.getElementById('logo-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    logoDataUrl = event.target.result;
+                    document.getElementById('logo-preview').src = logoDataUrl;
+                    document.getElementById('logo-upload-area').classList.add('hidden');
+                    document.getElementById('logo-preview-area').classList.remove('hidden');
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function removeLogo() {
+            logoDataUrl = null;
+            document.getElementById('logo-upload').value = '';
+            document.getElementById('logo-upload-area').classList.remove('hidden');
+            document.getElementById('logo-preview-area').classList.add('hidden');
+            updatePreview();
+        }
+
+        // Color picker sync
+        document.getElementById('input-color').addEventListener('input', function(e) {
+            document.getElementById('input-color-hex').value = e.target.value;
+            updatePreview();
+        });
+
+        document.getElementById('input-color-hex').addEventListener('input', function(e) {
+            document.getElementById('input-color').value = e.target.value;
+            updatePreview();
+        });
+
+        // Real-time preview update
+        const inputFields = ['input-name', 'input-title', 'input-company', 'input-phone', 'input-email', 'input-website', 'input-font'];
+        inputFields.forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePreview);
+        });
+
+        function updatePreview() {
+            const name = document.getElementById('input-name').value || 'Your Name';
+            const title = document.getElementById('input-title').value;
+            const company = document.getElementById('input-company').value;
+            const phone = document.getElementById('input-phone').value;
+            const email = document.getElementById('input-email').value;
+            const website = document.getElementById('input-website').value;
+            const color = document.getElementById('input-color').value;
+            const font = document.getElementById('input-font').value;
+            const logoUrl = document.getElementById('input-logo-url').value || logoDataUrl;
+
+            const preview = document.getElementById('signature-preview');
+            preview.innerHTML = generateSignatureHTML(name, title, company, phone, email, website, color, font, logoUrl, true);
+        }
+
+        function generateSignatureHTML(name, title, company, phone, email, website, color, font, logoUrl, isPreview = false) {
+            let html = '';
+
+            // Note: Using placeholder for logo if not provided
+            const imgUrl = logoUrl || 'YOUR-LOGO-URL-HERE';
+            const imgTag = logoUrl || isPreview ? `<img src="${imgUrl}" alt="Logo" style="max-height: 80px; display: block; margin-bottom: 12px;">` : '';
+
+            if (selectedTemplate === 'classic') {
+                html = `
+                    <table cellpadding="0" cellspacing="0" style="font-family: ${font}; font-size: 14px; color: #000000; line-height: 1.4;">
+                        <tr>
+                            <td>
+                                ${imgTag}
+                                <div style="font-size: 18px; font-weight: bold; color: ${color}; margin-bottom: 4px;">${name}</div>
+                                ${title ? `<div style="font-size: 14px; color: #666666; margin-bottom: 2px;">${title}</div>` : ''}
+                                ${company ? `<div style="font-size: 14px; color: #666666; margin-bottom: 8px;">${company}</div>` : ''}
+                                ${phone ? `<div style="font-size: 13px; color: #333333;">📞 ${phone}</div>` : ''}
+                                ${email ? `<div style="font-size: 13px; color: #333333;">✉️ <a href="mailto:${email}" style="color: ${color}; text-decoration: none;">${email}</a></div>` : ''}
+                                ${website ? `<div style="font-size: 13px; color: #333333;">🌐 <a href="${website}" style="color: ${color}; text-decoration: none;">${website}</a></div>` : ''}
+                            </td>
+                        </tr>
+                    </table>
+                `;
+            } else if (selectedTemplate === 'modern') {
+                html = `
+                    <table cellpadding="0" cellspacing="0" style="font-family: ${font}; font-size: 14px; color: #000000; line-height: 1.4;">
+                        <tr>
+                            <td style="padding-right: 15px; border-right: 3px solid ${color};">
+                                ${imgTag}
+                            </td>
+                            <td style="padding-left: 15px;">
+                                <div style="font-size: 18px; font-weight: bold; color: #000000; margin-bottom: 4px;">${name}</div>
+                                ${title ? `<div style="font-size: 14px; color: ${color}; margin-bottom: 2px; font-weight: 600;">${title}</div>` : ''}
+                                ${company ? `<div style="font-size: 14px; color: #666666; margin-bottom: 8px;">${company}</div>` : ''}
+                                ${phone ? `<div style="font-size: 13px; color: #333333; margin-bottom: 2px;">${phone}</div>` : ''}
+                                ${email ? `<div style="font-size: 13px; margin-bottom: 2px;"><a href="mailto:${email}" style="color: ${color}; text-decoration: none;">${email}</a></div>` : ''}
+                                ${website ? `<div style="font-size: 13px;"><a href="${website}" style="color: ${color}; text-decoration: none;">${website}</a></div>` : ''}
+                            </td>
+                        </tr>
+                    </table>
+                `;
+            } else if (selectedTemplate === 'minimal') {
+                html = `
+                    <table cellpadding="0" cellspacing="0" style="font-family: ${font}; font-size: 14px; color: #000000; line-height: 1.6;">
+                        <tr>
+                            <td>
+                                <div style="font-size: 16px; font-weight: bold; color: #000000;">${name}</div>
+                                ${title ? `<div style="font-size: 13px; color: #666666;">${title}${company ? ` at ${company}` : ''}</div>` : ''}
+                                <div style="margin-top: 8px; font-size: 13px; color: #333333;">
+                                    ${phone ? `${phone} | ` : ''}${email ? `<a href="mailto:${email}" style="color: ${color}; text-decoration: none;">${email}</a>` : ''}${website ? ` | <a href="${website}" style="color: ${color}; text-decoration: none;">${website}</a>` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                `;
+            } else if (selectedTemplate === 'bold') {
+                html = `
+                    <table cellpadding="0" cellspacing="0" style="font-family: ${font}; font-size: 14px; color: #000000; line-height: 1.4;">
+                        <tr>
+                            <td style="background-color: ${color}; padding: 12px; border-radius: 4px;">
+                                <div style="font-size: 20px; font-weight: bold; color: #FFFFFF; margin-bottom: 4px;">${name}</div>
+                                ${title ? `<div style="font-size: 14px; color: #FFFFFF; opacity: 0.9;">${title}</div>` : ''}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 12px;">
+                                ${company ? `<div style="font-size: 14px; color: #666666; margin-bottom: 6px; font-weight: 600;">${company}</div>` : ''}
+                                ${phone ? `<div style="font-size: 13px; color: #333333;">📞 ${phone}</div>` : ''}
+                                ${email ? `<div style="font-size: 13px; color: #333333;">✉️ <a href="mailto:${email}" style="color: ${color}; text-decoration: none;">${email}</a></div>` : ''}
+                                ${website ? `<div style="font-size: 13px; color: #333333;">🌐 <a href="${website}" style="color: ${color}; text-decoration: none;">${website}</a></div>` : ''}
+                            </td>
+                        </tr>
+                    </table>
+                `;
+            }
+
+            return html;
+        }
+
+        function generateSignature() {
+            const name = document.getElementById('input-name').value;
+            if (!name) {
+                alert('Please enter your name before generating the signature.');
+                return;
+            }
+
+            const title = document.getElementById('input-title').value;
+            const company = document.getElementById('input-company').value;
+            const phone = document.getElementById('input-phone').value;
+            const email = document.getElementById('input-email').value;
+            const website = document.getElementById('input-website').value;
+            const color = document.getElementById('input-color').value;
+            const font = document.getElementById('input-font').value;
+            const logoUrl = document.getElementById('input-logo-url').value;
+
+            const signatureHTML = generateSignatureHTML(name, title, company, phone, email, website, color, font, logoUrl, false);
+
+            document.getElementById('html-output').value = signatureHTML;
+            document.getElementById('output-section').classList.remove('hidden');
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyHTML() {
+            const htmlOutput = document.getElementById('html-output');
+            htmlOutput.select();
+            document.execCommand('copy');
+
+            const btn = document.getElementById('copy-html-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        }
+
+        // Email client instructions
+        document.getElementById('email-client-select').addEventListener('change', function(e) {
+            const client = e.target.value;
+            const container = document.getElementById('instructions-container');
+            const content = document.getElementById('instructions-content');
+
+            if (!client) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            content.innerHTML = getInstructions(client);
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        function getInstructions(client) {
+            const instructions = {
+                'gmail-web': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Gmail (Web) Setup Instructions</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 1: Host Your Logo</h4>
+                        <p class="text-gray-400 text-sm mb-3">Gmail requires your logo to be hosted at a public URL. Options:</p>
+                        <ul class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>• <strong>Google Drive:</strong> Upload logo → Right-click → Share → "Anyone with the link" → Copy link</li>
+                            <li>• <strong>Your Website:</strong> Upload to media library and copy image URL</li>
+                            <li>• <strong>Imgur:</strong> Free image hosting with direct links</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 2: Install Signature</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Gmail and click the ⚙️ gear icon (top right)</li>
+                            <li>2. Click "See all settings"</li>
+                            <li>3. Scroll to "Signature" section in General tab</li>
+                            <li>4. Click "+ Create new" and name your signature</li>
+                            <li>5. Paste the HTML code directly into the editor</li>
+                            <li>6. If you have a logo, replace "YOUR-LOGO-URL-HERE" with your hosted logo URL</li>
+                            <li>7. Set as default for new emails and/or replies</li>
+                            <li>8. Scroll down and click "Save Changes"</li>
+                            <li>9. Send a test email to yourself</li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded p-4">
+                        <p class="font-bold mb-2 text-yellow-400">Gmail Tips:</p>
+                        <ul class="space-y-1 text-sm text-gray-400">
+                            <li>• Gmail strips certain HTML - keep it simple</li>
+                            <li>• Limit links to 3-4 maximum</li>
+                            <li>• Images should be under 100KB</li>
+                        </ul>
+                    </div>
+                `,
+                'outlook-windows': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Outlook Desktop (Windows) Setup</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 1: Host Your Logo</h4>
+                        <p class="text-gray-400 text-sm mb-3">For best compatibility, host on OneDrive, your website, or image hosting service.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 2: Install Signature</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Outlook and go to File → Options</li>
+                            <li>2. Select "Mail" from left sidebar</li>
+                            <li>3. Click "Signatures..." button</li>
+                            <li>4. Click "New" to create signature</li>
+                            <li>5. Paste your HTML code in the editor</li>
+                            <li>6. Replace logo URL if needed</li>
+                            <li>7. Set as default for new/reply messages</li>
+                            <li>8. Click OK to save</li>
+                            <li>9. Test by sending yourself an email</li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded p-4">
+                        <p class="font-bold mb-2 text-yellow-400">Outlook Tips:</p>
+                        <ul class="space-y-1 text-sm text-gray-400">
+                            <li>• Outlook may convert images to attachments - test carefully</li>
+                            <li>• Keep signature under 10KB</li>
+                            <li>• Use standard fonts</li>
+                        </ul>
+                    </div>
+                `,
+                'apple-mail-mac': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Apple Mail (Mac) Setup</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 1: Host Your Logo</h4>
+                        <p class="text-gray-400 text-sm mb-3">Use iCloud Drive, your website, or image hosting for consistent display.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 2: Install Signature</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Mail and go to Mail → Settings (or Preferences)</li>
+                            <li>2. Click "Signatures" tab</li>
+                            <li>3. Select email account</li>
+                            <li>4. Click "+" to create new signature</li>
+                            <li>5. Paste your signature HTML in the right panel</li>
+                            <li>6. Uncheck "Always match my default message font"</li>
+                            <li>7. Replace logo URL if needed</li>
+                            <li>8. Drag signature to email account to set as default</li>
+                            <li>9. Close Settings and test</li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded p-4">
+                        <p class="font-bold mb-2 text-yellow-400">Apple Mail Tips:</p>
+                        <ul class="space-y-1 text-sm text-gray-400">
+                            <li>• Apple Mail preserves formatting well</li>
+                            <li>• Test with Gmail and Outlook recipients</li>
+                            <li>• Keep images under 100KB</li>
+                        </ul>
+                    </div>
+                `,
+                'outlook-web': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Outlook.com / Outlook Web Setup</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 1: Host Your Logo</h4>
+                        <p class="text-gray-400 text-sm mb-3">Host on OneDrive, your website, or image hosting service.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 2: Install Signature</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Outlook.com in your browser</li>
+                            <li>2. Click ⚙️ Settings → View all Outlook settings</li>
+                            <li>3. Go to Mail → Compose and reply</li>
+                            <li>4. Under "Email signature", paste your HTML code</li>
+                            <li>5. Replace logo URL with your hosted image</li>
+                            <li>6. Check "Include signature on new messages"</li>
+                            <li>7. Click "Save"</li>
+                            <li>8. Compose test email to verify</li>
+                        </ol>
+                    </div>
+                `,
+                'gmail-ios': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Gmail Mobile (iOS) Setup</h3>
+
+                    <div class="mb-6">
+                        <p class="text-gray-400 text-sm mb-3">⚠️ <strong>Note:</strong> Gmail mobile app has limited signature formatting. For best results, set up via Gmail web first, then it will sync to mobile.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Mobile App Method</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Gmail app</li>
+                            <li>2. Tap ☰ menu → Settings</li>
+                            <li>3. Select your account</li>
+                            <li>4. Scroll to "Mobile Signature"</li>
+                            <li>5. Paste plain text version (HTML won't work)</li>
+                            <li>6. Tap OK</li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-primary/10 border border-primary/30 rounded p-4">
+                        <p class="font-bold mb-2 text-primary">Recommended:</p>
+                        <p class="text-sm text-gray-400">Set up your full HTML signature via Gmail web. It will display properly when you send from mobile, though the mobile app's signature editor is text-only.</p>
+                    </div>
+                `,
+                'gmail-android': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Gmail Mobile (Android) Setup</h3>
+
+                    <div class="mb-6">
+                        <p class="text-gray-400 text-sm mb-3">⚠️ <strong>Note:</strong> Gmail mobile app has limited signature formatting. For best results, set up via Gmail web first.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Mobile App Method</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Gmail app</li>
+                            <li>2. Tap ☰ menu → Settings</li>
+                            <li>3. Select your account</li>
+                            <li>4. Tap "Mobile Signature"</li>
+                            <li>5. Enter plain text version (HTML not supported)</li>
+                            <li>6. Tap OK</li>
+                        </ol>
+                    </div>
+                `,
+                'outlook-mac': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Outlook Desktop (Mac) Setup</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Step 1: Install Signature</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Outlook and go to Outlook → Preferences</li>
+                            <li>2. Click "Signatures"</li>
+                            <li>3. Click "+" to add new signature</li>
+                            <li>4. Paste your HTML code</li>
+                            <li>5. Replace logo URL if needed</li>
+                            <li>6. Set as default signature</li>
+                            <li>7. Close and test</li>
+                        </ol>
+                    </div>
+                `,
+                'outlook-mobile': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Outlook Mobile Setup</h3>
+
+                    <div class="mb-6">
+                        <p class="text-gray-400 text-sm mb-3">⚠️ Outlook mobile has limited signature support. Best to set up via desktop/web first.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Mobile Setup</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Outlook app</li>
+                            <li>2. Tap profile icon → ⚙️ Settings</li>
+                            <li>3. Select your account</li>
+                            <li>4. Tap "Signature"</li>
+                            <li>5. Enter text version</li>
+                            <li>6. Save changes</li>
+                        </ol>
+                    </div>
+                `,
+                'apple-mail-ios': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Apple Mail (iPhone/iPad) Setup</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Setup Instructions</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Settings app (not Mail app)</li>
+                            <li>2. Scroll to "Mail"</li>
+                            <li>3. Tap "Signature"</li>
+                            <li>4. Choose "Per Account" if you have multiple emails</li>
+                            <li>5. Paste your HTML signature</li>
+                            <li>6. Note: iOS Mail may strip some HTML formatting</li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded p-4">
+                        <p class="font-bold mb-2 text-yellow-400">iOS Limitation:</p>
+                        <p class="text-sm text-gray-400">iOS Mail app adds "Sent from my iPhone" by default. You can delete this when pasting your signature.</p>
+                    </div>
+                `,
+                'yahoo': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Yahoo Mail Setup</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Setup Instructions</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Yahoo Mail</li>
+                            <li>2. Click ⚙️ Settings → More Settings</li>
+                            <li>3. Select "Writing email" in left menu</li>
+                            <li>4. Under "Signature", paste your HTML code</li>
+                            <li>5. Replace logo URL with hosted image</li>
+                            <li>6. Check "Show signature on all new messages"</li>
+                            <li>7. Click "Save" at bottom</li>
+                            <li>8. Send test email</li>
+                        </ol>
+                    </div>
+                `,
+                'thunderbird': `
+                    <h3 class="text-xl font-bold mb-4 text-primary">Thunderbird Setup</h3>
+
+                    <div class="mb-6">
+                        <h4 class="font-bold mb-2 text-white">Setup Instructions</h4>
+                        <ol class="space-y-2 text-sm text-gray-400 ml-4">
+                            <li>1. Open Thunderbird</li>
+                            <li>2. Go to Account Settings</li>
+                            <li>3. Select your email account</li>
+                            <li>4. Check "Compose messages in HTML format"</li>
+                            <li>5. Paste your HTML signature in the "Signature text" box</li>
+                            <li>6. Check "Use HTML"</li>
+                            <li>7. Replace logo URL if needed</li>
+                            <li>8. Click OK and test</li>
+                        </ol>
+                    </div>
+                `
+            };
+
+            return instructions[client] || '<p class="text-gray-400">Please select an email client to see instructions.</p>';
+        }
+
+        // Initialize
+        updatePreview();
+    </script>
+</body>
+</html>
