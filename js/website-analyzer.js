@@ -21,8 +21,8 @@ const loadingStatus = document.getElementById('loading-status');
 const resultsSection = document.getElementById('results-section');
 const downloadPdfBtn = document.getElementById('download-pdf-btn');
 
-// API Key - Google PageSpeed Insights API
-const PAGESPEED_API_KEY = 'AIzaSyAwCl4sPUWqaBgiddfJwPEpeGsuw5sUNrk';
+// PageSpeed API calls are now handled by serverless function at /api/analyze
+// API key is stored securely in Vercel environment variables
 
 let analysisData = {};
 
@@ -312,13 +312,14 @@ async function analyzeWebsite(url) {
         // Extract domain from URL
         const domain = new URL(url).hostname;
 
-        // Fetch PageSpeed data
-        const pagespeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${PAGESPEED_API_KEY}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`;
+        // Fetch PageSpeed data via serverless function (API key is secured server-side)
+        const pagespeedUrl = `/api/analyze?url=${encodeURIComponent(url)}`;
 
         const response = await fetch(pagespeedUrl);
 
         if (!response.ok) {
-            throw new Error('Failed to fetch PageSpeed data. Please check your API key.');
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || 'Failed to fetch PageSpeed data.');
         }
 
         const data = await response.json();
