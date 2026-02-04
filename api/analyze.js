@@ -15,8 +15,16 @@ export default async function handler(req, res) {
     const API_KEY = process.env.PAGESPEED_API_KEY;
 
     if (!API_KEY) {
-        console.error('PAGESPEED_API_KEY environment variable not set');
-        return res.status(500).json({ error: 'Server configuration error' });
+        // Log available env var names (not values) to help debug
+        const envVarNames = Object.keys(process.env).filter(key =>
+            key.includes('PAGESPEED') || key.includes('API') || key.includes('KEY')
+        );
+        console.error('PAGESPEED_API_KEY not found. Similar env vars:', envVarNames);
+        return res.status(500).json({
+            error: 'Server configuration error',
+            hint: 'Environment variable PAGESPEED_API_KEY not found',
+            availableSimilar: envVarNames
+        });
     }
 
     try {
