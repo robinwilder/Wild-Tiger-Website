@@ -21,8 +21,8 @@ const loadingStatus = document.getElementById('loading-status');
 const resultsSection = document.getElementById('results-section');
 const downloadPdfBtn = document.getElementById('download-pdf-btn');
 
-// PageSpeed API calls are now handled by serverless function at /api/analyze
-// API key is stored securely in Vercel environment variables
+// PageSpeed API key (restricted to wildtigerdesign.com domain)
+const PAGESPEED_API_KEY = 'AIzaSyAwCl4sPUWqaBgiddfJwPEpeGsuw5sUNrk';
 
 let analysisData = {};
 
@@ -312,8 +312,8 @@ async function analyzeWebsite(url) {
         // Extract domain from URL
         const domain = new URL(url).hostname;
 
-        // Fetch PageSpeed data via serverless function (API key is secured server-side)
-        const pagespeedUrl = `/api/analyze?url=${encodeURIComponent(url)}`;
+        // Fetch PageSpeed data directly from Google API
+        const pagespeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${PAGESPEED_API_KEY}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`;
 
         const response = await fetch(pagespeedUrl);
 
