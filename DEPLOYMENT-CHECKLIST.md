@@ -1,268 +1,140 @@
 # Deployment Checklist
 
-Follow this checklist to deploy your Wild Tiger Design website with the new Toolbox features.
+Follow this checklist to deploy the Wild Tiger Design website on Vercel.
 
-## ✅ Pre-Deployment Checklist
+## Pre-Deployment Checklist
 
 ### 1. Test Locally
-- [ ] Open `toolbox.html` in Chrome
-- [ ] Test File Converter - Image Conversion
-- [ ] Test File Converter - HEIC Conversion
-- [ ] Test File Converter - Images to PDF
+- [ ] Open `index.html` in Chrome and verify all pages load
+- [ ] Test Website Analyzer (requires Vercel CLI for local serverless function testing)
+- [ ] Test all Toolbox tools in `toolbox/` folder
 - [ ] Verify all navigation links work
 - [ ] Check mobile responsiveness
 
-### 2. Review Changes
-- [ ] All Toolbox navigation links added to pages
-- [ ] File converter embedded and working
-- [ ] Background remover card has correct link
-- [ ] Footer updated with Toolbox link
+### 2. Review Environment Variables
+- [ ] `PAGESPEED_API_KEY` is set in Vercel project settings (Settings → Environment Variables)
+- [ ] API key is valid and the PageSpeed Insights API is enabled in Google Cloud Console
+- [ ] Variable is enabled for Production (and optionally Preview/Development)
 
-### 3. Git Repository
+### 3. Review Vercel Configuration
+- [ ] `vercel.json` has correct rewrite rules for `/api/*` routes
+- [ ] `vercel.json` has correct HTML rewrite rules (excluding `/api/` and static files)
+- [ ] Clean URLs enabled
+
+### 4. Git Repository
 - [ ] All files staged for commit
-- [ ] Commit message written
-- [ ] Repository pushed to GitHub
+- [ ] No sensitive data (API keys, passwords) in committed files
+- [ ] `.gitignore` excludes `.env`, `.env.local`, and `node_modules/`
 
 ---
 
-## 🚀 Deployment Steps
+## Deployment Steps
 
-### Step 1: Commit Changes to GitHub
+### Step 1: Commit and Push to GitHub
 
 ```bash
-# Navigate to your project
 cd ~/wild-tiger-design
 
-# Add all new files
+# Stage changes
 git add .
 
-# Commit with descriptive message
-git commit -m "Add Toolbox with File Converter and Background Remover
+# Commit
+git commit -m "Description of changes"
 
-- Added new Toolbox page with free tools
-- Integrated File Converter (JPG/PNG/WebP, HEIC, Images to PDF)
-- Added Background Remover tool (requires backend)
-- Updated navigation across all pages
-- Added deployment documentation
-
-🤖 Generated with Claude Code
-
-Co-Authored-By: Claude <noreply@anthropic.com>"
-
-# Push to GitHub
+# Push to main branch
 git push origin main
 ```
 
-### Step 2: Deploy Frontend (GitHub Pages)
+Vercel automatically deploys when changes are pushed to `main`.
 
-**If GitHub Pages is already enabled:**
-- Changes will deploy automatically after push
-- Wait 1-2 minutes for deployment
-- Visit your site: `https://yourusername.github.io/wild-tiger-design/`
+### Step 2: Verify Deployment
 
-**If GitHub Pages is NOT enabled:**
-1. Go to GitHub.com → Your Repository
-2. Click "Settings" tab
-3. Scroll to "Pages" section
-4. Source: Select "main" branch
-5. Folder: Select "/ (root)"
-6. Click "Save"
-7. Wait for deployment (check Actions tab)
+1. Go to [Vercel Dashboard](https://vercel.com/) → your project → Deployments
+2. Wait for the latest deployment to show a green checkmark
+3. Click the deployment URL to preview
 
 ### Step 3: Test Live Site
 
-Visit your live website and verify:
+#### Core Pages
 - [ ] Homepage loads correctly
-- [ ] Toolbox link appears in navigation
-- [ ] Toolbox page loads and displays both tools
-- [ ] File Converter works (try converting an image)
-- [ ] Background Remover shows "Open Tool" link
+- [ ] All service pages load (web-design, web-hosting, ai-consulting)
+- [ ] Portfolio pages load with project details
+- [ ] Contact form submits to Formspree
+- [ ] 404 page displays for invalid URLs
+- [ ] Clean URLs work (e.g., `/about` instead of `/about.html`)
 
-### Step 4: Deploy Background Remover (Optional)
+#### Website Analyzer
+- [ ] Navigate to `/website-analyzer`
+- [ ] Enter a URL and click Analyze
+- [ ] Performance scores display correctly
+- [ ] Core Web Vitals metrics appear
+- [ ] Improvement opportunities are listed
+- [ ] Hosting information is detected
+- [ ] Technology stack inference works
+- [ ] PDF report downloads successfully
 
-**Choose One Deployment Method:**
+#### Toolbox
+- [ ] All 10 tools load from the toolbox page
+- [ ] Case Converter works
+- [ ] Color Picker works
+- [ ] Email Signature Generator works
+- [ ] File Converter works (test image format conversion)
+- [ ] Gradient Generator works
+- [ ] Image Compressor works
+- [ ] Image Resizer works
+- [ ] PDF Merger works
+- [ ] PDF Splitter works
+- [ ] Word Counter works
 
-#### Option A: Railway (Recommended)
-1. Sign up at [railway.app](https://railway.app)
-2. Click "New Project" → "Deploy from GitHub repo"
-3. Select your `wild-tiger-design` repository
-4. Railway will auto-detect Python in `background-remover/`
-5. Wait for deployment (5-10 minutes)
-6. Copy the deployment URL
+#### API Endpoint
+- [ ] Test directly: `https://wildtigerdesign.com/api/analyze?url=https://google.com`
+- [ ] Returns JSON with Lighthouse data (not a 500 error)
 
-#### Option B: Render
-1. Sign up at [render.com](https://render.com)
-2. New → Web Service
-3. Connect your GitHub repo
-4. Root directory: `background-remover`
-5. Build: `pip install -r requirements.txt`
-6. Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-7. Deploy
+### Step 4: Browser Testing
 
-#### Option C: Your Own Server
-See detailed guide in `background-remover/DEPLOYMENT.md`
-
-### Step 5: Connect Background Remover to Frontend
-
-After deploying the backend:
-
-1. Get your backend URL (e.g., `https://your-app.railway.app`)
-2. Update `background-remover/index.html`:
-   ```javascript
-   // Line 478 - Change from:
-   const API_URL = 'http://localhost:8000';
-
-   // To your deployed URL:
-   const API_URL = 'https://your-app.railway.app';
-   ```
-3. Commit and push:
-   ```bash
-   git add background-remover/index.html
-   git commit -m "Update background remover API URL to production"
-   git push origin main
-   ```
-
----
-
-## 🧪 Post-Deployment Testing
-
-### File Converter Tests
-- [ ] Image format conversion (JPG → PNG)
-- [ ] Quality slider works
-- [ ] Multiple file upload
-- [ ] Download converted files
-- [ ] HEIC conversion (if you have HEIC files)
-- [ ] Images to PDF creation
-
-### Background Remover Tests (if deployed)
-- [ ] Upload an image
-- [ ] Background removal processes successfully
-- [ ] Before/After slider works
-- [ ] Download processed image
-- [ ] Try different output formats (PNG, WebP, JPEG)
-
-### Navigation Tests
-- [ ] Toolbox link works from all pages
-- [ ] Mobile menu includes Toolbox
-- [ ] Footer includes Toolbox link
-- [ ] All pages load without errors
-
-### Browser Tests
-Test on multiple browsers:
-- [ ] Chrome
-- [ ] Firefox
-- [ ] Safari
-- [ ] Edge
+- [ ] Chrome (desktop)
+- [ ] Firefox (desktop)
+- [ ] Safari (desktop)
+- [ ] Edge (desktop)
 - [ ] Mobile Safari (iPhone)
 - [ ] Mobile Chrome (Android)
 
 ---
 
-## 📊 Monitoring
+## Troubleshooting
 
-After deployment, monitor:
+### Website Analyzer returns "Server configuration error"
+- Check that `PAGESPEED_API_KEY` is set in Vercel Environment Variables
+- **Important:** Redeploy after adding/changing environment variables
+- Check Vercel function logs: Deployments → latest → Functions → `/api/analyze`
 
-### GitHub Pages
-- Check Actions tab for deployment status
-- Monitor any build failures
+### Clean URLs not working
+- Verify `vercel.json` has the correct rewrite and redirect rules
+- Check that `"cleanUrls": true` is set
 
-### Backend (if deployed)
-- Check Railway/Render dashboard for:
-  - Server status
-  - Resource usage
-  - Error logs
-  - Request counts
+### API routes returning HTML instead of JSON
+- Ensure `vercel.json` has the `/api/:path*` rewrite rule listed **before** the HTML rewrite rule
+- The HTML rewrite pattern must exclude `/api/` paths
 
-### Performance
-- Test tool speed with various file sizes
-- Monitor browser console for errors
-- Check mobile performance
+### Deployment fails
+- Check Vercel build logs for errors
+- Verify no syntax errors in `vercel.json`
+- Ensure `api/analyze.js` exports a valid serverless function
 
----
-
-## 🐛 Troubleshooting
-
-### "Toolbox page not loading"
-- Check GitHub Pages deployment status
+### Toolbox tools not loading
 - Clear browser cache
-- Verify all files were pushed to GitHub
-
-### "File Converter not working"
 - Check browser console for JavaScript errors
-- Verify CDN scripts are loading (jsPDF, heic2any)
-- Test with a different browser
-
-### "Background Remover connection refused"
-- Verify backend is deployed and running
-- Check API_URL is correct
-- Check CORS settings in backend
-
-### "GitHub Pages shows 404"
-- Verify branch is set to `main` in Pages settings
-- Check file paths are correct (case-sensitive)
-- Wait a few minutes for propagation
+- Verify CDN scripts are accessible (Tailwind CSS, jsPDF, etc.)
 
 ---
 
-## 🎉 Success Criteria
+## Post-Deployment Monitoring
 
-Deployment is complete when:
-- ✅ Website is live on GitHub Pages
-- ✅ Toolbox page is accessible
-- ✅ File Converter works in production
-- ✅ All navigation links function correctly
-- ✅ Mobile version displays properly
-- ✅ (Optional) Background Remover backend is deployed and connected
+- Check Vercel Analytics for traffic and performance
+- Monitor Vercel function logs for API errors
+- Review Google Cloud Console for PageSpeed API usage and quota
+- Test the Website Analyzer periodically to ensure it's working
 
 ---
 
-## 📝 Next Steps
-
-After successful deployment:
-
-1. **Announce the new feature:**
-   - Add to homepage
-   - Social media announcement
-   - Email subscribers
-
-2. **Gather feedback:**
-   - Monitor user behavior
-   - Collect feature requests
-   - Track tool usage
-
-3. **Plan improvements:**
-   - Add more tools
-   - Enhance UI/UX
-   - Optimize performance
-
----
-
-## 🔄 Future Updates
-
-To add new tools or make changes:
-
-```bash
-# Make your changes locally
-# Test thoroughly
-
-# Commit and push
-git add .
-git commit -m "Description of changes"
-git push origin main
-
-# GitHub Pages will auto-deploy
-# Backend: redeploy if changes affect it
-```
-
----
-
-## 📞 Need Help?
-
-- Review `TOOLBOX-README.md` for detailed documentation
-- Check `background-remover/DEPLOYMENT.md` for backend setup
-- GitHub repository: [Your Repo URL]
-- Website: https://wildtigerdesign.com
-
----
-
-**Last Updated:** January 2026
+**Last Updated:** February 2026

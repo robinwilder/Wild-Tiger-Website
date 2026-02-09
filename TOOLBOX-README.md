@@ -1,300 +1,151 @@
 # Wild Tiger Design - Free Toolbox
 
-A collection of free, web-based tools for image editing and file conversion.
+A collection of 10 free, browser-based tools for web professionals and content creators. All tools run entirely in the browser — no files are uploaded to any server.
 
-## 🛠️ Available Tools
+## Available Tools
 
-### 1. **File Converter** ✅ (Works Immediately)
-- **Image Converter**: Convert between JPG, PNG, WebP formats with quality control
-- **HEIC to JPG/PNG**: Convert iPhone photos to standard formats
-- **Images to PDF**: Combine multiple images into a single PDF document
+### 1. Case Converter
+Transform text between uppercase, lowercase, title case, sentence case, and more.
 
-**Features:**
-- ✅ 100% client-side processing (no uploads to server)
-- ✅ Privacy-focused - files never leave your browser
-- ✅ Works offline after initial page load
-- ✅ Drag & drop interface
-- ✅ Batch processing support
+### 2. Color Picker
+Pick colors visually and convert between HEX, RGB, and HSL formats. Copy values to clipboard.
 
-**How to Use:**
-1. Open `toolbox.html` in your browser
-2. Select the converter tab you need
-3. Drag and drop files or click to browse
-4. Choose your output format and quality
-5. Convert and download!
+### 3. Email Signature Generator
+Create professional HTML email signatures with customizable fields, social links, and branding.
 
----
+### 4. File Converter
+Convert between image formats including JPG, PNG, WebP, and HEIC with quality control.
 
-### 2. **Background Remover** 🔧 (Requires Setup)
-AI-powered background removal using the U2-Net model.
+### 5. Gradient Generator
+Create CSS linear and radial gradients with a visual editor. Copy CSS code directly.
 
-**Features:**
-- 🤖 AI-powered for high-quality results
-- 📸 Perfect for product photos and portraits
-- 🎨 Export as PNG, WebP, or JPEG
-- 🔄 Before/After comparison slider
+### 6. Image Compressor
+Reduce image file sizes while maintaining quality. Supports batch processing.
 
-**Status:** Requires backend server deployment (see instructions below)
+### 7. Image Resizer
+Resize images to custom dimensions with aspect ratio lock and multiple output formats.
+
+### 8. PDF Merger
+Combine multiple PDF files into a single document. Drag and drop to reorder pages.
+
+### 9. PDF Splitter
+Split PDF files into individual pages or custom page ranges.
+
+### 10. Word Counter
+Count words, characters, sentences, paragraphs, and estimate reading time.
 
 ---
 
-## 🚀 Quick Start
+## Key Features
 
-### For File Converter (No Setup Required)
+- **100% Client-Side**: All processing happens in the browser — no files are uploaded to any server
+- **Privacy-Focused**: Your files never leave your device
+- **No Account Required**: All tools are free to use without registration
+- **Works Offline**: Tools work after the initial page load (CDN scripts must load first)
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Dark Theme**: Consistent with the Wild Tiger Design brand
 
-Simply open `toolbox.html` in any modern web browser. All tools work immediately!
+---
+
+## Quick Start
+
+All tools are accessible from the toolbox page on the live site or locally:
 
 ```bash
-# Option 1: Double-click toolbox.html in Finder
-
-# Option 2: Open in Chrome from Terminal
-open -a "Google Chrome" toolbox.html
+# Open any tool directly in your browser
+open toolbox/case-converter.html
+open toolbox/color-picker.html
+open toolbox/file-converter.html
+# etc.
 ```
 
-### For Background Remover (Setup Required)
-
-See the detailed deployment guide: [`background-remover/DEPLOYMENT.md`](background-remover/DEPLOYMENT.md)
-
-**Quick Local Test:**
-```bash
-cd background-remover
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python main.py
-```
-
-Then open `background-remover/index.html` in your browser.
+Or visit the live site: [https://wildtigerdesign.com](https://wildtigerdesign.com)
 
 ---
 
-## 📦 Deployment Options
+## File Structure
 
-### File Converter
-The file converter is ready to deploy as-is:
-- Works on any static hosting (GitHub Pages, Netlify, Vercel, etc.)
-- No server required
+```
+toolbox/
+├── case-converter.html              # Case Converter
+├── color-picker.html                # Color Picker
+├── email-signature-generator.html   # Email Signature Generator
+├── file-converter.html              # File Converter
+├── gradient-generator.html          # Gradient Generator
+├── image-compressor.html            # Image Compressor
+├── image-resizer.html               # Image Resizer
+├── pdf-merger.html                  # PDF Merger
+├── pdf-splitter.html                # PDF Splitter
+└── word-counter.html                # Word Counter
+```
+
+Each tool is a self-contained HTML file with embedded CSS and JavaScript.
+
+---
+
+## Deployment
+
+The toolbox tools are static HTML files and require no server or build step:
+- Works on any static hosting (Vercel, Netlify, GitHub Pages, etc.)
 - No environment variables needed
+- No server-side processing required
 
-### Background Remover
-Requires a Python backend. Recommended options:
-
-1. **Railway.app** (Easiest)
-   - Free tier available
-   - Auto-deploys from GitHub
-   - See `background-remover/DEPLOYMENT.md`
-
-2. **Render.com** (Also Easy)
-   - Free tier available
-   - Simple GitHub integration
-
-3. **Your Own VPS** (Most Control)
-   - DigitalOcean, Linode, etc.
-   - Full deployment guide included
+The Wild Tiger Design site is currently deployed on **Vercel**, which serves these files via a global CDN.
 
 ---
 
-## 🌐 Deploying to Your Website
+## Browser Support
 
-### Step 1: Push to GitHub
-
-```bash
-cd wild-tiger-design
-git add .
-git commit -m "Add toolbox with file converter and background remover"
-git push origin main
-```
-
-### Step 2: Deploy Frontend (GitHub Pages)
-
-**Option A: Via GitHub.com**
-1. Go to your repository on GitHub
-2. Settings → Pages
-3. Source: Deploy from main branch
-4. Select `/` (root) folder
-5. Save
-
-Your site will be live at: `https://yourusername.github.io/wild-tiger-design/`
-
-**Option B: Via Command Line**
-```bash
-# If you have GitHub Pages enabled, just push
-git push origin main
-
-# Or use gh-pages branch
-git checkout -b gh-pages
-git push origin gh-pages
-```
-
-### Step 3: Deploy Background Remover Backend (Optional)
-
-If you want the background remover to work:
-1. Follow `background-remover/DEPLOYMENT.md`
-2. Deploy to Railway, Render, or your VPS
-3. Update the API URL in `background-remover/index.html`
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+- Mobile Safari (iOS)
+- Chrome Mobile (Android)
 
 ---
 
-## 🔧 Configuration
+## External Dependencies
 
-### File Converter
-No configuration needed! It works out of the box.
-
-### Background Remover
-Update the API URL in `background-remover/index.html`:
-
-```javascript
-// Line 478
-const API_URL = 'http://localhost:8000';  // For local testing
-
-// For production, change to:
-const API_URL = 'https://your-backend.railway.app';
-```
+Tools load the following libraries via CDN:
+- **Tailwind CSS** — Styling
+- **jsPDF** — PDF generation and manipulation
+- **pdf-lib** — PDF merging and splitting
+- **heic2any** — HEIC image conversion
+- **Google Fonts (Inter)** — Typography
 
 ---
 
-## 📁 Project Structure
+## Customization
 
-```
-wild-tiger-design/
-├── toolbox.html                    # Main toolbox page
-├── file-converter-module.html      # File converter component
-├── background-remover/             # Background remover tool
-│   ├── index.html                  # Frontend
-│   ├── main.py                     # Backend API
-│   ├── requirements.txt            # Python dependencies
-│   ├── Procfile                    # For Railway/Render
-│   ├── runtime.txt                 # Python version
-│   ├── DEPLOYMENT.md               # Deployment guide
-│   └── README.md                   # Tool documentation
-├── TOOLBOX-README.md               # This file
-└── ...                             # Other website files
-```
+### Change Brand Colors
+Each tool uses CSS variables for consistent theming. The primary brand color is `#146765` (teal).
+
+### Add a New Tool
+1. Create a new HTML file in the `toolbox/` directory
+2. Follow the structure of an existing tool for consistent layout and styling
+3. Add a link to the new tool from the main toolbox navigation
+4. Commit and push — Vercel auto-deploys
 
 ---
 
-## 🎨 Customization
+## Troubleshooting
 
-### Change Colors
-The file converter uses CSS variables. Update in `file-converter-module.html`:
+### Tool not loading
+- Clear browser cache and refresh
+- Check browser console for JavaScript errors
+- Verify CDN scripts are accessible (not blocked by ad blockers or firewalls)
 
-```css
-.fc-module {
-  --fc-teal: rgb(20, 103, 101);      /* Your brand color */
-  --fc-bg-card: rgba(26, 26, 26, 0.7);
-  /* ... other variables */
-}
-```
-
-### Add More Tools
-Tools are modular! To add a new tool:
-1. Create a new section in `toolbox.html`
-2. Add a card in the "Image Tools Overview" section
-3. Create the tool interface (similar to file converter)
-
----
-
-## 🔍 Browser Support
-
-### File Converter
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
-
-### Background Remover
-- ✅ All modern browsers
-- ⚠️ Requires backend server
-
----
-
-## 📊 Performance
-
-### File Converter
-- Processing: Instant to 2 seconds (depending on image size)
-- No server load - all processing in browser
-- Works offline after first load
-
-### Background Remover
-- First request: 5-10 seconds (model download)
-- Subsequent requests: 2-5 seconds
-- Server-side processing
-
----
-
-## 🐛 Troubleshooting
-
-### File Converter Issues
-
-**"Tools not showing up"**
-- Make sure you're viewing `toolbox.html` not `file-converter-module.html`
-- Try refreshing the page
-
-**"File conversion fails"**
-- Check browser console for errors
-- Ensure file is a valid image format
+### File conversion fails
+- Ensure the file is a valid format
 - Try a smaller file size
+- Test in a different browser
 
-**"HEIC conversion not working"**
-- HEIC support requires the heic2any library
-- Check that the CDN scripts are loading
-
-### Background Remover Issues
-
-**"Connection refused"**
-- Make sure the backend server is running
-- Check the API_URL matches your server
-
-**"Slow processing"**
-- First request downloads the AI model (~176MB)
-- Subsequent requests should be faster
-- Consider upgrading server resources
+### PDF tools not working
+- Verify pdf-lib and jsPDF CDN scripts loaded successfully
+- Check browser console for errors
+- Some browsers have limitations with large PDF files
 
 ---
 
-## 📄 License
-
-- File Converter: MIT License
-- Background Remover: MIT License
-- rembg (AI library): MIT License
-- U2-Net model: Apache 2.0 License
-
-Free to use for personal and commercial projects!
-
----
-
-## 🤝 Contributing
-
-Want to add more tools? Here's how:
-
-1. Fork the repository
-2. Create a new branch: `git checkout -b feature/new-tool`
-3. Add your tool following the existing structure
-4. Test thoroughly
-5. Submit a pull request
-
----
-
-## 📞 Support
-
-Need help?
-- Check the `DEPLOYMENT.md` for detailed deployment instructions
-- Review this README for usage information
-- Open an issue on GitHub
-- Visit [wildtigerdesign.com](https://wildtigerdesign.com)
-
----
-
-## 🎯 Roadmap
-
-Future tools under consideration:
-- [ ] Image resizer/cropper
-- [ ] PDF to Images converter
-- [ ] Image compression tool
-- [ ] Watermark tool
-- [ ] Batch rename utility
-- [ ] Color palette generator
-
----
-
-**Built with ❤️ by Wild Tiger Design**
+**Built by Wild Tiger Design** | [wildtigerdesign.com](https://wildtigerdesign.com)

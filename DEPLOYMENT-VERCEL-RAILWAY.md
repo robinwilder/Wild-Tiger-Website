@@ -1,133 +1,159 @@
-# Deployment Guide: Vercel + Railway
+# Deployment Guide: Vercel
 
-## 🎯 Best Setup: Split Deployment
+## Overview
 
-Deploy your Wild Tiger Design site using **both** Vercel and Railway for the best performance:
-
----
-
-## 📦 What Goes Where
-
-### Vercel (Frontend)
-✅ `toolbox.html`
-✅ `index.html`
-✅ All HTML pages
-✅ `file-converter-module.html`
-✅ CSS, JavaScript, images
-✅ Everything EXCEPT `background-remover/`
-
-**Why Vercel for frontend:**
-- ⚡ Super fast global CDN
-- 🆓 Free for static sites
-- 🔄 Auto-deploy from GitHub
-- 🌐 Great for HTML/CSS/JS
-
-### Railway (Backend)
-✅ `background-remover/` folder only
-✅ Python FastAPI server
-✅ AI processing
-
-**Why Railway for backend:**
-- 🐍 Full Python support
-- ⏱️ No timeout limits
-- 🤖 Handles AI processing
-- 💪 Always-on server
+Wild Tiger Design is deployed entirely on **Vercel**, which handles both the static frontend and the serverless API function for the Website Analyzer.
 
 ---
 
-## 🚀 Deployment Steps
+## What Vercel Hosts
 
-### Step 1: Deploy Frontend to Vercel
+### Static Frontend
+- All HTML pages (homepage, services, portfolio, toolbox, etc.)
+- JavaScript files (`js/website-analyzer.js`)
+- CSS (Tailwind via CDN)
+- Images and assets
 
-**1a. Push to GitHub (if not already done)**
+### Serverless Function
+- `api/analyze.js` — Secure proxy for Google PageSpeed Insights API
+- Reads the `PAGESPEED_API_KEY` environment variable
+- Called by the Website Analyzer frontend at `/api/analyze?url=...`
+
+### Why Vercel
+- Super fast global CDN for static assets
+- Built-in serverless functions for API routes
+- Free tier covers static sites and serverless functions
+- Auto-deploys from GitHub on every push to `main`
+- Clean URLs and routing via `vercel.json`
+
+---
+
+## Deployment Steps
+
+### Step 1: Push to GitHub
+
 ```bash
 cd ~/wild-tiger-design
 git add .
-git commit -m "Add toolbox"
+git commit -m "Description of changes"
 git push origin main
 ```
 
-**1b. Deploy to Vercel**
-1. Go to https://vercel.com
-2. Log in with your existing account
-3. Click "**Add New Project**"
-4. Select your `wild-tiger-design` repository
-5. Configure:
-   - **Framework Preset:** Other
-   - **Root Directory:** `./` (leave as default)
-   - **Build Command:** (leave empty - it's static)
-   - **Output Directory:** `./` (leave as default)
-6. Click "**Deploy**"
+### Step 2: Vercel Auto-Deploys
 
-**1c. Get Your Vercel URL**
-- Vercel gives you: `https://wild-tiger-design.vercel.app`
-- Or use your custom domain!
+Vercel is connected to the GitHub repository and automatically deploys when changes are pushed to the `main` branch. Deployments typically complete in under 30 seconds.
 
----
+### Step 3: Set Environment Variables (First Time Only)
 
-### Step 2: Deploy Backend to Railway
+1. Go to [Vercel Dashboard](https://vercel.com/) → your project
+2. Navigate to **Settings** → **Environment Variables**
+3. Add:
+   - **Name:** `PAGESPEED_API_KEY`
+   - **Value:** Your Google PageSpeed API key
+   - **Environments:** Production, Preview, Development
+4. Click **Save**
+5. **Redeploy** the project for the variable to take effect
 
-**2a. Sign Up for Railway**
-1. Go to https://railway.app
-2. Click "**Login with GitHub**"
-3. Authorize Railway
+See [PAGESPEED-API-SETUP.md](PAGESPEED-API-SETUP.md) for full API key setup instructions.
 
-**2b. Create New Project**
-1. Click "**New Project**"
-2. Select "**Deploy from GitHub repo**"
-3. Choose `wild-tiger-design` repository
+### Step 4: Verify Deployment
 
-**2c. Configure Root Directory**
-Railway needs to know where the Python app is:
-
-1. Click on your deployment
-2. Go to "**Settings**"
-3. Find "**Root Directory**"
-4. Set to: `background-remover`
-5. Save
-
-**2d. Wait for Build**
-- Takes 5-10 minutes
-- Watch logs for progress
-- Green checkmark = success!
-
-**2e. Generate Domain**
-1. Go to "**Settings**" → "**Networking**"
-2. Click "**Generate Domain**"
-3. Copy URL: `https://bg-remover-production.up.railway.app`
+1. Visit your live site: [https://wildtigerdesign.com](https://wildtigerdesign.com)
+2. Test the Website Analyzer: navigate to `/website-analyzer` and analyze a URL
+3. Test the API endpoint directly: `https://wildtigerdesign.com/api/analyze?url=https://google.com`
 
 ---
 
-### Step 3: Connect Frontend to Backend
+## Vercel Configuration
 
-**3a. Update API URL in Code**
+The `vercel.json` file controls routing:
 
-Edit `background-remover/index.html`:
-```javascript
-// Line 486 - change from:
-const API_URL = 'YOUR_RAILWAY_URL_HERE';
-
-// To your Railway URL:
-const API_URL = 'https://bg-remover-production.up.railway.app';
+```json
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/:path((?!api)(?!.*\\\\.).*)",
+      "destination": "/:path.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*.html",
+      "destination": "/:path*",
+      "permanent": true
+    }
+  ],
+  "cleanUrls": true
+}
 ```
 
-**3b. Push Update**
+**What this does:**
+- `/api/*` routes are passed through to serverless functions (not rewritten to HTML)
+- All other clean paths (e.g., `/about`) are mapped to their HTML files (e.g., `/about.html`)
+- Direct `.html` URLs are permanently redirected to clean URLs
+- `cleanUrls: true` enables Vercel's built-in clean URL handling
+
+---
+
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `PAGESPEED_API_KEY` | Google PageSpeed Insights API key | Yes |
+
+**Important:** Environment variables only take effect after a deployment. If you add or change a variable, you must redeploy.
+
+---
+
+## Custom Domain
+
+The site uses a custom domain configured via:
+- **CNAME file** in the repository root (for DNS)
+- **Vercel Domains settings** (Settings → Domains)
+- Domain: `wildtigerdesign.com`
+
+---
+
+## Troubleshooting
+
+### Website Analyzer not working
+1. Check that `PAGESPEED_API_KEY` is set in Vercel Environment Variables
+2. Make sure you redeployed after adding the variable
+3. Test the API endpoint: `https://wildtigerdesign.com/api/analyze?url=https://google.com`
+4. Check Vercel function logs for errors
+
+### API returns HTML instead of JSON
+- The `/api/:path*` rewrite rule must be listed **before** the HTML rewrite rule in `vercel.json`
+
+### Deployment stuck or failing
+- Check Vercel build logs in the Deployments tab
+- Verify `vercel.json` has valid JSON syntax
+- Ensure `api/analyze.js` exports a default function
+
+### Clean URLs not working
+- Verify `"cleanUrls": true` is set in `vercel.json`
+- Check that redirect and rewrite rules are correct
+
+---
+
+## Local Development
+
+To test the serverless function locally:
+
 ```bash
-git add background-remover/index.html
-git commit -m "Connect background remover to Railway backend"
-git push origin main
+# Install Vercel CLI
+npm i -g vercel
+
+# Run local development server (includes serverless functions)
+vercel dev
 ```
 
-Vercel will **auto-deploy** your update! (takes ~30 seconds)
+This starts a local server that mimics the Vercel deployment environment, including serverless function support and environment variables from `.env.local`.
 
 ---
 
-### Step 4: Update CORS (Important!)
-
-The Railway backend needs to allow requests from your Vercel domain.
-
-Edit `background-remover/main.py`:
-
-<function_calls>
-<invoke name="Read">
-<parameter name="file_path">/Users/wtd/wild-tiger-design/background-remover/main.py
+**Last Updated:** February 2026
